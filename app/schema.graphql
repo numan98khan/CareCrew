@@ -1,0 +1,324 @@
+type InvoiceFrequencyTypes {
+  Daily: String
+  Weekly: String
+  Monthly: String
+}
+
+type InvoiceDeliveryTypes {
+  Email: String
+  Mail: String
+  Both: String
+}
+
+type Billing @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  allowOvertime: Boolean
+  maxBillingMonthly: Float
+  hourlyRate: String
+  weekendHourlyRate: Float
+  holidayHourlyRate: Float
+  maxMonthlyIncentive: Float
+  maxHourlyIncentive: Float
+  maxFixedIncentive: Float
+  invoiceDelivery: String
+  invoiceFrequency: String
+  topUpPercentage: String
+}
+
+type Reviews @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  peopleID: ID! @index(name: "byPeople")
+  review: String
+  rating: Float
+  facilityName: String
+}
+
+type Document {
+  name: String
+  key: String
+}
+
+type Floors {
+  floorNumber: String
+}
+
+enum NotificationTypes {
+  SHIFT_ASSIGNMENT
+  ADMIN_REMINDER
+  IN_APP
+  TEXT
+  EMAIL
+}
+
+type Notifications @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  Receivers: [People] @manyToMany(relationName: "NotificationsPeople")
+  peopleID: ID! @index(name: "byPeople")
+  type: NotificationTypes
+  subject: String
+  body: String
+  thumbnail: String
+  organization: String
+}
+
+type Reminders @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  date: AWSDate
+  time: AWSTime
+  receiverType: PeopleTypes
+  note: String
+  People: [People] @manyToMany(relationName: "RemindersPeople")
+  read: Boolean
+  message: String
+}
+
+type FCMLookup @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  other_token: String
+  fcm_token: String
+  apns_token: String
+}
+
+type InvoiceDetails {
+  description: String
+  quantity: Int
+  amount: Float
+}
+
+type Invoice @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  dueDate: AWSDate
+  amount: Float
+  description: [InvoiceDetails]
+}
+
+type SupportTickets @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  details: String
+  reasonID: ID! @index(name: "byReason")
+}
+
+enum AreaTypes {
+  DASHBOARD
+  SCHEDULES
+  WHOSON
+  PEOPLE
+  FACILITIES
+  MESSAGING
+  TIMECARD
+  SUPPORT
+  SETTINGS
+  REPORTS
+}
+
+type Reason @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  area: AreaTypes
+  status: Status
+  reason: String
+  SupportTickets: [SupportTickets] @hasMany(indexName: "byReason", fields: ["id"])
+}
+
+type Points @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  reason: String
+  point: Int
+}
+
+enum Status {
+  ACTIVE
+  UNACTIVE
+}
+
+type Templates @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  subject: String
+  status: Status
+  body: String
+  peopleID: ID! @index(name: "byPeople")
+}
+
+enum PeopleTypes {
+  FACILITIES
+  STAFF
+  EMPLOYEES
+  ALL
+}
+
+type News @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  peopleID: ID! @index(name: "byPeople")
+  datetime: AWSDateTime
+  headline: String
+  news: String
+  receivers: PeopleTypes
+  status: Status
+  alt: String
+  author: String
+}
+
+type ManualTimecard @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  clockInTime: AWSDateTime
+  clockOutTime: AWSDateTime
+  role: Roles
+  notes: String
+  timeType: String
+  hours: Float
+  minutes: Float
+  status: String
+  peopleID: ID! @index(name: "byPeople")
+  facilityID: ID! @index(name: "byFacility")
+}
+
+type Timecard @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  clockInTime: AWSDateTime
+  clockOutTime: AWSDateTime
+  isCallOff: Boolean
+  peopleID: ID! @index(name: "byPeople")
+  shiftsID: ID! @index(name: "byShifts")
+  isLate: Boolean
+  lateReason: String
+  date: String
+}
+
+type Contact {
+  name: String
+  phone: String
+  email: String
+  position: String
+}
+
+type CheckList {
+  name: String
+  isBool: Boolean
+}
+
+type Message @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  text: String
+  peopleID: ID! @index(name: "byPeople")
+  chatroomID: ID! @index(name: "byChatRoom")
+}
+
+type ChatRoom @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  People: [People] @manyToMany(relationName: "ChatRoomPeople")
+  Messages: [Message] @hasMany(indexName: "byChatRoom", fields: ["id"])
+}
+
+type Incentive {
+  incentiveBy: String
+  incentiveType: String
+  incentiveAmount: Float
+  notes: String
+}
+
+type Shifts @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  numOfPositions: String
+  shiftStart: AWSTime
+  shiftEnd: AWSTime
+  date: AWSDate
+  roleRequired: Roles
+  rate: Float
+  floorNumber: String
+  supervisor: String
+  incentives: Incentive
+  cancellationGuarantee: Boolean
+  isAssigned: Boolean
+  isIncentive: Boolean
+  isGuarantee: Boolean
+  isLate: Boolean
+  isCallOff: Boolean
+  isSelected: Boolean
+  recurringSchedule: String
+  facilityID: ID! @index(name: "byFacility")
+  Timecards: [Timecard] @hasMany(indexName: "byShifts", fields: ["id"])
+  hide: Boolean
+}
+
+type Facility @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  FacilityPeople: [People] @manyToMany(relationName: "PeopleFacility")
+  imgSrc: String
+  facilityName: String
+  aboutFacility: String
+  streetAddress: String
+  country: String
+  city: String
+  state: String
+  zip: String
+  contacts: [Contact]
+  email: AWSEmail
+  permissions: String
+  Shifts: [Shifts] @hasMany(indexName: "byFacility", fields: ["id"])
+  ManualTimecards: [ManualTimecard] @hasMany(indexName: "byFacility", fields: ["id"])
+  lat: Float
+  lng: Float
+  floors: [Floors]
+  documents: Document
+  Billing: Billing @hasOne
+}
+
+enum Roles {
+  LPN
+  RN
+  CNA
+}
+
+type Documents @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  docURL: AWSURL
+  name: String
+}
+
+type People @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  firstName: String
+  lastName: String
+  phoneNumber: String
+  documents: [Document]
+  country: String
+  city: String
+  state: String
+  zip: String
+  timezone: String
+  language: String
+  isEmailNotifications: Boolean
+  isTextNotification: Boolean
+  effectiveStartDate: AWSDateTime
+  driverLicenseNumber: String
+  driverLicenseState: String
+  SSN: String
+  uniformSize: String
+  isCompleteDrugScreening: Boolean
+  emergencyContactName: String
+  emergencyContactNumber: String
+  emergencyContactRelationship: String
+  milesToWork: Float
+  licenseCode: String
+  profilePicture: String
+  role: Roles
+  status: String
+  email: AWSEmail
+  points: Int
+  rating: Float
+  PeopleFacility: [Facility] @manyToMany(relationName: "PeopleFacility")
+  chatrooms: [ChatRoom] @manyToMany(relationName: "ChatRoomPeople")
+  Messages: [Message] @hasMany(indexName: "byPeople", fields: ["id"])
+  empCheckList: [CheckList]
+  permissions: AWSJSON
+  Timecards: [Timecard] @hasMany(indexName: "byPeople", fields: ["id"])
+  ManualTimecards: [ManualTimecard] @hasMany(indexName: "byPeople", fields: ["id"])
+  News: [News] @hasMany(indexName: "byPeople", fields: ["id"])
+  Templates: [Templates] @hasMany(indexName: "byPeople", fields: ["id"])
+  type: String
+  availability: AWSJSON
+  reminderss: [Reminders] @manyToMany(relationName: "RemindersPeople")
+  notificationss: [Notifications] @manyToMany(relationName: "NotificationsPeople")
+  Notifications: [Notifications] @hasMany(indexName: "byPeople", fields: ["id"])
+  immunization: AWSJSON
+  Reviews: [Reviews] @hasMany(indexName: "byPeople", fields: ["id"])
+}

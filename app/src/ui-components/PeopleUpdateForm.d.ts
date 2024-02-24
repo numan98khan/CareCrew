@@ -1,0 +1,167 @@
+/***************************************************************************
+ * The contents of this file were generated with Amplify Studio.           *
+ * Please refrain from making any modifications to this file.              *
+ * Any changes to this file will be overwritten when running amplify pull. *
+ **************************************************************************/
+
+import * as React from "react";
+import { GridProps, SelectFieldProps, SwitchFieldProps, TextAreaFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { People } from "../models";
+export declare type EscapeHatchProps = {
+    [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+export declare type VariantValues = {
+    [key: string]: string;
+};
+export declare type Variant = {
+    variantValues: VariantValues;
+    overrides: EscapeHatchProps;
+};
+export declare type ValidationResponse = {
+    hasError: boolean;
+    errorMessage?: string;
+};
+export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type PeopleUpdateFormInputValues = {
+    surrogateID?: number;
+    firstName?: string;
+    lastName?: string;
+    phoneNumber?: string;
+    country?: string;
+    streetAddress?: string;
+    city?: string;
+    state?: string;
+    zip?: string;
+    timezone?: string;
+    language?: string;
+    isEmailNotifications?: boolean;
+    isTextNotification?: boolean;
+    effectiveStartDate?: string;
+    driverLicenseNumber?: string;
+    driverLicenseState?: string;
+    SSN?: string;
+    uniformSize?: string;
+    isCompleteDrugScreening?: boolean;
+    emergencyContactName?: string;
+    emergencyContactNumber?: string;
+    emergencyContactRelationship?: string;
+    milesToWork?: number;
+    licenseCode?: string;
+    profilePicture?: string;
+    role?: string;
+    status?: string;
+    personalNote?: string;
+    payrollCycle?: string;
+    email?: string;
+    points?: number;
+    rating?: number;
+    position?: string;
+    isTerminated?: boolean;
+    lastActivity?: string;
+    lastActivityNotifications?: string;
+    adminHold?: boolean;
+    permissions?: string;
+    type?: string;
+    availability?: string;
+    immunization?: string;
+};
+export declare type PeopleUpdateFormValidationValues = {
+    surrogateID?: ValidationFunction<number>;
+    firstName?: ValidationFunction<string>;
+    lastName?: ValidationFunction<string>;
+    phoneNumber?: ValidationFunction<string>;
+    country?: ValidationFunction<string>;
+    streetAddress?: ValidationFunction<string>;
+    city?: ValidationFunction<string>;
+    state?: ValidationFunction<string>;
+    zip?: ValidationFunction<string>;
+    timezone?: ValidationFunction<string>;
+    language?: ValidationFunction<string>;
+    isEmailNotifications?: ValidationFunction<boolean>;
+    isTextNotification?: ValidationFunction<boolean>;
+    effectiveStartDate?: ValidationFunction<string>;
+    driverLicenseNumber?: ValidationFunction<string>;
+    driverLicenseState?: ValidationFunction<string>;
+    SSN?: ValidationFunction<string>;
+    uniformSize?: ValidationFunction<string>;
+    isCompleteDrugScreening?: ValidationFunction<boolean>;
+    emergencyContactName?: ValidationFunction<string>;
+    emergencyContactNumber?: ValidationFunction<string>;
+    emergencyContactRelationship?: ValidationFunction<string>;
+    milesToWork?: ValidationFunction<number>;
+    licenseCode?: ValidationFunction<string>;
+    profilePicture?: ValidationFunction<string>;
+    role?: ValidationFunction<string>;
+    status?: ValidationFunction<string>;
+    personalNote?: ValidationFunction<string>;
+    payrollCycle?: ValidationFunction<string>;
+    email?: ValidationFunction<string>;
+    points?: ValidationFunction<number>;
+    rating?: ValidationFunction<number>;
+    position?: ValidationFunction<string>;
+    isTerminated?: ValidationFunction<boolean>;
+    lastActivity?: ValidationFunction<string>;
+    lastActivityNotifications?: ValidationFunction<string>;
+    adminHold?: ValidationFunction<boolean>;
+    permissions?: ValidationFunction<string>;
+    type?: ValidationFunction<string>;
+    availability?: ValidationFunction<string>;
+    immunization?: ValidationFunction<string>;
+};
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PeopleUpdateFormOverridesProps = {
+    PeopleUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    surrogateID?: PrimitiveOverrideProps<TextFieldProps>;
+    firstName?: PrimitiveOverrideProps<TextFieldProps>;
+    lastName?: PrimitiveOverrideProps<TextFieldProps>;
+    phoneNumber?: PrimitiveOverrideProps<TextFieldProps>;
+    country?: PrimitiveOverrideProps<TextFieldProps>;
+    streetAddress?: PrimitiveOverrideProps<TextFieldProps>;
+    city?: PrimitiveOverrideProps<TextFieldProps>;
+    state?: PrimitiveOverrideProps<TextFieldProps>;
+    zip?: PrimitiveOverrideProps<TextFieldProps>;
+    timezone?: PrimitiveOverrideProps<TextFieldProps>;
+    language?: PrimitiveOverrideProps<TextFieldProps>;
+    isEmailNotifications?: PrimitiveOverrideProps<SwitchFieldProps>;
+    isTextNotification?: PrimitiveOverrideProps<SwitchFieldProps>;
+    effectiveStartDate?: PrimitiveOverrideProps<TextFieldProps>;
+    driverLicenseNumber?: PrimitiveOverrideProps<TextFieldProps>;
+    driverLicenseState?: PrimitiveOverrideProps<TextFieldProps>;
+    SSN?: PrimitiveOverrideProps<TextFieldProps>;
+    uniformSize?: PrimitiveOverrideProps<TextFieldProps>;
+    isCompleteDrugScreening?: PrimitiveOverrideProps<SwitchFieldProps>;
+    emergencyContactName?: PrimitiveOverrideProps<TextFieldProps>;
+    emergencyContactNumber?: PrimitiveOverrideProps<TextFieldProps>;
+    emergencyContactRelationship?: PrimitiveOverrideProps<TextFieldProps>;
+    milesToWork?: PrimitiveOverrideProps<TextFieldProps>;
+    licenseCode?: PrimitiveOverrideProps<TextFieldProps>;
+    profilePicture?: PrimitiveOverrideProps<TextFieldProps>;
+    role?: PrimitiveOverrideProps<SelectFieldProps>;
+    status?: PrimitiveOverrideProps<TextFieldProps>;
+    personalNote?: PrimitiveOverrideProps<TextFieldProps>;
+    payrollCycle?: PrimitiveOverrideProps<TextFieldProps>;
+    email?: PrimitiveOverrideProps<TextFieldProps>;
+    points?: PrimitiveOverrideProps<TextFieldProps>;
+    rating?: PrimitiveOverrideProps<TextFieldProps>;
+    position?: PrimitiveOverrideProps<TextFieldProps>;
+    isTerminated?: PrimitiveOverrideProps<SwitchFieldProps>;
+    lastActivity?: PrimitiveOverrideProps<TextFieldProps>;
+    lastActivityNotifications?: PrimitiveOverrideProps<TextFieldProps>;
+    adminHold?: PrimitiveOverrideProps<SwitchFieldProps>;
+    permissions?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    type?: PrimitiveOverrideProps<TextFieldProps>;
+    availability?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    immunization?: PrimitiveOverrideProps<TextAreaFieldProps>;
+} & EscapeHatchProps;
+export declare type PeopleUpdateFormProps = React.PropsWithChildren<{
+    overrides?: PeopleUpdateFormOverridesProps | undefined | null;
+} & {
+    id?: string;
+    people?: People;
+    onSubmit?: (fields: PeopleUpdateFormInputValues) => PeopleUpdateFormInputValues;
+    onSuccess?: (fields: PeopleUpdateFormInputValues) => void;
+    onError?: (fields: PeopleUpdateFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: PeopleUpdateFormInputValues) => PeopleUpdateFormInputValues;
+    onValidate?: PeopleUpdateFormValidationValues;
+} & React.CSSProperties>;
+export default function PeopleUpdateForm(props: PeopleUpdateFormProps): React.ReactElement;

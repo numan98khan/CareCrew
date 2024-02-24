@@ -1,0 +1,12 @@
+{
+  "resourceName": "s3instacarestorage373c65a0",
+  "bucketName": "instacare-storage-373c65a0",
+  "policyUUID": "18b0dc8b",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ]
+}

@@ -1,0 +1,54 @@
+/* CSS */
+
+.Modal {
+    transition: opacity 200ms ease-in-out;
+    opacity: 0;
+  }
+  
+  .Overlay {
+    transition: opacity 200ms ease-in-out;
+    opacity: 0;
+  }
+  
+  .Modal--after-open {
+    opacity: 1;
+  }
+  
+  .Overlay--after-open {
+    opacity: 1;
+  }
+  
+  .Modal--before-close {
+    opacity: 0;
+  }
+  
+  .Overlay--before-close {
+    opacity: 0;
+  }
+  
+
+  .badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    /* background-color: red; */
+    color: white;
+    border-radius: 50%;
+    padding: 0.2rem 0.4rem;
+    font-size: 0.5rem;
+    z-index: 1;
+  }
+  
+  .animate-bounce {
+    animation: bounce 0.5s ease infinite;
+  }
+  
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  

@@ -1,0 +1,47 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-instacare-staging-164444-authRole",
+      "UnauthRoleArn": "arn:aws:iam::078950192077:role/amplify-instacare-staging-164444-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::078950192077:role/amplify-instacare-staging-164444-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-instacare-staging-164444-deployment",
+      "UnauthRoleName": "amplify-instacare-staging-164444-unauthRole",
+      "StackName": "amplify-instacare-staging-164444",
+      "StackId": "arn:aws:cloudformation:us-east-1:078950192077:stack/amplify-instacare-staging-164444/0b911c10-36d4-11ee-a6aa-0ef9b73213eb",
+      "AmplifyAppId": "d3pr7bq8bk1bta"
+    },
+    "categories": {
+      "analytics": {
+        "Pinpoint": {
+          "Name": "instacare-staging",
+          "Id": "b356340e594144f6869750b8bb112ec7",
+          "Region": "us-east-1"
+        },
+        "instacare": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d3pr7bq8bk1bta",
+          "type": "manual"
+        }
+      },
+      "notifications": {
+        "Pinpoint": {
+          "Name": "instacare-staging",
+          "Id": "b356340e594144f6869750b8bb112ec7",
+          "Region": "us-east-1"
+        }
+      },
+      "auth": {
+        "InstaCare": {}
+      },
+      "storage": {
+        "s3instacarestorage373c65a0": {}
+      },
+      "api": {
+        "instacare": {}
+      }
+    }
+  }
+}

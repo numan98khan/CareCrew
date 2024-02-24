@@ -1,0 +1,17 @@
+/* RichTextEditor.css */
+.toolbar-class {
+  background-color: #D8F1F7 !important;
+  border-radius: 30 !important;
+
+}
+
+/* RichTextEditor.css */
+.toolbar-class .rdw-option-wrapper {
+  background-color: transparent !important;
+  border: 0 !important;
+}
+
+/* RichTextEditor.css */
+.editorClassName .public-DraftStyleDefault-block {
+  line-height: 0.5; /* adjust as needed */
+}
