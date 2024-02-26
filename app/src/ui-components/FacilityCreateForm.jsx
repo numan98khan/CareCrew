@@ -13,9 +13,9 @@ import {
   SwitchField,
   TextField,
 } from "@aws-amplify/ui-react";
-import { Facility } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { DataStore } from "aws-amplify";
+import { API } from "aws-amplify";
+import { createFacility } from "../graphql/mutations";
 export default function FacilityCreateForm(props) {
   const {
     clearOnSuccess = true,
@@ -168,7 +168,14 @@ export default function FacilityCreateForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(new Facility(modelFields));
+          await API.graphql({
+            query: createFacility.replaceAll("__typename", ""),
+            variables: {
+              input: {
+                ...modelFields,
+              },
+            },
+          });
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -177,7 +184,8 @@ export default function FacilityCreateForm(props) {
           }
         } catch (err) {
           if (onError) {
-            onError(modelFields, err.message);
+            const messages = err.errors.map((e) => e.message).join("\n");
+            onError(modelFields, messages);
           }
         }
       }}

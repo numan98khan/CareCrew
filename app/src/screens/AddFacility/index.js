@@ -221,7 +221,7 @@ const AddFacility = ({
       fileRef,
       uploadFile
     );
-    refetchFacilities();
+    // refetchFacilities();
     if (goBackHandler && createUsersResponse === 1) {
       goBackHandler();
     }
@@ -320,7 +320,7 @@ const AddFacility = ({
                 <Button
                   children={"POST"}
                   onClick={publish}
-                  disabled={isLoading}
+                  // disabled={isLoading}
                 />
               )}
               <div className="mx-1" />

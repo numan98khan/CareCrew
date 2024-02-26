@@ -176,31 +176,31 @@ const AppBar = ({ children, type }) => {
     resetLastNotificationsActivity(personalData?.id);
   };
 
-  const { notifications, refetch } = useListNotifications({
-    userId: user?.attributes?.sub,
-    setAlertNotification: setAlertNotification,
-    type: type,
-  });
+  // const { notifications, refetch } = useListNotifications({
+  //   userId: user?.attributes?.sub,
+  //   setAlertNotification: setAlertNotification,
+  //   type: type,
+  // });
 
-  const newNotifications = useMemo(() => {
-    return notifications.filter((notification) => {
-      return (
-        personalData?.lastActivityNotifications &&
-        new Date(notification.createdAt).getTime() >
-          new Date(personalData.lastActivityNotifications).getTime()
-      );
-    });
-  }, [notifications, personalData?.lastActivityNotifications]);
+  // const newNotifications = useMemo(() => {
+  //   return notifications.filter((notification) => {
+  //     return (
+  //       personalData?.lastActivityNotifications &&
+  //       new Date(notification.createdAt).getTime() >
+  //         new Date(personalData.lastActivityNotifications).getTime()
+  //     );
+  //   });
+  // }, [notifications, personalData?.lastActivityNotifications]);
 
-  const filteredNotifications = useMemo(() => {
-    // console.log("🚀 ~ file: index.js:168 ~ notifications:", notifications);
+  // const filteredNotifications = useMemo(() => {
+  //   // console.log("🚀 ~ file: index.js:168 ~ notifications:", notifications);
 
-    return notifications.sort(function (a, b) {
-      return b._lastChangedAt - a._lastChangedAt;
-    });
+  //   return notifications.sort(function (a, b) {
+  //     return b._lastChangedAt - a._lastChangedAt;
+  //   });
 
-    // return notifications;
-  }, [notifications]);
+  //   // return notifications;
+  // }, [notifications]);
 
   const closeModal = () => {
     setModalIsOpen(false);
@@ -268,17 +268,8 @@ const AppBar = ({ children, type }) => {
               onClick={openNotificationModal}
               className="rounded-full"
             />
-            {/* {notifications && notifications.length > 0 && (
-              <span
-                className={`bg-SECONDARY_COLOR badge ${
-                  isBadgeAnimating ? "animate-bounce" : ""
-                }`}
-              >
-                {notifications.length}
-              </span>
-            )} */}
 
-            {newNotifications.length > 0 && (
+            {/* {newNotifications.length > 0 && (
               <span
                 className={`bg-SECONDARY_COLOR badge ${
                   isBadgeAnimating ? "animate-bounce" : ""
@@ -286,7 +277,7 @@ const AppBar = ({ children, type }) => {
               >
                 {newNotifications.length}
               </span>
-            )}
+            )} */}
           </div>
           <div
             className="flex border rounded-full h-full items-center transition duration-300 ease-in-out hover:shadow-lg dark:hover:shadow-black/30"
@@ -370,12 +361,12 @@ const AppBar = ({ children, type }) => {
         {/* </div> */}
       </Modal>
 
-      <NotificationModal
+      {/* <NotificationModal
         open={notificationModalIsOpen}
         onClose={closeNotificationModal}
         position={notificationPosition}
         notifications={filteredNotifications}
-      />
+      /> */}
     </div>
   );
 };

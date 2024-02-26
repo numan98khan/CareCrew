@@ -103,6 +103,7 @@ function AddStaffMember({ isEdit, peopleObj, goBackHandler, refetchPeople }) {
       // const parsedBody = null;
 
       if (!result || result?.statusCode === 400) {
+        // if (false) {
         throw new Error(
           parsedBody?.error?.message || "Failed to create bulk users."
         );
@@ -110,6 +111,8 @@ function AddStaffMember({ isEdit, peopleObj, goBackHandler, refetchPeople }) {
         const ID = parsedBody.user.User.Attributes.find(
           (attribute) => attribute.Name === "sub"
         ).Value;
+
+        // const ID = "d4b87468-10e1-7065-3a10-12d4b929a769_OLD";
 
         setPeopleKey("id")(ID);
 
@@ -142,6 +145,7 @@ function AddStaffMember({ isEdit, peopleObj, goBackHandler, refetchPeople }) {
 
           SuccessToast("People Created");
         } catch (error) {
+          console.error(error);
           ErrorToast("Error creating people: ", error);
         }
       }

@@ -100,12 +100,12 @@ const menuItems = [
     path: "/timecard",
     element: <Timecards />,
   },
-  {
-    name: "Reports",
-    icon: ReportsIcon,
-    path: "/reports",
-    element: <Reports />,
-  },
+  // {
+  //   name: "Reports",
+  //   icon: ReportsIcon,
+  //   path: "/reports",
+  //   element: <Reports />,
+  // },
   {
     name: "Total Billing",
     icon: ReportsIcon,

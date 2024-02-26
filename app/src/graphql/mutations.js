@@ -14,9 +14,6 @@ export const createRequests = /* GraphQL */ `
       shiftID
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -34,9 +31,6 @@ export const updateRequests = /* GraphQL */ `
       shiftID
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -54,9 +48,6 @@ export const deleteRequests = /* GraphQL */ `
       shiftID
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -88,9 +79,6 @@ export const createBilling = /* GraphQL */ `
       topUpPercentage
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -122,9 +110,6 @@ export const updateBilling = /* GraphQL */ `
       topUpPercentage
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -156,9 +141,6 @@ export const deleteBilling = /* GraphQL */ `
       topUpPercentage
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -176,9 +158,6 @@ export const createReviews = /* GraphQL */ `
       facilityName
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -196,9 +175,6 @@ export const updateReviews = /* GraphQL */ `
       facilityName
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -216,9 +192,6 @@ export const deleteReviews = /* GraphQL */ `
       facilityName
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -232,7 +205,6 @@ export const createNotifications = /* GraphQL */ `
       id
       Receivers {
         nextToken
-        startedAt
         __typename
       }
       peopleID
@@ -244,9 +216,6 @@ export const createNotifications = /* GraphQL */ `
       receivers
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -260,7 +229,6 @@ export const updateNotifications = /* GraphQL */ `
       id
       Receivers {
         nextToken
-        startedAt
         __typename
       }
       peopleID
@@ -272,9 +240,6 @@ export const updateNotifications = /* GraphQL */ `
       receivers
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -288,7 +253,6 @@ export const deleteNotifications = /* GraphQL */ `
       id
       Receivers {
         nextToken
-        startedAt
         __typename
       }
       peopleID
@@ -300,9 +264,6 @@ export const deleteNotifications = /* GraphQL */ `
       receivers
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -321,16 +282,12 @@ export const createReminders = /* GraphQL */ `
       note
       People {
         nextToken
-        startedAt
         __typename
       }
       read
       message
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -349,16 +306,12 @@ export const updateReminders = /* GraphQL */ `
       note
       People {
         nextToken
-        startedAt
         __typename
       }
       read
       message
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -377,16 +330,12 @@ export const deleteReminders = /* GraphQL */ `
       note
       People {
         nextToken
-        startedAt
         __typename
       }
       read
       message
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -404,9 +353,6 @@ export const createFCMLookup = /* GraphQL */ `
       topic
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -424,9 +370,6 @@ export const updateFCMLookup = /* GraphQL */ `
       topic
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -444,9 +387,6 @@ export const deleteFCMLookup = /* GraphQL */ `
       topic
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -464,9 +404,6 @@ export const createAccountLimitsLookup = /* GraphQL */ `
       amount
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -484,9 +421,6 @@ export const updateAccountLimitsLookup = /* GraphQL */ `
       amount
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -504,9 +438,6 @@ export const deleteAccountLimitsLookup = /* GraphQL */ `
       amount
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -531,9 +462,6 @@ export const createInvoice = /* GraphQL */ `
       receiverID
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -558,9 +486,6 @@ export const updateInvoice = /* GraphQL */ `
       receiverID
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -585,9 +510,6 @@ export const deleteInvoice = /* GraphQL */ `
       receiverID
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -603,9 +525,6 @@ export const createSupportTickets = /* GraphQL */ `
       reasonID
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -621,9 +540,6 @@ export const updateSupportTickets = /* GraphQL */ `
       reasonID
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -639,9 +555,6 @@ export const deleteSupportTickets = /* GraphQL */ `
       reasonID
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -658,14 +571,10 @@ export const createReason = /* GraphQL */ `
       reason
       SupportTickets {
         nextToken
-        startedAt
         __typename
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -682,14 +591,10 @@ export const updateReason = /* GraphQL */ `
       reason
       SupportTickets {
         nextToken
-        startedAt
         __typename
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -706,14 +611,10 @@ export const deleteReason = /* GraphQL */ `
       reason
       SupportTickets {
         nextToken
-        startedAt
         __typename
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -729,9 +630,6 @@ export const createPoints = /* GraphQL */ `
       point
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -747,9 +645,6 @@ export const updatePoints = /* GraphQL */ `
       point
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -765,9 +660,6 @@ export const deletePoints = /* GraphQL */ `
       point
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -787,9 +679,6 @@ export const createTemplates = /* GraphQL */ `
       peopleID
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -809,9 +698,6 @@ export const updateTemplates = /* GraphQL */ `
       peopleID
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -831,9 +717,6 @@ export const deleteTemplates = /* GraphQL */ `
       peopleID
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -855,9 +738,6 @@ export const createNews = /* GraphQL */ `
       author
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -879,9 +759,6 @@ export const updateNews = /* GraphQL */ `
       author
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -903,9 +780,6 @@ export const deleteNews = /* GraphQL */ `
       author
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -960,16 +834,10 @@ export const createManualTimecard = /* GraphQL */ `
         date
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       manualTimecardTimecardId
       __typename
     }
@@ -1025,16 +893,10 @@ export const updateManualTimecard = /* GraphQL */ `
         date
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       manualTimecardTimecardId
       __typename
     }
@@ -1090,16 +952,10 @@ export const deleteManualTimecard = /* GraphQL */ `
         date
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       manualTimecardTimecardId
       __typename
     }
@@ -1126,7 +982,6 @@ export const createTimecard = /* GraphQL */ `
       shiftsID
       TimecardGEOEvents {
         nextToken
-        startedAt
         __typename
       }
       isLate
@@ -1135,9 +990,6 @@ export const createTimecard = /* GraphQL */ `
       date
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -1163,7 +1015,6 @@ export const updateTimecard = /* GraphQL */ `
       shiftsID
       TimecardGEOEvents {
         nextToken
-        startedAt
         __typename
       }
       isLate
@@ -1172,9 +1023,6 @@ export const updateTimecard = /* GraphQL */ `
       date
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -1200,7 +1048,6 @@ export const deleteTimecard = /* GraphQL */ `
       shiftsID
       TimecardGEOEvents {
         nextToken
-        startedAt
         __typename
       }
       isLate
@@ -1209,9 +1056,6 @@ export const deleteTimecard = /* GraphQL */ `
       date
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -1235,9 +1079,6 @@ export const createMessage = /* GraphQL */ `
       platform
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -1261,9 +1102,6 @@ export const updateMessage = /* GraphQL */ `
       platform
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -1287,9 +1125,6 @@ export const deleteMessage = /* GraphQL */ `
       platform
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -1303,12 +1138,10 @@ export const createChatRoom = /* GraphQL */ `
       id
       People {
         nextToken
-        startedAt
         __typename
       }
       Messages {
         nextToken
-        startedAt
         __typename
       }
       title
@@ -1316,9 +1149,6 @@ export const createChatRoom = /* GraphQL */ `
       latestMessageTime
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -1332,12 +1162,10 @@ export const updateChatRoom = /* GraphQL */ `
       id
       People {
         nextToken
-        startedAt
         __typename
       }
       Messages {
         nextToken
-        startedAt
         __typename
       }
       title
@@ -1345,9 +1173,6 @@ export const updateChatRoom = /* GraphQL */ `
       latestMessageTime
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -1361,12 +1186,10 @@ export const deleteChatRoom = /* GraphQL */ `
       id
       People {
         nextToken
-        startedAt
         __typename
       }
       Messages {
         nextToken
-        startedAt
         __typename
       }
       title
@@ -1374,9 +1197,6 @@ export const deleteChatRoom = /* GraphQL */ `
       latestMessageTime
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -1418,15 +1238,11 @@ export const createShifts = /* GraphQL */ `
       facilityID
       Timecards {
         nextToken
-        startedAt
         __typename
       }
       hide
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -1468,15 +1284,11 @@ export const updateShifts = /* GraphQL */ `
       facilityID
       Timecards {
         nextToken
-        startedAt
         __typename
       }
       hide
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -1518,15 +1330,11 @@ export const deleteShifts = /* GraphQL */ `
       facilityID
       Timecards {
         nextToken
-        startedAt
         __typename
       }
       hide
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -1540,7 +1348,6 @@ export const createFacility = /* GraphQL */ `
       id
       FacilityPeople {
         nextToken
-        startedAt
         __typename
       }
       imgSrc
@@ -1566,12 +1373,10 @@ export const createFacility = /* GraphQL */ `
       adminHold
       Shifts {
         nextToken
-        startedAt
         __typename
       }
       ManualTimecards {
         nextToken
-        startedAt
         __typename
       }
       lat
@@ -1608,21 +1413,14 @@ export const createFacility = /* GraphQL */ `
         topUpPercentage
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       Requests {
         nextToken
-        startedAt
         __typename
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       facilityBillingId
       __typename
     }
@@ -1637,7 +1435,6 @@ export const updateFacility = /* GraphQL */ `
       id
       FacilityPeople {
         nextToken
-        startedAt
         __typename
       }
       imgSrc
@@ -1663,12 +1460,10 @@ export const updateFacility = /* GraphQL */ `
       adminHold
       Shifts {
         nextToken
-        startedAt
         __typename
       }
       ManualTimecards {
         nextToken
-        startedAt
         __typename
       }
       lat
@@ -1705,21 +1500,14 @@ export const updateFacility = /* GraphQL */ `
         topUpPercentage
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       Requests {
         nextToken
-        startedAt
         __typename
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       facilityBillingId
       __typename
     }
@@ -1734,7 +1522,6 @@ export const deleteFacility = /* GraphQL */ `
       id
       FacilityPeople {
         nextToken
-        startedAt
         __typename
       }
       imgSrc
@@ -1760,12 +1547,10 @@ export const deleteFacility = /* GraphQL */ `
       adminHold
       Shifts {
         nextToken
-        startedAt
         __typename
       }
       ManualTimecards {
         nextToken
-        startedAt
         __typename
       }
       lat
@@ -1802,21 +1587,14 @@ export const deleteFacility = /* GraphQL */ `
         topUpPercentage
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       Requests {
         nextToken
-        startedAt
         __typename
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       facilityBillingId
       __typename
     }
@@ -1834,9 +1612,6 @@ export const createIDCounter = /* GraphQL */ `
       invoice
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -1853,9 +1628,6 @@ export const updateIDCounter = /* GraphQL */ `
       invoice
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -1872,9 +1644,6 @@ export const deleteIDCounter = /* GraphQL */ `
       invoice
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -1890,9 +1659,6 @@ export const createDocuments = /* GraphQL */ `
       name
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -1908,9 +1674,6 @@ export const updateDocuments = /* GraphQL */ `
       name
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -1926,9 +1689,6 @@ export const deleteDocuments = /* GraphQL */ `
       name
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -1946,9 +1706,6 @@ export const createTimecardGEOEvents = /* GraphQL */ `
       timecardID
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -1966,9 +1723,6 @@ export const updateTimecardGEOEvents = /* GraphQL */ `
       timecardID
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -1986,9 +1740,6 @@ export const deleteTimecardGEOEvents = /* GraphQL */ `
       timecardID
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -2045,17 +1796,14 @@ export const createPeople = /* GraphQL */ `
       adminHold
       PeopleFacility {
         nextToken
-        startedAt
         __typename
       }
       chatrooms {
         nextToken
-        startedAt
         __typename
       }
       Messages {
         nextToken
-        startedAt
         __typename
       }
       empCheckList {
@@ -2066,57 +1814,45 @@ export const createPeople = /* GraphQL */ `
       permissions
       Timecards {
         nextToken
-        startedAt
         __typename
       }
       ManualTimecards {
         nextToken
-        startedAt
         __typename
       }
       News {
         nextToken
-        startedAt
         __typename
       }
       Templates {
         nextToken
-        startedAt
         __typename
       }
       type
       availability
       reminderss {
         nextToken
-        startedAt
         __typename
       }
       notificationss {
         nextToken
-        startedAt
         __typename
       }
       Notifications {
         nextToken
-        startedAt
         __typename
       }
       immunization
       Reviews {
         nextToken
-        startedAt
         __typename
       }
       Requests {
         nextToken
-        startedAt
         __typename
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -2173,17 +1909,14 @@ export const updatePeople = /* GraphQL */ `
       adminHold
       PeopleFacility {
         nextToken
-        startedAt
         __typename
       }
       chatrooms {
         nextToken
-        startedAt
         __typename
       }
       Messages {
         nextToken
-        startedAt
         __typename
       }
       empCheckList {
@@ -2194,57 +1927,45 @@ export const updatePeople = /* GraphQL */ `
       permissions
       Timecards {
         nextToken
-        startedAt
         __typename
       }
       ManualTimecards {
         nextToken
-        startedAt
         __typename
       }
       News {
         nextToken
-        startedAt
         __typename
       }
       Templates {
         nextToken
-        startedAt
         __typename
       }
       type
       availability
       reminderss {
         nextToken
-        startedAt
         __typename
       }
       notificationss {
         nextToken
-        startedAt
         __typename
       }
       Notifications {
         nextToken
-        startedAt
         __typename
       }
       immunization
       Reviews {
         nextToken
-        startedAt
         __typename
       }
       Requests {
         nextToken
-        startedAt
         __typename
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -2301,17 +2022,14 @@ export const deletePeople = /* GraphQL */ `
       adminHold
       PeopleFacility {
         nextToken
-        startedAt
         __typename
       }
       chatrooms {
         nextToken
-        startedAt
         __typename
       }
       Messages {
         nextToken
-        startedAt
         __typename
       }
       empCheckList {
@@ -2322,57 +2040,45 @@ export const deletePeople = /* GraphQL */ `
       permissions
       Timecards {
         nextToken
-        startedAt
         __typename
       }
       ManualTimecards {
         nextToken
-        startedAt
         __typename
       }
       News {
         nextToken
-        startedAt
         __typename
       }
       Templates {
         nextToken
-        startedAt
         __typename
       }
       type
       availability
       reminderss {
         nextToken
-        startedAt
         __typename
       }
       notificationss {
         nextToken
-        startedAt
         __typename
       }
       Notifications {
         nextToken
-        startedAt
         __typename
       }
       immunization
       Reviews {
         nextToken
-        startedAt
         __typename
       }
       Requests {
         nextToken
-        startedAt
         __typename
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -2397,9 +2103,6 @@ export const createNotificationsPeople = /* GraphQL */ `
         receivers
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       people {
@@ -2447,16 +2150,10 @@ export const createNotificationsPeople = /* GraphQL */ `
         immunization
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -2481,9 +2178,6 @@ export const updateNotificationsPeople = /* GraphQL */ `
         receivers
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       people {
@@ -2531,16 +2225,10 @@ export const updateNotificationsPeople = /* GraphQL */ `
         immunization
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -2565,9 +2253,6 @@ export const deleteNotificationsPeople = /* GraphQL */ `
         receivers
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       people {
@@ -2615,16 +2300,10 @@ export const deleteNotificationsPeople = /* GraphQL */ `
         immunization
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -2649,9 +2328,6 @@ export const createRemindersPeople = /* GraphQL */ `
         message
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       people {
@@ -2699,16 +2375,10 @@ export const createRemindersPeople = /* GraphQL */ `
         immunization
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -2733,9 +2403,6 @@ export const updateRemindersPeople = /* GraphQL */ `
         message
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       people {
@@ -2783,16 +2450,10 @@ export const updateRemindersPeople = /* GraphQL */ `
         immunization
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -2817,9 +2478,6 @@ export const deleteRemindersPeople = /* GraphQL */ `
         message
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       people {
@@ -2867,16 +2525,10 @@ export const deleteRemindersPeople = /* GraphQL */ `
         immunization
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -2897,9 +2549,6 @@ export const createChatRoomPeople = /* GraphQL */ `
         latestMessageTime
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       people {
@@ -2947,16 +2596,10 @@ export const createChatRoomPeople = /* GraphQL */ `
         immunization
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -2977,9 +2620,6 @@ export const updateChatRoomPeople = /* GraphQL */ `
         latestMessageTime
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       people {
@@ -3027,16 +2667,10 @@ export const updateChatRoomPeople = /* GraphQL */ `
         immunization
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -3057,9 +2691,6 @@ export const deleteChatRoomPeople = /* GraphQL */ `
         latestMessageTime
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       people {
@@ -3107,16 +2738,10 @@ export const deleteChatRoomPeople = /* GraphQL */ `
         immunization
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -3148,9 +2773,6 @@ export const createPeopleFacility = /* GraphQL */ `
         lng
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         facilityBillingId
         __typename
       }
@@ -3199,16 +2821,10 @@ export const createPeopleFacility = /* GraphQL */ `
         immunization
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -3240,9 +2856,6 @@ export const updatePeopleFacility = /* GraphQL */ `
         lng
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         facilityBillingId
         __typename
       }
@@ -3291,16 +2904,10 @@ export const updatePeopleFacility = /* GraphQL */ `
         immunization
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }
@@ -3332,9 +2939,6 @@ export const deletePeopleFacility = /* GraphQL */ `
         lng
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         facilityBillingId
         __typename
       }
@@ -3383,16 +2987,10 @@ export const deletePeopleFacility = /* GraphQL */ `
         immunization
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         __typename
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       __typename
     }
   }

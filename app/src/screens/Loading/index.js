@@ -18,10 +18,10 @@ const Loading = () => {
         // data-testid="loader"
       /> */}
       <div>
-        <PropagateLoader
-          color={themeStyles.PRIMARY_COLOR}
+        <PuffLoader
+          color={themeStyles.SECONDARY_COLOR}
           loading={true}
-          size={30}
+          size={100}
           // aria-label="Loading Spinner"
           // data-testid="loader"
         />

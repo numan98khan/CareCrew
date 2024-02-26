@@ -120,4 +120,4 @@ export const STAFF_PERMISSIONS = {
   ],
 };
 
-export const SUPER_ADMIN = "admin@instacarenursing.com";
+export const SUPER_ADMIN = "numan98khan@gmail.com";

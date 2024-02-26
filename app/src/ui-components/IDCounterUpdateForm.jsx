@@ -7,9 +7,10 @@
 /* eslint-disable */
 import * as React from "react";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
-import { IDCounter } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { DataStore } from "aws-amplify";
+import { API } from "aws-amplify";
+import { getIDCounter } from "../graphql/queries";
+import { updateIDCounter } from "../graphql/mutations";
 export default function IDCounterUpdateForm(props) {
   const {
     id: idProp,
@@ -45,7 +46,12 @@ export default function IDCounterUpdateForm(props) {
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
-        ? await DataStore.query(IDCounter, idProp)
+        ? (
+            await API.graphql({
+              query: getIDCounter.replaceAll("__typename", ""),
+              variables: { id: idProp },
+            })
+          )?.data?.getIDCounter
         : iDCounterModelProp;
       setIDCounterRecord(record);
     };
@@ -83,9 +89,9 @@ export default function IDCounterUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          people,
-          facility,
-          invoice,
+          people: people ?? null,
+          facility: facility ?? null,
+          invoice: invoice ?? null,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -115,17 +121,22 @@ export default function IDCounterUpdateForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(
-            IDCounter.copyOf(iDCounterRecord, (updated) => {
-              Object.assign(updated, modelFields);
-            })
-          );
+          await API.graphql({
+            query: updateIDCounter.replaceAll("__typename", ""),
+            variables: {
+              input: {
+                id: iDCounterRecord.id,
+                ...modelFields,
+              },
+            },
+          });
           if (onSuccess) {
             onSuccess(modelFields);
           }
         } catch (err) {
           if (onError) {
-            onError(modelFields, err.message);
+            const messages = err.errors.map((e) => e.message).join("\n");
+            onError(modelFields, messages);
           }
         }
       }}

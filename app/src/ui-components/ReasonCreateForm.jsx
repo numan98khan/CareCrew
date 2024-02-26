@@ -13,9 +13,9 @@ import {
   SelectField,
   TextField,
 } from "@aws-amplify/ui-react";
-import { Reason } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { DataStore } from "aws-amplify";
+import { API } from "aws-amplify";
+import { createReason } from "../graphql/mutations";
 export default function ReasonCreateForm(props) {
   const {
     clearOnSuccess = true,
@@ -105,7 +105,14 @@ export default function ReasonCreateForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(new Reason(modelFields));
+          await API.graphql({
+            query: createReason.replaceAll("__typename", ""),
+            variables: {
+              input: {
+                ...modelFields,
+              },
+            },
+          });
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -114,7 +121,8 @@ export default function ReasonCreateForm(props) {
           }
         } catch (err) {
           if (onError) {
-            onError(modelFields, err.message);
+            const messages = err.errors.map((e) => e.message).join("\n");
+            onError(modelFields, messages);
           }
         }
       }}

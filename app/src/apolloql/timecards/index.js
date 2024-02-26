@@ -257,7 +257,7 @@ export const useListTimecards = (peopleID) => {
   let filterObject = {};
   filterObject.filter = {};
 
-  filterObject.filter._deleted = { ne: true };
+  // filterObject.filter._deleted = { ne: true };
   // filterObject.filter.clockOutTime = { eq: null };
 
   if (peopleID) {

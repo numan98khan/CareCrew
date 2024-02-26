@@ -83,23 +83,24 @@ export const setImageToCache = (imgSrc, imageUrl) => {
 };
 
 export const fetchImageFromStorage = async (imgSrc) => {
-  try {
-    // Get the signed URL for the image stored at the public level
-    const signedUrl = await Storage.get(imgSrc, { level: "public" });
+  return null;
+  // try {
+  //   // Get the signed URL for the image stored at the public level
+  //   const signedUrl = await Storage.get(imgSrc, { level: "public" });
 
-    // Try to fetch the image using the signed URL
-    const response = await fetch(signedUrl);
+  //   // Try to fetch the image using the signed URL
+  //   const response = await fetch(signedUrl);
 
-    if (response.status === 404) {
-      // console.error("Image not found in S3:", imgSrc);
-      return null;
-    }
+  //   if (response.status === 404) {
+  //     // console.error("Image not found in S3:", imgSrc);
+  //     return null;
+  //   }
 
-    return signedUrl;
-  } catch (error) {
-    console.error("Error fetching image from storage:", error);
-    throw error;
-  }
+  //   return signedUrl;
+  // } catch (error) {
+  //   console.error("Error fetching image from storage:", error);
+  //   throw error;
+  // }
 };
 
 // export const retrieveImage = async (imgSrc) => {

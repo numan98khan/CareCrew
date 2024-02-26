@@ -113,7 +113,7 @@ function Staff({ setIsStaffDetails, setSelectedStaff }) {
       ) : (
         <>
           <div className="flex flex-wrap p-4">
-            {staff.map((item) => {
+            {staff?.map((item) => {
               return (
                 <div className={``}>
                   <StaffCard

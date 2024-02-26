@@ -1,6 +1,6 @@
 projects:
-  InstaCareApp:
-    schemaPath: amplify/backend/api/instacare/build/schema.graphql
+  CareCrew:
+    schemaPath: amplify/backend/api/carecrew/build/schema.graphql
     includes:
       - src/graphql/**/*.js
     excludes:
@@ -14,6 +14,17 @@ projects:
         apiId: null
         maxDepth: 3
   instacare:
+    schemaPath: src/graphql/schema.json
+    includes:
+      - src/graphql/**/*.js
+    excludes:
+      - ./amplify/**
+    extensions:
+      amplify:
+        codeGenTarget: javascript
+        generatedFileName: ''
+        docsFilePath: src/graphql
+  carecrew:
     schemaPath: src/graphql/schema.json
     includes:
       - src/graphql/**/*.js

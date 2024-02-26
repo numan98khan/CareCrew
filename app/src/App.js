@@ -70,6 +70,10 @@ function App() {
           graphqlOperation(GET_PEOPLE, { id: user.attributes.sub })
         );
 
+        // const userData = await API.graphql(
+        //   graphqlOperation(getPeople, { id: user.attributes.sub })
+        // );
+
         // Set a new state or context value here if adminHold is true
         if (userData?.data?.getPeople?.adminHold) {
           signIn("adminHold");
@@ -78,7 +82,7 @@ function App() {
         }
 
         loadIsSuperAdmin(
-          userData?.data?.getPeople?.email === "admin@instacarenursing.com"
+          userData?.data?.getPeople?.email === "numan98khan@gmail.com"
         );
 
         const jsonPermissions = JSON.parse(
@@ -140,41 +144,45 @@ function App() {
             },
           });
         }
+        console.log(
+          "🚀 ~ .then ~ userData?.data?.getPeople:",
+          userData?.data?.getPeople
+        );
 
-        // Handle subscription for updating facility data
-        subscriptionPeople = API.graphql(
-          graphqlOperation(onUpdatePeople, { id: user.attributes.sub })
-        ).subscribe({
-          next: async ({
-            value: {
-              data: { onUpdatePeople },
-            },
-          }) => {
-            if (
-              onUpdatePeople &&
-              (onUpdatePeople?.id === user.attributes.sub ||
-                onUpdatePeople?.id === personalData?.id)
-            ) {
-              // Call your context setters here
+        // // Handle subscription for updating facility data
+        // subscriptionPeople = API.graphql(
+        //   graphqlOperation(onUpdatePeople, { id: user.attributes.sub })
+        // ).subscribe({
+        //   next: async ({
+        //     value: {
+        //       data: { onUpdatePeople },
+        //     },
+        //   }) => {
+        //     if (
+        //       onUpdatePeople &&
+        //       (onUpdatePeople?.id === user.attributes.sub ||
+        //         onUpdatePeople?.id === personalData?.id)
+        //     ) {
+        //       // Call your context setters here
 
-              const jsonPermissions = JSON.parse(onUpdatePeople.permissions);
+        //       const jsonPermissions = JSON.parse(onUpdatePeople.permissions);
 
-              // console.log(
-              //   "Employee Permissions Reloaded",
-              //   jsonPermissions.access
-              // );
+        //       // console.log(
+        //       //   "Employee Permissions Reloaded",
+        //       //   jsonPermissions.access
+        //       // );
 
-              if (onUpdatePeople?.type !== FACILITY) {
-                loadPermissions(jsonPermissions);
-              }
-              loadType(onUpdatePeople.type);
-              loadPersonalData(onUpdatePeople);
-            }
-          },
-          error: (error) => {
-            console.error("Error with the subscription: ", error);
-          },
-        });
+        //       if (onUpdatePeople?.type !== FACILITY) {
+        //         loadPermissions(jsonPermissions);
+        //       }
+        //       loadType(onUpdatePeople.type);
+        //       loadPersonalData(onUpdatePeople);
+        //     }
+        //   },
+        //   error: (error) => {
+        //     console.error("Error with the subscription: ", error);
+        //   },
+        // });
       })
       .catch((error) => {
         console.log("Error", error);
@@ -193,16 +201,7 @@ function App() {
     };
   }, []);
 
-  // useEffect(() => {
-  //   if (user?.attributes?.sub) {
-  //     // Only setup interval if user is authenticated
-  //     const intervalId = setInterval(() => {
-  //       updateLastActivity(user?.attributes?.sub);
-  //     }, 60000 * 5); // Updates every 5 minutes
-
-  //     return () => clearInterval(intervalId); // Clear interval on component unmount
-  //   }
-  // }, [user?.attributes?.sub]);
+  // return <Loading />;
 
   if (loading) {
     return <Loading />; // Your loading component

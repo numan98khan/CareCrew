@@ -6,7 +6,6 @@
 
 import * as React from "react";
 import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
-import { Documents } from "../models";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
 } | null;
@@ -40,7 +39,7 @@ export declare type DocumentsUpdateFormProps = React.PropsWithChildren<{
     overrides?: DocumentsUpdateFormOverridesProps | undefined | null;
 } & {
     id?: string;
-    documents?: Documents;
+    documents?: any;
     onSubmit?: (fields: DocumentsUpdateFormInputValues) => DocumentsUpdateFormInputValues;
     onSuccess?: (fields: DocumentsUpdateFormInputValues) => void;
     onError?: (fields: DocumentsUpdateFormInputValues, errorMessage: string) => void;

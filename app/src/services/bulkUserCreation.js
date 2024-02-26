@@ -12,7 +12,7 @@ export const createBulkUsers = async (users) => {
   users.action = "create";
 
   const apiName = "ic-services";
-  const path = "/create-user/";
+  const path = "/cc-create-user/";
   const myInit = {
     body: { user: users },
     headers: {
@@ -86,7 +86,7 @@ export const createBulkShifts = async (payload) => {
   }
 
   const apiName = "ic-services";
-  const path = "/bulk-shifts/";
+  const path = "/cc-bulk-shifts/";
   const myInit = {
     body: payload,
     headers: {
@@ -97,6 +97,7 @@ export const createBulkShifts = async (payload) => {
   };
 
   const result = await API.post(apiName, path, myInit);
+  console.log("🚀 ~ createBulkShifts ~ result:", result);
 
   const parsedBody = JSON.parse(result.body);
   return { result, parsedBody };

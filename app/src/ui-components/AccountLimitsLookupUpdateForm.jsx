@@ -7,9 +7,10 @@
 /* eslint-disable */
 import * as React from "react";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
-import { AccountLimitsLookup } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { DataStore } from "aws-amplify";
+import { API } from "aws-amplify";
+import { getAccountLimitsLookup } from "../graphql/queries";
+import { updateAccountLimitsLookup } from "../graphql/mutations";
 export default function AccountLimitsLookupUpdateForm(props) {
   const {
     id: idProp,
@@ -48,7 +49,12 @@ export default function AccountLimitsLookupUpdateForm(props) {
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
-        ? await DataStore.query(AccountLimitsLookup, idProp)
+        ? (
+            await API.graphql({
+              query: getAccountLimitsLookup.replaceAll("__typename", ""),
+              variables: { id: idProp },
+            })
+          )?.data?.getAccountLimitsLookup
         : accountLimitsLookupModelProp;
       setAccountLimitsLookupRecord(record);
     };
@@ -87,10 +93,10 @@ export default function AccountLimitsLookupUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          facilityID,
-          attribute,
-          month,
-          amount,
+          facilityID: facilityID ?? null,
+          attribute: attribute ?? null,
+          month: month ?? null,
+          amount: amount ?? null,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -120,17 +126,22 @@ export default function AccountLimitsLookupUpdateForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(
-            AccountLimitsLookup.copyOf(accountLimitsLookupRecord, (updated) => {
-              Object.assign(updated, modelFields);
-            })
-          );
+          await API.graphql({
+            query: updateAccountLimitsLookup.replaceAll("__typename", ""),
+            variables: {
+              input: {
+                id: accountLimitsLookupRecord.id,
+                ...modelFields,
+              },
+            },
+          });
           if (onSuccess) {
             onSuccess(modelFields);
           }
         } catch (err) {
           if (onError) {
-            onError(modelFields, err.message);
+            const messages = err.errors.map((e) => e.message).join("\n");
+            onError(modelFields, messages);
           }
         }
       }}

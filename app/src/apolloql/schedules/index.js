@@ -66,13 +66,8 @@ const listShiftsCustom = /* GraphQL */ `
         }
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        __typename
       }
       nextToken
-      startedAt
       __typename
     }
   }
@@ -432,7 +427,7 @@ export const useListShifts = (
   isIncentive
 ) => {
   const filter = {
-    _deleted: { ne: true },
+    // _deleted: { ne: true },
     // isArchive: { ne: true },
     ...(facilityID && { facilityID: { eq: facilityID } }),
     ...(role && { roleRequired: { eq: role } }),

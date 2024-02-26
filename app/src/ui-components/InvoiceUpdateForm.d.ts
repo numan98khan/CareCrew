@@ -6,7 +6,6 @@
 
 import * as React from "react";
 import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
-import { Invoice } from "../models";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
 } | null;
@@ -49,7 +48,7 @@ export declare type InvoiceUpdateFormProps = React.PropsWithChildren<{
     overrides?: InvoiceUpdateFormOverridesProps | undefined | null;
 } & {
     id?: string;
-    invoice?: Invoice;
+    invoice?: any;
     onSubmit?: (fields: InvoiceUpdateFormInputValues) => InvoiceUpdateFormInputValues;
     onSuccess?: (fields: InvoiceUpdateFormInputValues) => void;
     onError?: (fields: InvoiceUpdateFormInputValues, errorMessage: string) => void;

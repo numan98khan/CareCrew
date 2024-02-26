@@ -26,8 +26,7 @@ import { AuthProvider } from "./context";
 awsconfig["aws_cloud_logic_custom"] = [
   {
     name: "ic-services",
-    endpoint:
-      "https://5ngs62w6c5.execute-api.us-east-1.amazonaws.com/ic-api-staging",
+    endpoint: "https://zsrpg3wv32.execute-api.us-east-1.amazonaws.com/staging",
     region: "us-east-1",
   },
 ];

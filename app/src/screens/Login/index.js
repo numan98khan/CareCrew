@@ -27,6 +27,7 @@ import { useApolloClient } from "@apollo/client";
 import { onUpdateFacility, onUpdatePeople } from "../../graphql/subscriptions";
 import { GET_PEOPLE } from "../../apolloql/queries";
 import themeStyles from "../../styles/theme.styles";
+import Footer from "../../components/Footer";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -45,15 +46,15 @@ const Login = () => {
 
   // const [loading, setLoading] = useState(true);
 
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const [email, setEmail] = useState("numan98khan@gmail.com");
+  // const [email, setEmail] = useState("numan98khan@gmail.com");
   // const [email, setEmail] = useState("hassan@instacare.com");
   // const [email, setEmail] = useState("admin@instacarenursing.com");
   // const [email, setEmail] = useState("matthew@instacarenursing.com");
 
-  const [password, setPassword] = useState("Rentto@123");
+  // const [password, setPassword] = useState("Rentto@123");
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -296,15 +297,33 @@ const Login = () => {
   );
 };
 
+// const LoginLayout = ({ children }) => (
+//   <div className="flex flex-row w-full h-screen">
+//     <div className="absolute top-5 left-5">
+//       <Logo size={3} className="mb-14" />
+//     </div>
+//     <div className="flex justify-center items-center w-full bg-gray-50">
+//       <div className="items-center border border-gray-200 rounded-lg shadow w-1/4">
+//         {children}
+//       </div>
+//     </div>
+//     <Footer />
+//   </div>
+// );
+
 const LoginLayout = ({ children }) => (
-  <div className="flex flex-row w-full h-screen">
-    <div className="flex-1 flex justify-center items-center">
-      <div>
-        <Logo size={8} className="mb-14" />
-        {children}
+  <div className="flex flex-col justify-between w-full h-screen">
+    <div className="h-full">
+      <div className="absolute top-5 left-5">
+        <Logo size={3} className="mb-14" />
+      </div>
+      <div className="flex justify-center items-center w-full bg-gray-50 h-full">
+        <div className="items-center border border-gray-200 rounded-lg shadow w-1/4">
+          {children}
+        </div>
       </div>
     </div>
-    <RightPane />
+    <Footer />
   </div>
 );
 
@@ -338,7 +357,7 @@ const SignInForm = ({
     className="w-full bg-white rounded px-8 pt-6 pb-8"
   >
     <label className="text-lg font-bold" htmlFor="email">
-      Welcome Back!
+      Sign In
     </label>
     <div className="mb-5" />
     <div className="mb-2">
@@ -393,7 +412,7 @@ const SignInForm = ({
         Forgot password?
       </label>
     </div>
-    <div className="mb-40" />
+    {/* <div className="mb-40" /> */}
   </form>
 );
 
@@ -454,7 +473,7 @@ const FirstLoginForm = ({
         Setup
       </Button>
     </div>
-    <div className="mb-40" />
+    {/* <div className="mb-40" /> */}
   </form>
 );
 
@@ -528,7 +547,6 @@ const SetNewPasswordForm = ({
         Reset
       </Button>
     </div>
-    <div className="mb-40" />
   </form>
 );
 

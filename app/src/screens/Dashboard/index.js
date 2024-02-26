@@ -65,6 +65,7 @@ import BackButton from "../../components/Button/BackButton";
 import { SUPER_ADMIN } from "../../constants/permissions";
 import { ScaleHover } from "../../styles/animations";
 import { userTimezone } from "../../apolloql/timezone";
+import Charts from "./Charts";
 
 // import { reverseFormatDate } from "../../services/micro";
 const getSummaryData = (type) => {
@@ -140,7 +141,7 @@ const getSummaryData = (type) => {
 const Dashboard = () => {
   const { user, type, myFacility, permissions, personalData } = useAuth();
 
-  const actionPermissions = [...permissions.permissions];
+  // const actionPermissions = [...permissions?.permissions];
   const isSuperAdmin = SUPER_ADMIN === user?.attributes?.email;
   const canCreateShift = isSuperAdmin
     ? true
@@ -777,26 +778,51 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="flex flex-wrap">
-            {summaryData.map((item, index) => (
-              <div className="w-1/5 p-1 flex ">
-                <SummaryCard
-                  text={item.label}
-                  shifts={summaryShifts?.[item.datakey]}
-                  data={summaryShifts}
-                  datakey={item.datakey}
-                  gradient={item.gradient}
-                  icon={item.icon}
-                  onClick={() => {
-                    // console.log(summaryShifts[item.datakey]);
-                    if (item.datakey !== "daily") {
-                      handleSummaryCardClick(true, item.datakey);
-                    }
-                  }}
-                  disableHover={item.datakey === "daily"}
-                />
-              </div>
-            ))}
+          <div className="flex flex-row">
+            <div className="w-3/4">
+              <Charts />
+            </div>
+            <div className="flex flex-wrap h-1/2 w-1/4">
+              {summaryData.map((item, index) => (
+                <div className="w-1/2 p-1 flex ">
+                  <SummaryCard
+                    text={item.label}
+                    shifts={summaryShifts?.[item.datakey]}
+                    data={summaryShifts}
+                    datakey={item.datakey}
+                    // gradient={item.gradient}
+                    icon={item.icon}
+                    onClick={() => {
+                      // console.log(summaryShifts[item.datakey]);
+                      if (item.datakey !== "daily") {
+                        handleSummaryCardClick(true, item.datakey);
+                      }
+                    }}
+                    disableHover={item.datakey === "daily"}
+                  />
+                </div>
+              ))}
+
+              {summaryData.slice(0, 4).map((item, index) => (
+                <div className="w-1/2 p-1 flex ">
+                  <SummaryCard
+                    text={item.label}
+                    shifts={summaryShifts?.[item.datakey]}
+                    data={summaryShifts}
+                    datakey={item.datakey}
+                    // gradient={item.gradient}
+                    icon={item.icon}
+                    onClick={() => {
+                      // console.log(summaryShifts[item.datakey]);
+                      if (item.datakey !== "daily") {
+                        handleSummaryCardClick(true, item.datakey);
+                      }
+                    }}
+                    disableHover={item.datakey === "daily"}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="my-3" />

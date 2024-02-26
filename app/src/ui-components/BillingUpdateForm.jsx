@@ -13,9 +13,10 @@ import {
   SwitchField,
   TextField,
 } from "@aws-amplify/ui-react";
-import { Billing } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { DataStore } from "aws-amplify";
+import { API } from "aws-amplify";
+import { getBilling } from "../graphql/queries";
+import { updateBilling } from "../graphql/mutations";
 export default function BillingUpdateForm(props) {
   const {
     id: idProp,
@@ -128,7 +129,12 @@ export default function BillingUpdateForm(props) {
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
-        ? await DataStore.query(Billing, idProp)
+        ? (
+            await API.graphql({
+              query: getBilling.replaceAll("__typename", ""),
+              variables: { id: idProp },
+            })
+          )?.data?.getBilling
         : billingModelProp;
       setBillingRecord(record);
     };
@@ -198,24 +204,24 @@ export default function BillingUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          allowOvertime,
-          maxBillingMonthly,
-          remainingBillingMonthly,
-          hourlyRate,
-          hourlyRateCNA,
-          hourlyRateLPN,
-          hourlyRateRN,
-          weekendHourlyRate,
-          holidayHourlyRate,
-          maxMonthlyIncentive,
-          remainingMonthlyIncentive,
-          maxHourlyIncentive,
-          maxFixedIncentive,
-          billingEmail,
-          billingMonth,
-          invoiceDelivery,
-          invoiceFrequency,
-          topUpPercentage,
+          allowOvertime: allowOvertime ?? null,
+          maxBillingMonthly: maxBillingMonthly ?? null,
+          remainingBillingMonthly: remainingBillingMonthly ?? null,
+          hourlyRate: hourlyRate ?? null,
+          hourlyRateCNA: hourlyRateCNA ?? null,
+          hourlyRateLPN: hourlyRateLPN ?? null,
+          hourlyRateRN: hourlyRateRN ?? null,
+          weekendHourlyRate: weekendHourlyRate ?? null,
+          holidayHourlyRate: holidayHourlyRate ?? null,
+          maxMonthlyIncentive: maxMonthlyIncentive ?? null,
+          remainingMonthlyIncentive: remainingMonthlyIncentive ?? null,
+          maxHourlyIncentive: maxHourlyIncentive ?? null,
+          maxFixedIncentive: maxFixedIncentive ?? null,
+          billingEmail: billingEmail ?? null,
+          billingMonth: billingMonth ?? null,
+          invoiceDelivery: invoiceDelivery ?? null,
+          invoiceFrequency: invoiceFrequency ?? null,
+          topUpPercentage: topUpPercentage ?? null,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -245,17 +251,22 @@ export default function BillingUpdateForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(
-            Billing.copyOf(billingRecord, (updated) => {
-              Object.assign(updated, modelFields);
-            })
-          );
+          await API.graphql({
+            query: updateBilling.replaceAll("__typename", ""),
+            variables: {
+              input: {
+                id: billingRecord.id,
+                ...modelFields,
+              },
+            },
+          });
           if (onSuccess) {
             onSuccess(modelFields);
           }
         } catch (err) {
           if (onError) {
-            onError(modelFields, err.message);
+            const messages = err.errors.map((e) => e.message).join("\n");
+            onError(modelFields, messages);
           }
         }
       }}

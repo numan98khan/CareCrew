@@ -14,9 +14,10 @@ import {
   SwitchField,
   TextField,
 } from "@aws-amplify/ui-react";
-import { Reminders } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { DataStore } from "aws-amplify";
+import { API } from "aws-amplify";
+import { getReminders } from "../graphql/queries";
+import { updateReminders } from "../graphql/mutations";
 export default function RemindersUpdateForm(props) {
   const {
     id: idProp,
@@ -66,7 +67,12 @@ export default function RemindersUpdateForm(props) {
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
-        ? await DataStore.query(Reminders, idProp)
+        ? (
+            await API.graphql({
+              query: getReminders.replaceAll("__typename", ""),
+              variables: { id: idProp },
+            })
+          )?.data?.getReminders
         : remindersModelProp;
       setRemindersRecord(record);
     };
@@ -125,13 +131,13 @@ export default function RemindersUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          date,
-          time,
-          datetime,
-          receiverType,
-          note,
-          read,
-          message,
+          date: date ?? null,
+          time: time ?? null,
+          datetime: datetime ?? null,
+          receiverType: receiverType ?? null,
+          note: note ?? null,
+          read: read ?? null,
+          message: message ?? null,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -161,17 +167,22 @@ export default function RemindersUpdateForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(
-            Reminders.copyOf(remindersRecord, (updated) => {
-              Object.assign(updated, modelFields);
-            })
-          );
+          await API.graphql({
+            query: updateReminders.replaceAll("__typename", ""),
+            variables: {
+              input: {
+                id: remindersRecord.id,
+                ...modelFields,
+              },
+            },
+          });
           if (onSuccess) {
             onSuccess(modelFields);
           }
         } catch (err) {
           if (onError) {
-            onError(modelFields, err.message);
+            const messages = err.errors.map((e) => e.message).join("\n");
+            onError(modelFields, messages);
           }
         }
       }}

@@ -2,17 +2,20 @@ import { EMPLOYEE, ADMIN, FACILITY } from "./userTypes";
 
 export const people = {
   // id: null,
-  // firstName: null,
-  // lastName: null,
-  // email: null,
-  // phoneNumber: null,
-  // documents: null,
-  // country: null,
-  // city: null,
-  // state: null,
-  // zip: null,
+  firstName: "null",
+  lastName: "null",
+  email: "null@null.com",
+  phoneNumber: "1234567890",
+  documents: null,
+  country: "Pakistan",
+  city: "null",
+  state: "null",
+  zip: "44400",
+  role: "CNA",
+
   timezone: "America/New_York",
   language: "English",
+
   // isEmailNotifications: true,
   // isTextNotification: true,
   // effectiveStartDate: null,
@@ -28,6 +31,7 @@ export const people = {
   // licenseCode: null,
   // profilePicture: null,
   // role: null,
+
   payrollCycle: "Weekly",
   status: "Available",
   points: 0,

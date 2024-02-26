@@ -6,7 +6,6 @@
 
 import * as React from "react";
 import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
-import { ChatRoom } from "../models";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
 } | null;
@@ -43,7 +42,7 @@ export declare type ChatRoomUpdateFormProps = React.PropsWithChildren<{
     overrides?: ChatRoomUpdateFormOverridesProps | undefined | null;
 } & {
     id?: string;
-    chatRoom?: ChatRoom;
+    chatRoom?: any;
     onSubmit?: (fields: ChatRoomUpdateFormInputValues) => ChatRoomUpdateFormInputValues;
     onSuccess?: (fields: ChatRoomUpdateFormInputValues) => void;
     onError?: (fields: ChatRoomUpdateFormInputValues, errorMessage: string) => void;

@@ -6,7 +6,6 @@
 
 import * as React from "react";
 import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
-import { FCMLookup } from "../models";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
 } | null;
@@ -46,7 +45,7 @@ export declare type FCMLookupUpdateFormProps = React.PropsWithChildren<{
     overrides?: FCMLookupUpdateFormOverridesProps | undefined | null;
 } & {
     id?: string;
-    fCMLookup?: FCMLookup;
+    fCMLookup?: any;
     onSubmit?: (fields: FCMLookupUpdateFormInputValues) => FCMLookupUpdateFormInputValues;
     onSuccess?: (fields: FCMLookupUpdateFormInputValues) => void;
     onError?: (fields: FCMLookupUpdateFormInputValues, errorMessage: string) => void;

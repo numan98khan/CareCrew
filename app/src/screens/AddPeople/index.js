@@ -389,7 +389,7 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
 
     setIsLoading(true);
     const resp = await createUsers();
-    refetchPeople();
+    // refetchPeople();
     if (goBackHandler && resp === 1) {
       goBackHandler();
     }
@@ -531,7 +531,7 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
 
     inApplNotificationToInstacare(
       PEOPLE_UPDATED,
-      "Shift was edited",
+      "Person information was edited",
       formedMessage,
       createNotificationQuery
     );
@@ -539,7 +539,7 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
     inAppNotificationsToPeople(
       peopleDetails?.id,
       PEOPLE_UPDATED,
-      "Shift was edited",
+      "Person information was edited",
       formedMessage,
       createNotificationQuery
     );
@@ -566,21 +566,21 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
       }
     `;
 
-    const userData = (
-      await API.graphql(graphqlOperation(GET_PEOPLE_MINIMAL, { id: people.id }))
-    )?.data?.getPeople;
-    console.log("🚀 ~ file: index.js:442 ~ updatePerson ~ userData:", userData);
+    // const userData = (
+    //   await API.graphql(graphqlOperation(GET_PEOPLE_MINIMAL, { id: people.id }))
+    // )?.data?.getPeople;
+    // console.log("🚀 ~ file: index.js:442 ~ updatePerson ~ userData:", userData);
 
     // return;
     const updatedPeople = {
       ...updatedFields,
-      id: userData.id,
+      id: people.id,
       permissions: permissionsString,
       profilePicture: imageUrl,
       empCheckList: people?.empCheckList?.map(
         ({ __typename, ...rest }) => rest
       ),
-      _version: userData._version,
+      // _version: userData._version,
     };
 
     // Generate a string from the updatedFields
@@ -1226,7 +1226,7 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
                   <Button
                     children={"POST"}
                     onClick={publishPeople}
-                    disabled={isLoading}
+                    // disabled={isLoading}
                   />
                 )}
 

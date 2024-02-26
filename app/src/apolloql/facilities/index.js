@@ -18,62 +18,6 @@ export const listFacilities = /* GraphQL */ `
     listFacilities(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        FacilityPeople {
-          items {
-            id
-            peopleId
-            facilityId
-            people {
-              id
-              firstName
-              lastName
-              phoneNumber
-              documents {
-                name
-                key
-              }
-              country
-              city
-              state
-              zip
-              timezone
-              language
-              isEmailNotifications
-              isTextNotification
-              effectiveStartDate
-              driverLicenseNumber
-              driverLicenseState
-              SSN
-              uniformSize
-              isCompleteDrugScreening
-              emergencyContactName
-              emergencyContactNumber
-              emergencyContactRelationship
-              milesToWork
-              licenseCode
-              profilePicture
-              role
-              status
-              email
-              points
-              rating
-              empCheckList {
-                name
-                isBool
-              }
-              permissions
-            }
-            createdAt
-            updatedAt
-            _version
-            _deleted
-            _lastChangedAt
-            __typename
-          }
-          nextToken
-          startedAt
-          __typename
-        }
         imgSrc
         facilityName
         aboutFacility
@@ -108,15 +52,8 @@ export const listFacilities = /* GraphQL */ `
           hourlyRateLPN
           hourlyRateRN
         }
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        __typename
       }
       nextToken
-      startedAt
       __typename
     }
   }
@@ -306,6 +243,8 @@ export const useUpdateFacility = () => {
 // LIST_PEOPLE query hook
 export const useListFacilities = () => {
   const { data, loading, error, refetch } = useQuery(gql(listFacilities));
+
+  // const { data, loading, error, refetch } = useQuery(gql(listFac));
 
   if (loading) {
     console.log("Loading Facilities...");

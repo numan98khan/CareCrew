@@ -7,9 +7,9 @@
 /* eslint-disable */
 import * as React from "react";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
-import { AccountLimitsLookup } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { DataStore } from "aws-amplify";
+import { API } from "aws-amplify";
+import { createAccountLimitsLookup } from "../graphql/mutations";
 export default function AccountLimitsLookupCreateForm(props) {
   const {
     clearOnSuccess = true,
@@ -104,7 +104,14 @@ export default function AccountLimitsLookupCreateForm(props) {
               modelFields[key] = null;
             }
           });
-          await DataStore.save(new AccountLimitsLookup(modelFields));
+          await API.graphql({
+            query: createAccountLimitsLookup.replaceAll("__typename", ""),
+            variables: {
+              input: {
+                ...modelFields,
+              },
+            },
+          });
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -113,7 +120,8 @@ export default function AccountLimitsLookupCreateForm(props) {
           }
         } catch (err) {
           if (onError) {
-            onError(modelFields, err.message);
+            const messages = err.errors.map((e) => e.message).join("\n");
+            onError(modelFields, messages);
           }
         }
       }}
