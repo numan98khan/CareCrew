@@ -98,7 +98,6 @@ type FCMLookup @model @auth(rules: [{allow: public}]) {
   topic: String
 }
 
-
 type AccountLimitsLookup @model @auth(rules: [{allow: public}]) {
   id: ID!
   facilityID: String
@@ -106,7 +105,6 @@ type AccountLimitsLookup @model @auth(rules: [{allow: public}]) {
   month: Int
   amount: Float
 }
-
 
 type InvoiceDetails {
   description: String
@@ -229,7 +227,7 @@ type Timecard @model @auth(rules: [{allow: public}]) {
   isAutoClockIn: Boolean
   allowedDelay: Int
   allowedDelayClockIn: Int
-  allowedDelayClockOut : Int
+  allowedDelayClockOut: Int
   isCallOff: Boolean
   peopleID: ID! @index(name: "byPeople")
   shiftsID: ID! @index(name: "byShifts")
@@ -257,7 +255,7 @@ type CheckList {
 type Message @model @auth(rules: [{allow: public}]) {
   id: ID!
   text: String
-  document: Document 
+  document: Document
   peopleID: ID! @index(name: "byPeople")
   chatroomID: ID! @index(name: "byChatRoom")
   platform: String
@@ -331,7 +329,6 @@ type Facility @model @auth(rules: [{allow: public}]) {
   documents: Document
   Billing: Billing @hasOne
   Requests: [Requests] @hasMany(indexName: "byFacility", fields: ["id"])
-
 }
 
 type IDCounter @model @auth(rules: [{allow: public}]) {
@@ -346,6 +343,7 @@ enum Roles {
   RN
   CNA
 }
+
 type Documents @model @auth(rules: [{allow: public}]) {
   id: ID!
   docURL: AWSURL

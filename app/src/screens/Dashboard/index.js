@@ -778,33 +778,19 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="flex flex-row">
-            <div className="w-3/4">
+          <div className="flex flex-row ">
+            {/* <div className="w-3/4">
               <Charts />
-            </div>
-            <div className="flex flex-wrap h-1/2 w-1/4">
+            </div> */}
+            <div
+              // className="flex flex-wrap h-1/2 w-1/4"
+              className="flex flex-wrap w-full"
+            >
               {summaryData.map((item, index) => (
-                <div className="w-1/2 p-1 flex ">
-                  <SummaryCard
-                    text={item.label}
-                    shifts={summaryShifts?.[item.datakey]}
-                    data={summaryShifts}
-                    datakey={item.datakey}
-                    // gradient={item.gradient}
-                    icon={item.icon}
-                    onClick={() => {
-                      // console.log(summaryShifts[item.datakey]);
-                      if (item.datakey !== "daily") {
-                        handleSummaryCardClick(true, item.datakey);
-                      }
-                    }}
-                    disableHover={item.datakey === "daily"}
-                  />
-                </div>
-              ))}
-
-              {summaryData.slice(0, 4).map((item, index) => (
-                <div className="w-1/2 p-1 flex ">
+                <div
+                  // className="w-1/2 p-1 flex "
+                  className="w-1/5 p-1 flex "
+                >
                   <SummaryCard
                     text={item.label}
                     shifts={summaryShifts?.[item.datakey]}

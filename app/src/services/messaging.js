@@ -34,6 +34,9 @@ export const sendBulkMessages_original = async (payload) => {
 };
 
 export const sendBulkMessages = async (payload) => {
+  console.error("🚀 ~ NOTIFICATIONS ARE DISABLED:");
+
+  return 0;
   const user = await Auth.currentAuthenticatedUser();
 
   if (!user) {

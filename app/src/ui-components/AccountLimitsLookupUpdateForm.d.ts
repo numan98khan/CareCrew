@@ -6,6 +6,7 @@
 
 import * as React from "react";
 import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { AccountLimitsLookup } from "../models";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
 } | null;
@@ -45,7 +46,7 @@ export declare type AccountLimitsLookupUpdateFormProps = React.PropsWithChildren
     overrides?: AccountLimitsLookupUpdateFormOverridesProps | undefined | null;
 } & {
     id?: string;
-    accountLimitsLookup?: any;
+    accountLimitsLookup?: AccountLimitsLookup;
     onSubmit?: (fields: AccountLimitsLookupUpdateFormInputValues) => AccountLimitsLookupUpdateFormInputValues;
     onSuccess?: (fields: AccountLimitsLookupUpdateFormInputValues) => void;
     onError?: (fields: AccountLimitsLookupUpdateFormInputValues, errorMessage: string) => void;

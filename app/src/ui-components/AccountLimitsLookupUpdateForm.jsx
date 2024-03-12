@@ -7,10 +7,9 @@
 /* eslint-disable */
 import * as React from "react";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import { AccountLimitsLookup } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { API } from "aws-amplify";
-import { getAccountLimitsLookup } from "../graphql/queries";
-import { updateAccountLimitsLookup } from "../graphql/mutations";
+import { DataStore } from "aws-amplify";
 export default function AccountLimitsLookupUpdateForm(props) {
   const {
     id: idProp,
@@ -49,12 +48,7 @@ export default function AccountLimitsLookupUpdateForm(props) {
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
-        ? (
-            await API.graphql({
-              query: getAccountLimitsLookup.replaceAll("__typename", ""),
-              variables: { id: idProp },
-            })
-          )?.data?.getAccountLimitsLookup
+        ? await DataStore.query(AccountLimitsLookup, idProp)
         : accountLimitsLookupModelProp;
       setAccountLimitsLookupRecord(record);
     };
@@ -93,10 +87,10 @@ export default function AccountLimitsLookupUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          facilityID: facilityID ?? null,
-          attribute: attribute ?? null,
-          month: month ?? null,
-          amount: amount ?? null,
+          facilityID,
+          attribute,
+          month,
+          amount,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -126,22 +120,17 @@ export default function AccountLimitsLookupUpdateForm(props) {
               modelFields[key] = null;
             }
           });
-          await API.graphql({
-            query: updateAccountLimitsLookup.replaceAll("__typename", ""),
-            variables: {
-              input: {
-                id: accountLimitsLookupRecord.id,
-                ...modelFields,
-              },
-            },
-          });
+          await DataStore.save(
+            AccountLimitsLookup.copyOf(accountLimitsLookupRecord, (updated) => {
+              Object.assign(updated, modelFields);
+            })
+          );
           if (onSuccess) {
             onSuccess(modelFields);
           }
         } catch (err) {
           if (onError) {
-            const messages = err.errors.map((e) => e.message).join("\n");
-            onError(modelFields, messages);
+            onError(modelFields, err.message);
           }
         }
       }}

@@ -13,10 +13,9 @@ import {
   SwitchField,
   TextField,
 } from "@aws-amplify/ui-react";
+import { Facility } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { API } from "aws-amplify";
-import { getFacility } from "../graphql/queries";
-import { updateFacility } from "../graphql/mutations";
+import { DataStore } from "aws-amplify";
 export default function FacilityUpdateForm(props) {
   const {
     id: idProp,
@@ -92,12 +91,7 @@ export default function FacilityUpdateForm(props) {
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
-        ? (
-            await API.graphql({
-              query: getFacility.replaceAll("__typename", ""),
-              variables: { id: idProp },
-            })
-          )?.data?.getFacility
+        ? await DataStore.query(Facility, idProp)
         : facilityModelProp;
       setFacilityRecord(record);
     };
@@ -146,20 +140,20 @@ export default function FacilityUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          imgSrc: imgSrc ?? null,
-          facilityName: facilityName ?? null,
-          aboutFacility: aboutFacility ?? null,
-          streetAddress: streetAddress ?? null,
-          country: country ?? null,
-          city: city ?? null,
-          state: state ?? null,
-          zip: zip ?? null,
-          email: email ?? null,
-          isHidden: isHidden ?? null,
-          permissions: permissions ?? null,
-          adminHold: adminHold ?? null,
-          lat: lat ?? null,
-          lng: lng ?? null,
+          imgSrc,
+          facilityName,
+          aboutFacility,
+          streetAddress,
+          country,
+          city,
+          state,
+          zip,
+          email,
+          isHidden,
+          permissions,
+          adminHold,
+          lat,
+          lng,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -189,22 +183,17 @@ export default function FacilityUpdateForm(props) {
               modelFields[key] = null;
             }
           });
-          await API.graphql({
-            query: updateFacility.replaceAll("__typename", ""),
-            variables: {
-              input: {
-                id: facilityRecord.id,
-                ...modelFields,
-              },
-            },
-          });
+          await DataStore.save(
+            Facility.copyOf(facilityRecord, (updated) => {
+              Object.assign(updated, modelFields);
+            })
+          );
           if (onSuccess) {
             onSuccess(modelFields);
           }
         } catch (err) {
           if (onError) {
-            const messages = err.errors.map((e) => e.message).join("\n");
-            onError(modelFields, messages);
+            onError(modelFields, err.message);
           }
         }
       }}

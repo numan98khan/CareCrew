@@ -7,10 +7,9 @@
 /* eslint-disable */
 import * as React from "react";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import { IDCounter } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { API } from "aws-amplify";
-import { getIDCounter } from "../graphql/queries";
-import { updateIDCounter } from "../graphql/mutations";
+import { DataStore } from "aws-amplify";
 export default function IDCounterUpdateForm(props) {
   const {
     id: idProp,
@@ -46,12 +45,7 @@ export default function IDCounterUpdateForm(props) {
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
-        ? (
-            await API.graphql({
-              query: getIDCounter.replaceAll("__typename", ""),
-              variables: { id: idProp },
-            })
-          )?.data?.getIDCounter
+        ? await DataStore.query(IDCounter, idProp)
         : iDCounterModelProp;
       setIDCounterRecord(record);
     };
@@ -89,9 +83,9 @@ export default function IDCounterUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          people: people ?? null,
-          facility: facility ?? null,
-          invoice: invoice ?? null,
+          people,
+          facility,
+          invoice,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -121,22 +115,17 @@ export default function IDCounterUpdateForm(props) {
               modelFields[key] = null;
             }
           });
-          await API.graphql({
-            query: updateIDCounter.replaceAll("__typename", ""),
-            variables: {
-              input: {
-                id: iDCounterRecord.id,
-                ...modelFields,
-              },
-            },
-          });
+          await DataStore.save(
+            IDCounter.copyOf(iDCounterRecord, (updated) => {
+              Object.assign(updated, modelFields);
+            })
+          );
           if (onSuccess) {
             onSuccess(modelFields);
           }
         } catch (err) {
           if (onError) {
-            const messages = err.errors.map((e) => e.message).join("\n");
-            onError(modelFields, messages);
+            onError(modelFields, err.message);
           }
         }
       }}

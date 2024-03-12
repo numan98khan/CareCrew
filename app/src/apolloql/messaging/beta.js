@@ -74,6 +74,7 @@ const listChatRooms = /* GraphQL */ gql`
                   firstName
                   lastName
                   email
+                  _version
                   _deleted
                 }
               }

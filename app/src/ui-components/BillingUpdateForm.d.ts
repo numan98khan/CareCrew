@@ -6,6 +6,7 @@
 
 import * as React from "react";
 import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { Billing } from "../models";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
 } | null;
@@ -87,7 +88,7 @@ export declare type BillingUpdateFormProps = React.PropsWithChildren<{
     overrides?: BillingUpdateFormOverridesProps | undefined | null;
 } & {
     id?: string;
-    billing?: any;
+    billing?: Billing;
     onSubmit?: (fields: BillingUpdateFormInputValues) => BillingUpdateFormInputValues;
     onSuccess?: (fields: BillingUpdateFormInputValues) => void;
     onError?: (fields: BillingUpdateFormInputValues, errorMessage: string) => void;

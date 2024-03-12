@@ -7,10 +7,9 @@
 /* eslint-disable */
 import * as React from "react";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import { ChatRoom } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { API } from "aws-amplify";
-import { getChatRoom } from "../graphql/queries";
-import { updateChatRoom } from "../graphql/mutations";
+import { DataStore } from "aws-amplify";
 export default function ChatRoomUpdateForm(props) {
   const {
     id: idProp,
@@ -49,12 +48,7 @@ export default function ChatRoomUpdateForm(props) {
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
-        ? (
-            await API.graphql({
-              query: getChatRoom.replaceAll("__typename", ""),
-              variables: { id: idProp },
-            })
-          )?.data?.getChatRoom
+        ? await DataStore.query(ChatRoom, idProp)
         : chatRoomModelProp;
       setChatRoomRecord(record);
     };
@@ -109,9 +103,9 @@ export default function ChatRoomUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          title: title ?? null,
-          latestMessage: latestMessage ?? null,
-          latestMessageTime: latestMessageTime ?? null,
+          title,
+          latestMessage,
+          latestMessageTime,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -141,22 +135,17 @@ export default function ChatRoomUpdateForm(props) {
               modelFields[key] = null;
             }
           });
-          await API.graphql({
-            query: updateChatRoom.replaceAll("__typename", ""),
-            variables: {
-              input: {
-                id: chatRoomRecord.id,
-                ...modelFields,
-              },
-            },
-          });
+          await DataStore.save(
+            ChatRoom.copyOf(chatRoomRecord, (updated) => {
+              Object.assign(updated, modelFields);
+            })
+          );
           if (onSuccess) {
             onSuccess(modelFields);
           }
         } catch (err) {
           if (onError) {
-            const messages = err.errors.map((e) => e.message).join("\n");
-            onError(modelFields, messages);
+            onError(modelFields, err.message);
           }
         }
       }}

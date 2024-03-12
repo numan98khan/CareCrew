@@ -52,6 +52,9 @@ const getPeopleAssignTimecard = /* GraphQL */ `
       immunization
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
   }
@@ -81,6 +84,9 @@ const getShifts = /* GraphQL */ `
       hide
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       __typename
     }
   }
@@ -109,6 +115,9 @@ export const getFacility = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       facilityBillingId
       __typename
     }
@@ -312,9 +321,9 @@ export const getTimecardsForWeek = async (
     peopleID: {
       eq: userid,
     },
-    _deleted: {
-      ne: true,
-    },
+    // _deleted: {
+    //   ne: true,
+    // },
   };
 
   const timecardsData = await API.graphql(

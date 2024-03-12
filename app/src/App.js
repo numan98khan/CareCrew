@@ -149,7 +149,7 @@ function App() {
           userData?.data?.getPeople
         );
 
-        // // Handle subscription for updating facility data
+        // // // Handle subscription for updating facility data
         // subscriptionPeople = API.graphql(
         //   graphqlOperation(onUpdatePeople, { id: user.attributes.sub })
         // ).subscribe({

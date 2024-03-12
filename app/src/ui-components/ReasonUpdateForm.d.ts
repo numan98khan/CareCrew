@@ -6,6 +6,7 @@
 
 import * as React from "react";
 import { GridProps, SelectFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { Reason } from "../models";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
 } | null;
@@ -42,7 +43,7 @@ export declare type ReasonUpdateFormProps = React.PropsWithChildren<{
     overrides?: ReasonUpdateFormOverridesProps | undefined | null;
 } & {
     id?: string;
-    reason?: any;
+    reason?: Reason;
     onSubmit?: (fields: ReasonUpdateFormInputValues) => ReasonUpdateFormInputValues;
     onSuccess?: (fields: ReasonUpdateFormInputValues) => void;
     onError?: (fields: ReasonUpdateFormInputValues, errorMessage: string) => void;
