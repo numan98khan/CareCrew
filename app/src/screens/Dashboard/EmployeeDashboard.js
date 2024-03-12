@@ -300,7 +300,7 @@ const Dashboard = () => {
             <div className="mx-1" />
             <div className="w-1/2">
               <InfoCard
-                title={"Instacare Bulletin"}
+                title={"CareCrew Bulletin"}
                 // viewAllFunction={() => navigate("/news")}
                 viewAllClick={() => setSelectedTab("all_news")}
                 dataComponents={news?.map((item, index) => (

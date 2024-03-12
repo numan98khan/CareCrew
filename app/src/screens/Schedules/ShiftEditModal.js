@@ -251,7 +251,7 @@ const ShiftEditModal = ({
       );
 
       let formedMessage = `Subject: Open Shift Edited\n\nThe following shft has been edited by ${
-        myFacility ? "Facility" : "Instacare"
+        myFacility ? "Facility" : "CareCrew"
       }\n\nFacility: ${facilityData?.facilityName}\nShift Date: ${displayDate(
         shift?.shiftStartDT
       )}\nShift Time: ${
@@ -270,7 +270,7 @@ const ShiftEditModal = ({
         formedMessage
       );
 
-      // START: Send notification on all platforms to instacare
+      // START: Send notification on all platforms to CareCrew
       // INTERNAL
 
       inApplNotificationToInstacare(
@@ -287,7 +287,7 @@ const ShiftEditModal = ({
         createNotificationQuery
       );
       // EXTERNAL
-      externalNotificationToInstacare(formedMessage, true, false); // Instacare
+      externalNotificationToInstacare(formedMessage, true, false); // CareCrew
       sendNotificationsToFacilityPeople(
         facilityData?.id,
         formedMessage,

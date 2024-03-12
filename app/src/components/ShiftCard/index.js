@@ -115,7 +115,7 @@ const ShiftCard = ({
                   className="text-[7px] text-left"
                   style={{ color: themeStyles?.RED }}
                 >
-                  {shift?.lateReason?.replace("Instacare", "CareCrew")}
+                  {shift?.lateReason}
                 </label>
 
                 {isMarkedLate && (

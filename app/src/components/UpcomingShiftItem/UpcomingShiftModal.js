@@ -98,7 +98,7 @@ const UpcomingShiftModal = ({
         support,
         personalData?.firstName + " " + personalData?.lastName,
         type === ADMIN
-          ? "InstaCare"
+          ? "CareCrew"
           : type === FACILITY
           ? myFacility?.facilityName
           : type === EMPLOYEE
@@ -395,13 +395,13 @@ const UpcomingShiftModal = ({
         await updateTimecardQuery(updatedTimecard);
         SuccessToast("Shift Arrived Late");
 
-        let formedMessage = `Subject: InstaCarer Delay Notice\n\nThe following InstaCarer is running late for the following shift:\n\nShift Date: ${displayDate(
+        let formedMessage = `Subject: Employee Delay Notice\n\nThe following employee is running late for the following shift:\n\nShift Date: ${displayDate(
           upcomingShiftDetails?.shift?.shiftStartDT
         )}\nShift Time: ${
           displayTime(upcomingShiftDetails?.shift?.shiftStartDT) +
           " - " +
           displayTime(upcomingShiftDetails?.shift?.shiftEndDT)
-        }\nInstaCarer: ${
+        }\nEmployee: ${
           upcomingShiftDetails?.person?.firstName +
           " " +
           upcomingShiftDetails?.person?.lastName
@@ -434,7 +434,7 @@ const UpcomingShiftModal = ({
         );
 
         // // // EXTERNAL
-        externalNotificationToInstacare(formedMessage, true, false); // Instacare
+        externalNotificationToInstacare(formedMessage, true, false); // CareCrew
         sendNotificationsToFacilityPeople(
           upcomingShiftDetails?.facility?.id,
           formedMessage,

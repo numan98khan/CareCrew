@@ -602,7 +602,7 @@ const Schedules = () => {
         const formedMessage_OLD = `Shift deleted by ${
           myFacility?.facilityName
             ? tempFetchedFacility?.facilityName
-            : "Instacare"
+            : "CareCrew"
         } at ${
           tempFetchedFacility?.facilityName
         } on ${new Date()} for ${displayDate(
@@ -612,7 +612,7 @@ const Schedules = () => {
         )}`;
 
         let formedMessage = `Subject: Open Shift Deletion\nThe following shft has been cancelled by ${
-          myFacility?.facilityName ? "Facility" : "Instacare"
+          myFacility?.facilityName ? "Facility" : "CareCrew"
         }:\nFacility: ${
           tempFetchedFacility?.facilityName
         }\nShift Date: ${displayDate(
@@ -650,7 +650,7 @@ const Schedules = () => {
         );
 
         // // // EXTERNAL
-        externalNotificationToInstacare(formedMessage, true, false); // Instacare
+        externalNotificationToInstacare(formedMessage, true, false); // CareCrew
         sendNotificationsToFacilityPeople(
           selectedFacility?.id,
           formedMessage,

@@ -174,7 +174,7 @@ function RecurringShifts() {
               <RadioButton children="Yes" />
               <RadioButton children="No" />
               <select className="rounded-full bg-TEXT_FIELD_BACKGROUND p-2 flex-grow">
-                <option>Instacare</option>
+                <option>CareCrew</option>
               </select>
             </div>
           </div>

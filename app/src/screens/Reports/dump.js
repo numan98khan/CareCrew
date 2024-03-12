@@ -97,7 +97,7 @@ function Reports() {
           <OptionTab
             options={[
               { title: "Total Bill to Facility" },
-              { title: "Total Bill to Instacare" },
+              { title: "Total Bill to CareCrew" },
               { title: "Timecards" },
               { title: "PBJ Reports" },
               { title: "Advance Report" },

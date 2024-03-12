@@ -165,10 +165,10 @@ const EditProfileInfo = ({ user, refetch, isMyProfile }) => {
             <div className="flex flex-row gap-5 items-center">
               <div className="flex flex-col w-1/2 gap-0  space-y-2">
                 <p className="text-xxs text-gray-500">
-                  {`* Enabling notifications on InstaCare keeps you promptly
+                  {`* Enabling notifications on CareCrew keeps you promptly
                   informed about shift assignments, schedule changes, and
                   security alerts. Stay updated and empowered for a smoother
-                  work experience.`.replace("InstaCare", "CareCrew")}
+                  work experience.`.replace("CareCrew", "CareCrew")}
                 </p>
                 <div className="flex flex-row justify-between">
                   <p className="text-xs">Text Message</p>

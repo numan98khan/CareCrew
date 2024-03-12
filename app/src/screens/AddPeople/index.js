@@ -526,7 +526,7 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
 
     // return;
 
-    // START: Send notification on all platforms to instacare
+    // START: Send notification on all platforms to CareCrew
     // INTERNAL
 
     inApplNotificationToInstacare(
@@ -544,7 +544,7 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
       createNotificationQuery
     );
     // EXTERNAL
-    externalNotificationToInstacare(formedMessage, true, false); // Instacare
+    externalNotificationToInstacare(formedMessage, true, false); // CareCrew
     externalNotificationToPeople(peopleDetails?.id, formedMessage, true, true); // Employee
   };
 
@@ -896,7 +896,7 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
               <div className="mb-2 flex flex-row justify-around w-full items-center mt-7">
                 <div className="flex flex-col w-full gap-2">
                   <div className="flex mb-2">
-                    <InfoTitle text={"Instacare Notes"} />
+                    <InfoTitle text={"CareCrew Notes"} />
                   </div>
                   <div className="flex flex-row ">
                     <div className="flex flex-col w-full ">

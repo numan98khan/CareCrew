@@ -281,7 +281,7 @@ const WhosOn = () => {
         const peopleObj = filteredPeople.find(
           (obj) => obj?.id === timecard?.peopleID
         );
-        let formedMessage = `Subject: Timecard Flag\n\nThe following timecard has been flagged for being under 5 hours duration:\n\nInstaCarer: ${
+        let formedMessage = `Subject: Timecard Flag\n\nThe following timecard has been flagged for being under 5 hours duration:\n\nEmployee: ${
           peopleObj?.firstName + " " + peopleObj?.lastName
         }\nShift Date: ${displayDate(
           timecard?.shift?.shiftStartDT
@@ -304,7 +304,7 @@ const WhosOn = () => {
         );
 
         // // EXTERNAL
-        // externalNotificationToInstacare(formedMessage, true, false); // Instacare
+        // externalNotificationToInstacare(formedMessage, true, false); // CareCrew
       }
 
       // console.log("🚀 ~ isBreak:", isBreak);

@@ -878,7 +878,7 @@ const Dashboard = () => {
                   <div className="my-2" />
                   <InfoCard
                     isCreateNews={true}
-                    title={"Instacare Bulletin"}
+                    title={"CareCrew Bulletin"}
                     setSelectedTab={setSelectedTab}
                     tabToSelect={"all_news"}
                     dataComponents={news?.map((item, index) => (
@@ -917,7 +917,7 @@ const Dashboard = () => {
               <div className="my-2" />
               {type === FACILITY ? (
                 <InfoCard
-                  title={"Instacare Bulletin"}
+                  title={"CareCrew Bulletin"}
                   setSelectedTab={setSelectedTab}
                   tabToSelect={"all_news"}
                   dataComponents={news?.map((item, index) => (

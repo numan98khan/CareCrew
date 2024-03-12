@@ -43,7 +43,7 @@ function Support() {
         support,
         personalData?.firstName + " " + personalData?.lastName,
         type === ADMIN
-          ? "InstaCare"
+          ? "CareCrew"
           : type === FACILITY
           ? myFacility?.facilityName
           : type === EMPLOYEE
@@ -77,7 +77,7 @@ function Support() {
         support,
         firstName + " " + lastName + ` (${email})`,
         type === ADMIN
-          ? "InstaCare"
+          ? "CareCrew"
           : type === FACILITY
           ? myFacility?.facilityName
           : type === EMPLOYEE

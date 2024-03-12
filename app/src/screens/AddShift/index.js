@@ -147,26 +147,26 @@ const AddShift = () => {
       inAppNotificationsToPeople(
         "-1",
         ADD_SHIFT,
-        "New shift was added on Instacare",
+        "New shift was added on CareCrew",
         formedMessage,
         createNotificationQuery
       );
       inApplNotificationToInstacare(
         ADD_SHIFT,
-        "New shift was added on Instacare",
+        "New shift was added on CareCrew",
         formedMessage + userInfo,
         createNotificationQuery
       );
       inAppNotificationsToFacilityPeople(
         formattedShift?.facilityID,
         ADD_SHIFT,
-        "New shift was added on Instacare",
+        "New shift was added on CareCrew",
         formedMessage + userInfo,
         createNotificationQuery
       );
 
       // // // EXTERNAL
-      externalNotificationToInstacare(formedMessage + userInfo, true, false); // Instacare
+      externalNotificationToInstacare(formedMessage + userInfo, true, false); // CareCrew
       sendNotificationsToFacilityPeople(
         formattedShift?.facilityID,
         formedMessage + userInfo,

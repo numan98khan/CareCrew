@@ -395,7 +395,7 @@ const notifyPeople = async (
   )}-${displayTime(shiftData?.shiftEndDT)}`;
 
   let formedMessage = isMarketPlaceAssignment
-    ? `Subject: Shift Pick-Up\n\nThe following shft has been confirmed by an InstaCarer:\n\nInstaCarer: ${
+    ? `Subject: Shift Pick-Up\n\nThe following shft has been confirmed by an employee:\n\nEmployee: ${
         userData?.firstName + " " + userData?.lastName
       }\nShift Date: ${displayDate(shiftData?.shiftStartDT)}\nShift Time: ${
         displayTime(shiftData?.shiftStartDT) +
@@ -406,13 +406,13 @@ const notifyPeople = async (
         " " +
         displayTime(new Date()?.toISOString())
       }`
-    : `Subject: Shift Assignment\n\nThe following shft has been Assigned:\n\nInstaCarer: ${
+    : `Subject: Shift Assignment\n\nThe following shft has been Assigned:\n\nEmployee: ${
         userData?.firstName + " " + userData?.lastName
       }\nShift Date: ${displayDate(shiftData?.shiftStartDT)}\nShift Time: ${
         displayTime(shiftData?.shiftStartDT) +
         " " +
         displayTime(shiftData?.shiftEndDT)
-      }\nFacility: ${facilityData?.facilityName}\nInstacare Rate: ${
+      }\nFacility: ${facilityData?.facilityName}\nEmployee Rate: ${
         shiftData?.rate
       }\n\nTimestamp: ${
         displayDate(new Date()?.toISOString()) +
@@ -420,7 +420,7 @@ const notifyPeople = async (
         displayTime(new Date()?.toISOString())
       }\nBy User: ${user?.attributes?.email}`;
 
-  // START: Send notification on all platforms to instacare
+  // START: Send notification on all platforms to CareCrew
   // INTERNAL
   inAppNotificationsToPeople(
     userData?.id,
@@ -443,7 +443,7 @@ const notifyPeople = async (
     createNotificationQuery
   );
   // EXTERNAL
-  externalNotificationToInstacare(formedMessage, true, false); // Instacare
+  externalNotificationToInstacare(formedMessage, true, false); // CareCrew
   sendNotificationsToFacilityPeople(
     facilityData?.id,
     formedMessage,

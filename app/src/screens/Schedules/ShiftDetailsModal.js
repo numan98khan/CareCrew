@@ -217,14 +217,14 @@ const UnassignModal = ({
         )?.data?.getPeople;
 
         let formedMessage = `Subject: Shift Cancellation\n\nThe following shift has been cancelled by ${
-          selectedOption === "Facility Cancellation" ? "facility" : "instacare"
+          selectedOption === "Facility Cancellation" ? "facility" : "CareCrew"
         }\n\nFacility: ${facilityObj?.facilityName}\nShift Date: ${displayDate(
           selectedShift?.shiftStartDT
         )}\nShift Time: ${
           displayTime(selectedShift?.shiftStartDT) +
           " - " +
           displayTime(selectedShift?.shiftEndDT)
-        }\nInstaCarer: ${
+        }\nEmployee: ${
           peopleObj?.firstName + " " + peopleObj?.lastName
         }\n\nTimestamp: ${
           displayDate(new Date()?.toISOString()) +
@@ -237,7 +237,7 @@ const UnassignModal = ({
           formedMessage
         );
 
-        // START: Send notification on all platforms to instacare
+        // START: Send notification on all platforms to CareCrew
 
         const userInfo = `\nBy User: ${user?.attributes?.email}`;
 
@@ -264,7 +264,7 @@ const UnassignModal = ({
         );
 
         // EXTERNAL
-        externalNotificationToInstacare(formedMessage + userInfo, true, true); // Instacare
+        externalNotificationToInstacare(formedMessage + userInfo, true, true); // CareCrew
         sendNotificationsToFacilityPeople(
           facilityObj?.id,
           formedMessage + userInfo,
@@ -330,11 +330,11 @@ const UnassignModal = ({
               </RadioButton>
 
               <RadioButton
-                value={"InstaCare Cancellation"}
+                value={"CareCrew Cancellation"}
                 onChange={(e) => setSelectedOption(e.target.value)}
-                checked={selectedOption === "InstaCare Cancellation"}
+                checked={selectedOption === "CareCrew Cancellation"}
               >
-                {"InstaCare Cancellation".replace("InstaCare", "CareCrew")}
+                {"CareCrew Cancellation".replace("CareCrew", "CareCrew")}
               </RadioButton>
             </>
           ) : (
@@ -400,7 +400,7 @@ const LateArrivalModal = ({
       //   selectedTimecard
       // );
 
-      // START: Send notification on all platforms to instacare
+      // START: Send notification on all platforms to CareCrew
 
       // // INTERNAL
       // inAppNotificationsToPeople(
@@ -606,9 +606,7 @@ const ShiftDetailsModal = ({
         });
 
         const formedMessage_OLD = `Shift deleted by ${
-          myFacility?.facilityName
-            ? selectedFacility?.facilityName
-            : "Instacare"
+          myFacility?.facilityName ? selectedFacility?.facilityName : "CareCrew"
         } at ${
           selectedFacility?.facilityName
         } on ${new Date()} for ${displayDate(
@@ -618,7 +616,7 @@ const ShiftDetailsModal = ({
         )}`;
 
         let formedMessage = `Subject: Open Shift Deletion\n\nThe following shft has been cancelled by ${
-          myFacility?.facilityName ? "Facility" : "Instacare"
+          myFacility?.facilityName ? "Facility" : "CareCrew"
         }\n\nFacility: ${
           selectedFacility?.facilityName
         }\nShift Date: ${displayDate(
@@ -633,7 +631,7 @@ const ShiftDetailsModal = ({
           displayTime(new Date()?.toISOString())
         }`;
 
-        // START: Send notification on all platforms to instacare
+        // START: Send notification on all platforms to CareCrew
 
         // // INTERNAL
         inApplNotificationToInstacare(
@@ -651,7 +649,7 @@ const ShiftDetailsModal = ({
         );
 
         // // EXTERNAL
-        externalNotificationToInstacare(formedMessage, true, false); // Instacare
+        externalNotificationToInstacare(formedMessage, true, false); // CareCrew
         sendNotificationsToFacilityPeople(
           selectedFacility?.id,
           formedMessage,
@@ -696,7 +694,7 @@ const ShiftDetailsModal = ({
           )
         )?.data?.getPeople;
 
-        let formedMessage = `Subject: InstaCarer No Call/No Show\n\nThe InstaCarer did not appear for the following shift:\n\nInstaCarer: ${
+        let formedMessage = `Subject: Employee No Call/No Show\n\nThe employee did not appear for the following shift:\n\nEmployee: ${
           peopleObj?.firstName
         } ${peopleObj?.lastName}\nShift Date: ${displayDate(
           selectedShift?.shiftStartDT
@@ -735,7 +733,7 @@ const ShiftDetailsModal = ({
         );
 
         // // // EXTERNAL
-        externalNotificationToInstacare(formedMessage + userInfo, true, true); // Instacare
+        externalNotificationToInstacare(formedMessage + userInfo, true, true); // CareCrew
         sendNotificationsToFacilityPeople(
           selectedFacility?.id,
           formedMessage + userInfo,
@@ -764,7 +762,7 @@ const ShiftDetailsModal = ({
         id: selectedTimecard?.id,
         // isLate: true,
         lateReason: `Marked late by ${
-          type === FACILITY ? "facility" : "Instacare"
+          type === FACILITY ? "facility" : "CareCrew"
         }`,
         _version: selectedTimecard?._version,
       });
@@ -782,13 +780,13 @@ const ShiftDetailsModal = ({
         )
       )?.data?.getPeople;
 
-      let formedMessage = `Subject: InstaCarer Delay Notice\n\nThe following InstaCarer is running late for the following shift:\n\nShift Date: ${displayDate(
+      let formedMessage = `Subject: Employee Delay Notice\n\nThe following employee is running late for the following shift:\n\nShift Date: ${displayDate(
         selectedShift?.shiftStartDT
       )}\nShift Time: ${
         displayTime(selectedShift?.shiftStartDT) +
         " - " +
         displayTime(selectedShift?.shiftEndDT)
-      }\nFacility: ${selectedFacility?.facilityName}\nInstaCarer: ${
+      }\nFacility: ${selectedFacility?.facilityName}\nEmployee: ${
         peopleObj?.firstName + " " + peopleObj?.lastName
       }\nUpdated TOA: N/A\n\nTimestamp: ${
         displayDate(new Date()?.toISOString()) +
@@ -796,7 +794,7 @@ const ShiftDetailsModal = ({
         displayTime(new Date()?.toISOString())
       }\nBy User: ${user?.attributes?.email}`;
 
-      // START: Send notification on all platforms to instacare
+      // START: Send notification on all platforms to CareCrew
 
       // // INTERNAL
       inAppNotificationsToPeople(
@@ -821,7 +819,7 @@ const ShiftDetailsModal = ({
       );
 
       // // EXTERNAL
-      externalNotificationToInstacare(formedMessage, true, false); // Instacare
+      externalNotificationToInstacare(formedMessage, true, false); // CareCrew
       sendNotificationsToFacilityPeople(
         selectedFacility?.id,
         formedMessage,

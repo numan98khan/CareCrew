@@ -22,7 +22,7 @@ export function useBulkShiftUploader() {
 
       payload = {
         fileType,
-        bucketName: "instacare-storage-373c65a0164444-staging", // Adjust if this is dynamic
+        bucketName: "CareCrew-storage-373c65a0164444-staging", // Adjust if this is dynamic
         fileKey: "public/" + s3Link, // Or however you get the path
       };
       console.log(
@@ -32,7 +32,7 @@ export function useBulkShiftUploader() {
 
       // payload = {
       //   fileType: "csv",
-      //   bucketName: "instacare-storage211042-staging",
+      //   bucketName: "CareCrew-storage211042-staging",
       //   fileKey: "bulk shifts.csv",
       // };
     }

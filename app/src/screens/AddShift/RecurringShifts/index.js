@@ -478,7 +478,7 @@ function RecurringShift({
     const formedMessage_OLD = `${
       JSON.parse(apiResponse?.result?.body).length
     } New shift(s) created by ${
-      myFacility?.facilityName ? tempFetchedFacility?.facilityName : "Instacare"
+      myFacility?.facilityName ? tempFetchedFacility?.facilityName : "CareCrew"
     } at ${tempFetchedFacility?.facilityName} on ${new Date()} for ${
       shift?.roleRequired
     }`;
@@ -498,26 +498,26 @@ function RecurringShift({
     inAppNotificationsToPeople(
       "-1",
       ADD_SHIFT,
-      "New shift was added on Instacare",
+      "New shift was added on CareCrew",
       formedMessage,
       createNotificationQuery
     );
     inApplNotificationToInstacare(
       ADD_SHIFT,
-      "New shift was added on Instacare",
+      "New shift was added on CareCrew",
       formedMessage + userInfo,
       createNotificationQuery
     );
     inAppNotificationsToFacilityPeople(
       shift?.facilityID,
       ADD_SHIFT,
-      "New shift was added on Instacare",
+      "New shift was added on CareCrew",
       formedMessage + userInfo,
       createNotificationQuery
     );
 
     // // // EXTERNAL
-    externalNotificationToInstacare(formedMessage + userInfo, true, false); // Instacare
+    externalNotificationToInstacare(formedMessage + userInfo, true, false); // CareCrew
     sendNotificationsToFacilityPeople(
       shift?.facilityID,
       formedMessage + userInfo,
@@ -871,7 +871,7 @@ function RecurringShift({
                           "incentives",
                           "incentiveBy"
                         )}
-                        options={["InstaCare", "Facility"]}
+                        options={["CareCrew", "Facility"]}
                       />
                     )}
               </div>

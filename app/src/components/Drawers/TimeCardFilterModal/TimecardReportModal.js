@@ -110,7 +110,7 @@ function TimecardReportModal({ open, onClose, timecardDetails }) {
         support,
         personalData?.firstName + " " + personalData?.lastName,
         type === ADMIN
-          ? "InstaCare"
+          ? "CareCrew"
           : type === FACILITY
           ? myFacility?.facilityName
           : type === EMPLOYEE
