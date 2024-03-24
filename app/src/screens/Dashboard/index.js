@@ -895,7 +895,7 @@ const Dashboard = () => {
               >
                 <PercentageCard
                   title={"Fill Rate for Last-minute Shifts"}
-                  percent={99}
+                  percent={91}
                 />
               </div>
 
@@ -996,8 +996,8 @@ const Dashboard = () => {
             <div className="mx-1" />
             <div className="w-1/2">
               {/* KPI */}
-              <ShiftFullfilmentVisualization data={snowflakeData} />
-              <div className="my-2" />
+              {/* <ShiftFullfilmentVisualization data={snowflakeData} />
+              <div className="my-2" /> */}
 
               {/* <GaugeChart coverageEfficiency={90} /> */}
 

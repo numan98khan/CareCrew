@@ -154,6 +154,14 @@ const ShiftCard = ({
                     // className="mr-2"
                   />
 
+                  {isIncentive ? <IncentiveIndicator size={iconSize} /> : null}
+
+                  {isGuarantee ? <GuaranteeIndicator size={iconSize} /> : null}
+
+                  {isLate ? <WatchIndicator size={iconSize} /> : null}
+
+                  {isCallOff ? <UserXIndicator size={iconSize} /> : null}
+
                   {shift?.clockInTime ? (
                     !shift?.clockOutTime ? (
                       <ClockUpIcon
@@ -163,14 +171,6 @@ const ShiftCard = ({
                       />
                     ) : null
                   ) : null}
-
-                  {isIncentive ? <IncentiveIndicator size={iconSize} /> : null}
-
-                  {isGuarantee ? <GuaranteeIndicator size={iconSize} /> : null}
-
-                  {isLate ? <WatchIndicator size={iconSize} /> : null}
-
-                  {isCallOff ? <UserXIndicator size={iconSize} /> : null}
                 </div>
               </div>
             </div>
