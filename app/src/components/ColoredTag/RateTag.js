@@ -9,7 +9,9 @@ import themeStyles from "../../styles/theme.styles";
 const RateTag = ({ title, small }) => {
   return (
     <label
-      className={`text-xxs font-medium text-white rounded flex  items-center p-1 `}
+      className={` font-medium text-white rounded flex  items-center ${
+        small ? "text-xxs p-1" : "p-[2px] text-[8px]"
+      } `}
       style={{ backgroundColor: themeStyles?.SECONDARY_COLOR }}
     >
       <p className="text-bold text-black">{title}</p>

@@ -996,10 +996,10 @@ const Dashboard = () => {
             <div className="mx-1" />
             <div className="w-1/2">
               {/* KPI */}
-              {/* <ShiftFullfilmentVisualization data={snowflakeData} />
-              <div className="my-2" /> */}
+              <ShiftFullfilmentVisualization data={snowflakeData} />
+              <div className="my-2" />
 
-              <GaugeChart coverageEfficiency={90} />
+              {/* <GaugeChart coverageEfficiency={90} /> */}
 
               <InfoCard
                 isCreateReminder={canCreateReminders}
