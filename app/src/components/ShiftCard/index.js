@@ -137,52 +137,48 @@ const ShiftCard = ({
                   </label>
                 )}
 
-                <div className="py-1">
+                {/* <div className="py-1">
                   <RateTag title={rateTag} />
-                </div>
+                </div> */}
 
-                <div className="flex py-1">
+                <div
+                  className="flex flex-row justify-center items-center space-x-1 mt-1"
+                  // className="flex py-1"
+                >
+                  <div className="">
+                    <RateTag title={rateTag} />
+                  </div>
                   <OpenIndicator
                     isOpen={isAssigned}
                     size={iconSize}
-                    className="mr-2"
+                    // className="mr-2"
                   />
 
                   {shift?.clockInTime ? (
                     !shift?.clockOutTime ? (
                       <ClockUpIcon
                         size={iconSize}
-                        className="mr-2"
+                        // className="mr-2"
                         color={"#7EE69B"}
                       />
                     ) : null
                   ) : null}
 
-                  {isIncentive ? (
-                    <IncentiveIndicator size={iconSize} className="mr-2" />
-                  ) : null}
+                  {isIncentive ? <IncentiveIndicator size={iconSize} /> : null}
 
-                  {isGuarantee ? (
-                    <GuaranteeIndicator size={iconSize} className="mr-2" />
-                  ) : null}
+                  {isGuarantee ? <GuaranteeIndicator size={iconSize} /> : null}
 
-                  {isLate ? (
-                    <WatchIndicator size={iconSize} className="mr-2" />
-                  ) : null}
+                  {isLate ? <WatchIndicator size={iconSize} /> : null}
 
-                  {isCallOff ? (
-                    <UserXIndicator size={iconSize} className="mr-2" />
-                  ) : null}
+                  {isCallOff ? <UserXIndicator size={iconSize} /> : null}
                 </div>
               </div>
             </div>
 
-            <div className="flex h-full flex-col justify-between items-center bg-black">
+            {/* <div className="flex h-full flex-col justify-between items-center bg-black">
               <div className="flex h-full justify-end">
-                {/* <ColoredTag small title={type} /> */}
               </div>
-              {/* <label className="text-xxs text-grey">{shiftTiming}</label> */}
-            </div>
+            </div> */}
           </div>
 
           {/* {dataComponents} */}
