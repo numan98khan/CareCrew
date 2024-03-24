@@ -65,7 +65,12 @@ import BackButton from "../../components/Button/BackButton";
 import { SUPER_ADMIN } from "../../constants/permissions";
 import { ScaleHover } from "../../styles/animations";
 import { userTimezone } from "../../apolloql/timezone";
-import Charts from "./Charts";
+import Charts, {
+  GaugeChart,
+  PercentageCard,
+  ShiftFullfilmentVisualization,
+} from "./Charts";
+import { fetchSnowflakeData } from "../../services/mysql";
 
 // import { reverseFormatDate } from "../../services/micro";
 const getSummaryData = (type) => {
@@ -229,6 +234,82 @@ const Dashboard = () => {
       return person.type === EMPLOYEE;
     });
   }, [people]);
+
+  const snowflakeData = useMemo(() => {
+    const data = fetchSnowflakeData({ table: "sample" });
+    console.log("🚀 ~ snowflakeData ~ data:", data);
+
+    return [
+      {
+        SHIFTDATE: new Date(2024, 3, 31, 0, 0),
+        // TOTALPOSITIONS: 14,
+        // TOTALFULFILLMENTS: 2.0,
+        TOTALPOSITIONS: 14,
+        TOTALFULFILLMENTS: 14.0,
+        FULFILLMENTRATE: 0.14285714285714285,
+      },
+      {
+        SHIFTDATE: new Date(2024, 3, 30, 0, 0),
+        TOTALPOSITIONS: 20,
+        TOTALFULFILLMENTS: 20.0,
+        FULFILLMENTRATE: 0.14285714285714285,
+      },
+      {
+        SHIFTDATE: new Date(2024, 3, 29, 0, 0),
+        TOTALPOSITIONS: 14,
+        TOTALFULFILLMENTS: 14.0,
+        FULFILLMENTRATE: 0.14285714285714285,
+      },
+      {
+        SHIFTDATE: new Date(2024, 3, 28, 0, 0),
+        TOTALPOSITIONS: 12,
+        TOTALFULFILLMENTS: 12.0,
+        FULFILLMENTRATE: 0.3333333333333333,
+      },
+      {
+        SHIFTDATE: new Date(2024, 3, 27, 0, 0),
+        TOTALPOSITIONS: 13,
+        TOTALFULFILLMENTS: 13.0,
+        FULFILLMENTRATE: 0.23076923076923078,
+      },
+      {
+        SHIFTDATE: new Date(2024, 3, 26, 0, 0),
+        TOTALPOSITIONS: 14,
+        TOTALFULFILLMENTS: 2.0,
+        FULFILLMENTRATE: 0.14285714285714285,
+      },
+      {
+        SHIFTDATE: new Date(2024, 3, 25, 0, 0),
+        TOTALPOSITIONS: 12,
+        TOTALFULFILLMENTS: 4.0,
+        FULFILLMENTRATE: 0.3333333333333333,
+      },
+      {
+        SHIFTDATE: new Date(2024, 3, 24, 0, 0),
+        TOTALPOSITIONS: 10,
+        TOTALFULFILLMENTS: 6.0,
+        FULFILLMENTRATE: 0.6,
+      },
+      {
+        SHIFTDATE: new Date(2024, 3, 23, 0, 0),
+        TOTALPOSITIONS: 21,
+        TOTALFULFILLMENTS: 6.0,
+        FULFILLMENTRATE: 0.2857142857142857,
+      },
+      {
+        SHIFTDATE: new Date(2024, 3, 22, 0, 0),
+        TOTALPOSITIONS: 18,
+        TOTALFULFILLMENTS: 2.0,
+        FULFILLMENTRATE: 0.1111111111111111,
+      },
+      {
+        SHIFTDATE: new Date(2024, 3, 21, 0, 0),
+        TOTALPOSITIONS: 10,
+        TOTALFULFILLMENTS: 0.0,
+        FULFILLMENTRATE: 0.0,
+      },
+    ];
+  }, []);
 
   const onOpen = () => {
     setOpen(true);
@@ -808,6 +889,22 @@ const Dashboard = () => {
                   />
                 </div>
               ))}
+              <div
+                // className="w-1/2 p-1 flex "
+                className="w-1/5 p-1 flex "
+              >
+                <PercentageCard
+                  title={"Fill Rate for Last-minute Shifts"}
+                  percent={99}
+                />
+              </div>
+
+              <div
+                // className="w-1/2 p-1 flex "
+                className="w-1/5 p-1 flex "
+              >
+                <PercentageCard title={"No-show Rate"} percent={10} />
+              </div>
             </div>
           </div>
 
@@ -834,7 +931,8 @@ const Dashboard = () => {
                   ?.slice(0, 5)
                   .map((item, index) => {
                     // console.log("🚀 ~ file: index.js:452 ~ .map ~ item:", item);
-                    console.log(item);
+                    // console.log(item);
+
                     return (
                       <WhosOnItem
                         index={index}
@@ -897,6 +995,12 @@ const Dashboard = () => {
             </div>
             <div className="mx-1" />
             <div className="w-1/2">
+              {/* KPI */}
+              {/* <ShiftFullfilmentVisualization data={snowflakeData} />
+              <div className="my-2" /> */}
+
+              <GaugeChart coverageEfficiency={90} />
+
               <InfoCard
                 isCreateReminder={canCreateReminders}
                 title={"Reminders"}

@@ -679,6 +679,15 @@ const checkBillingLimits = async (
           : shiftData?.incentives?.incentiveAmount * hours_worked;
 
       if (limitObj?.attribute === "remainingBillingMonthly") {
+        // console.log(
+        //   "🚀 ~ limitObj?.attribute :",
+        //   limitObj?.attribute,
+        //   limitObj?.amount,
+        //   shiftData?.rate,
+        //   hours_worked,
+        //   billingData?.maxBillingMonthly
+        // );
+
         if (
           limitObj?.amount + shiftData?.rate * hours_worked >
           billingData?.maxBillingMonthly
@@ -686,6 +695,8 @@ const checkBillingLimits = async (
           throw Error(`Limit exceeded for ${limitObj?.attribute}`);
         }
       } else if (limitObj?.attribute === "remainingMonthlyIncentive") {
+        // console.log("🚀 ~ limitObj?.attribute:", limitObj?.attribute);
+
         if (
           limitObj?.amount + incentiveTotal >
             billingData?.maxMonthlyIncentive &&

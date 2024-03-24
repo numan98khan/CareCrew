@@ -219,13 +219,13 @@ const AppBar = ({ children, type }) => {
     <div
       className="flex top-0 p-2 items-center justify-between px-4 shadow-lg bg-white"
       // className="flex top-0 p-2 items-center justify-between px-4 shadow-lg bg-white"
-      style={{ height: "5vh" }}
+      style={{ height: "6vh" }}
     >
       {/* {children}
        */}
 
       <div className="items-center w-full  justify-between flex">
-        <CareCrewLogo size={2} className="ml-2" />
+        <CareCrewLogo size={2.6} className="ml-2" />
         {/* <Logo size={5} className="ml-2" /> */}
 
         {isDebug && (
@@ -254,7 +254,6 @@ const AppBar = ({ children, type }) => {
             className="relative rounded-full p-2 transition duration-300 ease-in-out hover:shadow-lg dark:hover:shadow-black/30"
           >
             <NotificationIcon
-              size={0.8}
               onClick={openNotificationModal}
               className="rounded-full"
             />
@@ -270,7 +269,7 @@ const AppBar = ({ children, type }) => {
             )}
           </div>
           <div
-            className="flex  rounded-full h-full items-center transition duration-300 ease-in-out hover:shadow-lg dark:hover:shadow-black/30"
+            className="flex border rounded-full h-full items-center transition duration-300 ease-in-out hover:shadow-lg dark:hover:shadow-black/30"
             style={{
               // width: "30px",
               // height: "30px",
@@ -280,9 +279,26 @@ const AppBar = ({ children, type }) => {
             onClick={openModal}
             ref={buttonRef}
           >
-            {/* <MenuIcon className="mr-3" />
-             */}
-            <label>{personalData?.email}</label>
+            <div
+              className="border rounded-full h-full mr-2 flex items-center justify-center text-white "
+              style={{
+                width: "35px",
+                height: "35px",
+                //   padding: 10,
+                backgroundColor: theme.PRIMARY_COLOR,
+              }}
+            >
+              <label>
+                {personalData
+                  ? Array.from(personalData?.firstName)[0].toUpperCase()
+                  : null}
+                {personalData
+                  ? Array.from(personalData?.lastName)[0].toUpperCase()
+                  : null}
+              </label>
+            </div>
+
+            <MenuIcon className="mr-3" />
           </div>
         </div>
       </div>

@@ -15,6 +15,8 @@ import RateTag from "../ColoredTag/RateTag";
 import { MainHover, ScaleHover } from "../../styles/animations";
 // import WhosOnItem from "../../components/WhosOn/index";
 
+import ClockUpIcon from "../../assets/icons/clockUp";
+
 const ShiftCard = ({
   index,
   shift,
@@ -112,7 +114,7 @@ const ShiftCard = ({
                 </label>
 
                 <label
-                  className="text-[7px] text-left"
+                  className="text-xxs text-left"
                   style={{ color: themeStyles?.RED }}
                 >
                   {shift?.lateReason}
@@ -120,7 +122,7 @@ const ShiftCard = ({
 
                 {isMarkedLate && (
                   <label
-                    className="text-[7px] text-left"
+                    className="text-xxs text-left"
                     style={{ color: themeStyles?.RED }}
                   >
                     {"Marked Late"}
@@ -128,8 +130,8 @@ const ShiftCard = ({
                 )}
                 {isComplete && (
                   <label
-                    className="text-[7px] text-left"
-                    style={{ color: themeStyles?.GREEN }}
+                    className="text-xxs text-left font-bold"
+                    style={{ color: themeStyles?.PRIMARY_COLOR }}
                   >
                     {"Completed"}
                   </label>
@@ -145,6 +147,16 @@ const ShiftCard = ({
                     size={iconSize}
                     className="mr-2"
                   />
+
+                  {shift?.clockInTime ? (
+                    !shift?.clockOutTime ? (
+                      <ClockUpIcon
+                        size={iconSize}
+                        className="mr-2"
+                        color={"#7EE69B"}
+                      />
+                    ) : null
+                  ) : null}
 
                   {isIncentive ? (
                     <IncentiveIndicator size={iconSize} className="mr-2" />

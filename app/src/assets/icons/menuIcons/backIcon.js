@@ -1,5 +1,6 @@
 import * as React from "react";
 import theme from "../../../styles/theme.styles";
+import themeStyles from "../../../styles/theme.styles";
 
 function SvgComponent(props) {
   const size = props.size ? props.size * 2.5 : 25;
@@ -14,14 +15,15 @@ function SvgComponent(props) {
       <circle cx="20" cy="20" r="20" fill="white" />
       <path
         d="M27 20H13"
-        stroke="#7ED1E6"
+        // stroke="#7ED1E6"
+        stroke={themeStyles?.PRIMARY_LIGHT_COLOR}
         strokeWidth="2"
         strokeLinecap="round"
         stroke-linejoin="round"
       />
       <path
         d="M20 27L13 20L20 13"
-        stroke="#7ED1E6"
+        stroke={themeStyles?.PRIMARY_LIGHT_COLOR}
         strokeWidth="2"
         strokeLinecap="round"
         stroke-linejoin="round"

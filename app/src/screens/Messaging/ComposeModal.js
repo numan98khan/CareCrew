@@ -24,7 +24,7 @@ import { useAuth } from "../../context";
 
 Modal.setAppElement("#root");
 
-const ReceiverType = ["InstaCare", "Facility", "Employee", "All People"];
+const ReceiverType = ["CareCrew", "Facility", "Employee", "All People"];
 const MessageType = ["Email", "Text", "Both"];
 
 function getNames(peopleIds, people) {
