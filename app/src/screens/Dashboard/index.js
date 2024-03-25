@@ -86,35 +86,35 @@ const getSummaryData = (type) => {
       points: 0,
       label: "Open Shifts",
       gradient: true,
-      icon: <OpenIcon />,
+      icon: <OpenIcon size={0.6} />,
       datakey: "open",
     },
     {
       points: 0,
       label: "Confirmed Shifts",
       gradient: true,
-      icon: <ConfirmedIcon />,
+      icon: <ConfirmedIcon size={0.6} />,
       datakey: "confirmed",
     },
     {
       points: 0,
       label: "Shifts in Progress",
       gradient: true,
-      icon: <ConfirmedIcon />,
+      icon: <ConfirmedIcon size={0.6} />,
       datakey: "inprogress",
     },
     {
       points: 0,
       label: "Completed Shifts",
       gradient: true,
-      icon: <CompletedIcon />,
+      icon: <CompletedIcon size={0.6} />,
       datakey: "completed",
     },
     {
       points: 0,
       label: "Call Off Shifts",
       gradient: true,
-      icon: <CallOffIcon />,
+      icon: <CallOffIcon size={0.6} />,
       datakey: "calloffs",
     },
   ];
@@ -122,16 +122,17 @@ const getSummaryData = (type) => {
   const extraData = [
     {
       points: 0,
-      label: "Facility Cancellations",
+      // label: "Facility Cancellations",
+      label: "Cancellations",
       gradient: true,
-      icon: <CancellationIcon />,
+      icon: <CancellationIcon size={0.6} />,
       datakey: "cancelled",
     },
     {
       points: 0,
       label: "Late",
       gradient: true,
-      icon: <CancellationIcon />,
+      icon: <CancellationIcon size={0.6} />,
       datakey: "late",
     },
   ];
@@ -772,21 +773,17 @@ const Dashboard = () => {
           />
         </>
       ) : selectedTab === "dash" ? (
-        <div className="p-3">
-          <div className="flex justify-start">
+        <div className="px-3">
+          <div className="flex justify-start ">
             <div className="flex items-center w-full justify-between">
-              <div className="flex items-center flex-1 z-50">
+              <div className="flex flex-row items-center z-50 space-x-1">
                 <PageHeader text={"Dashboard"} />
-                <div
-                  className={` ml-2 flex-1 flex-row gap-2 items-center justify-center ${ScaleHover}`}
-                >
-                  <DateDropDown
-                    date={currentViewDate}
-                    onChange={handleCurrentViewDateChange}
-                  />
-                </div>
               </div>
-              {canCreateShift && (
+              <DateDropDown
+                date={currentViewDate}
+                onChange={handleCurrentViewDateChange}
+              />
+              {/* {canCreateShift && (
                 <div className="flex items-center">
                   <IconButton
                     color={theme.SECONDARY_COLOR}
@@ -796,63 +793,64 @@ const Dashboard = () => {
                     }}
                   />
                 </div>
-              )}
+              )} */}
             </div>
           </div>
-
-          <div className="flex flex-row ">
-            {/* <div className="w-3/4">
-              <Charts />
-            </div> */}
-            <div
-              // className="flex flex-wrap h-1/2 w-1/4"
-              className="flex flex-wrap w-full"
-            >
-              {summaryData.map((item, index) => (
-                <div
-                  // className="w-1/2 p-1 flex "
-                  className="w-1/5 p-1 flex "
-                >
-                  <SummaryCard
-                    text={item.label}
-                    shifts={summaryShifts?.[item.datakey]}
-                    data={summaryShifts}
-                    datakey={item.datakey}
-                    // gradient={item.gradient}
-                    icon={item.icon}
-                    onClick={() => {
-                      // console.log(summaryShifts[item.datakey]);
-                      if (item.datakey !== "daily") {
-                        handleSummaryCardClick(true, item.datakey);
-                      }
-                    }}
-                    disableHover={item.datakey === "daily"}
-                  />
-                </div>
-              ))}
-              <div
-                // className="w-1/2 p-1 flex "
-                className="w-1/5 p-1 flex "
-              >
-                <PercentageCard
-                  title={"Fill Rate for Last-minute Shifts"}
-                  percent={91}
-                />
-              </div>
-
-              <div
-                // className="w-1/2 p-1 flex "
-                className="w-1/5 p-1 flex "
-              >
-                <PercentageCard title={"No-show Rate"} percent={10} />
-              </div>
-            </div>
-          </div>
-
-          <div className="my-3" />
 
           <div className="flex flex-grow h-full">
-            <div className="w-1/2 ">
+            <div className="w-[65%] space-y-2 ">
+              <div className="flex flex-row ">
+                {/* <div className="w-3/4">
+              <Charts />
+            </div> */}
+                <div
+                  // className="flex flex-wrap h-1/2 w-1/4"
+                  className="flex flex-wrap w-full"
+                >
+                  {summaryData.map((item, index) => (
+                    <div
+                      // className="w-1/2 p-1 flex "
+                      className="w-1/6 p-1 flex "
+                    >
+                      <SummaryCard
+                        text={item.label}
+                        shifts={summaryShifts?.[item.datakey]}
+                        data={summaryShifts}
+                        datakey={item.datakey}
+                        // gradient={item.gradient}
+                        icon={item.icon}
+                        onClick={() => {
+                          // console.log(summaryShifts[item.datakey]);
+                          if (item.datakey !== "daily") {
+                            handleSummaryCardClick(true, item.datakey);
+                          }
+                        }}
+                        disableHover={item.datakey === "daily"}
+                      />
+                    </div>
+                  ))}
+
+                  <div
+                    // className="w-1/2 p-1 flex "
+                    className="w-[33.5%] p-1 flex"
+                  >
+                    <PercentageCard
+                      title={"Efficient Fill Rate"}
+                      percent={91}
+                    />
+                  </div>
+
+                  <div
+                    // className="w-1/2 p-1 flex "
+                    className="w-[33%] p-1 flex"
+                  >
+                    <PercentageCard title={"No-show Rate"} percent={10} />
+                  </div>
+                </div>
+              </div>
+
+              {/* <div className="my-3" /> */}
+
               <InfoCard
                 navbar={
                   <div className="flex">
@@ -935,12 +933,33 @@ const Dashboard = () => {
               ) : null}
             </div>
             <div className="mx-1" />
-            <div className="w-1/2">
+            <div className="w-[35%]">
               {/* KPI */}
-              {/* <ShiftFullfilmentVisualization data={dataState?.data} />
-              <div className="my-2" /> */}
+              <ShiftFullfilmentVisualization data={dataState?.data} />
+              <div className="my-2" />
 
               {/* <GaugeChart coverageEfficiency={90} /> */}
+              <>
+                <div className="my-2" />
+                <InfoCard
+                  isCreateNews={true}
+                  title={"CareCrew Bulletin"}
+                  setSelectedTab={setSelectedTab}
+                  tabToSelect={"all_news"}
+                  dataComponents={news?.map((item, index) => (
+                    <NewsCard
+                      index={index}
+                      headline={item.headline}
+                      news={draftRichToText(item.news)}
+                      author={item?.author}
+                      datetime={displayDatetime(item.createdAt)}
+                      // datetime={"March 8, 2023  11:45AM"}
+                    />
+                  ))}
+                />
+              </>
+
+              <div className="my-2" />
 
               <InfoCard
                 isCreateReminder={canCreateReminders}

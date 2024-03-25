@@ -299,9 +299,9 @@ const Charts = () => {
 export const ShiftFullfilmentVisualization = ({ data }) => {
   console.log("🚀 ~ ShiftFullfilmentVisualization ~ data:", data);
 
-  // const data_filtered = data.slice(24, 36);
+  const data_filtered = data?.slice(24, 36);
 
-  const data_filtered = data;
+  // const data_filtered = data;
 
   return (
     <div className="bg-white rounded-lg py-2">
@@ -476,7 +476,7 @@ export const PercentageCard = ({ title, percent }) => {
   };
 
   return (
-    <div className="percentage-card flex flex-row justify-between pl-4 shadow-lg rounded-2xl w-full py-2 bg-white">
+    <div className="percentage-card flex flex-row justify-between pl-4 shadow-lg rounded-2xl w-full py-0 bg-white">
       <div className="text-left flex flex-col justify-center ">
         <label className="text font-bold self-start">{title}</label>
       </div>

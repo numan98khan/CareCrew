@@ -3,7 +3,7 @@ import theme from "../../styles/theme.styles";
 
 const PageHeader = ({ text }) => {
   return (
-    <label className="text-xl font-bold" htmlFor="email">
+    <label className="text-lg font-bold text-PRIMARY_COLOR" htmlFor="email">
       {text}
     </label>
   );
