@@ -297,6 +297,12 @@ const Charts = () => {
 // };
 
 export const ShiftFullfilmentVisualization = ({ data }) => {
+  console.log("🚀 ~ ShiftFullfilmentVisualization ~ data:", data);
+
+  // const data_filtered = data.slice(24, 36);
+
+  const data_filtered = data;
+
   return (
     <div className="bg-white rounded-lg py-2">
       <div className="w-full p-2 flex items-center">
@@ -306,7 +312,7 @@ export const ShiftFullfilmentVisualization = ({ data }) => {
       </div>
       <ResponsiveContainer width="100%" height={300}>
         <AreaChart
-          data={data}
+          data={data_filtered}
           margin={{
             top: 5,
             right: 30,
@@ -422,7 +428,7 @@ export const PercentageCard = ({ title, percent }) => {
     { name: "Remaining", value: 100 - percent },
   ];
 
-  const COLORS = ["#00C49F", "#eee"]; // Completed color and remaining color
+  const COLORS = [themeStyles?.SECONDARY_COLOR, "#eee"]; // Completed color and remaining color
 
   // Custom label component to render the percentage in the center
   const renderCustomLabel = ({ cx, cy }) => {

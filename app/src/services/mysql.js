@@ -52,11 +52,13 @@ export const fetchSnowflakeData = async (params) => {
       },
     };
 
-    const result = await API.post(apiName, path, myInit);
+    const result = await API.get(apiName, path, myInit);
     console.log("🚀 ~ fetchApiData ~ result:", result);
+    const parsedBody = JSON.parse(result.body);
+    return parsedBody;
 
     try {
-      const parsedBody = JSON.parse(result.body);
+      console.log("🚀 ~ fetchSnowflakeData ~ parsedBody:", parsedBody);
       return { result, parsedBody };
     } catch (error) {
       const parsedBody = []; //JSON.parse("{}");

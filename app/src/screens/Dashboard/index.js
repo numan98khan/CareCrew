@@ -235,80 +235,21 @@ const Dashboard = () => {
     });
   }, [people]);
 
-  const snowflakeData = useMemo(() => {
-    const data = fetchSnowflakeData({ table: "sample" });
-    console.log("🚀 ~ snowflakeData ~ data:", data);
+  const [dataState, setDataState] = useState({ loading: true, data: null });
 
-    return [
-      {
-        SHIFTDATE: new Date(2024, 3, 31, 0, 0),
-        // TOTALPOSITIONS: 14,
-        // TOTALFULFILLMENTS: 2.0,
-        TOTALPOSITIONS: 14,
-        TOTALFULFILLMENTS: 14.0,
-        FULFILLMENTRATE: 0.14285714285714285,
-      },
-      {
-        SHIFTDATE: new Date(2024, 3, 30, 0, 0),
-        TOTALPOSITIONS: 20,
-        TOTALFULFILLMENTS: 20.0,
-        FULFILLMENTRATE: 0.14285714285714285,
-      },
-      {
-        SHIFTDATE: new Date(2024, 3, 29, 0, 0),
-        TOTALPOSITIONS: 14,
-        TOTALFULFILLMENTS: 14.0,
-        FULFILLMENTRATE: 0.14285714285714285,
-      },
-      {
-        SHIFTDATE: new Date(2024, 3, 28, 0, 0),
-        TOTALPOSITIONS: 12,
-        TOTALFULFILLMENTS: 12.0,
-        FULFILLMENTRATE: 0.3333333333333333,
-      },
-      {
-        SHIFTDATE: new Date(2024, 3, 27, 0, 0),
-        TOTALPOSITIONS: 13,
-        TOTALFULFILLMENTS: 13.0,
-        FULFILLMENTRATE: 0.23076923076923078,
-      },
-      {
-        SHIFTDATE: new Date(2024, 3, 26, 0, 0),
-        TOTALPOSITIONS: 14,
-        TOTALFULFILLMENTS: 2.0,
-        FULFILLMENTRATE: 0.14285714285714285,
-      },
-      {
-        SHIFTDATE: new Date(2024, 3, 25, 0, 0),
-        TOTALPOSITIONS: 12,
-        TOTALFULFILLMENTS: 4.0,
-        FULFILLMENTRATE: 0.3333333333333333,
-      },
-      {
-        SHIFTDATE: new Date(2024, 3, 24, 0, 0),
-        TOTALPOSITIONS: 10,
-        TOTALFULFILLMENTS: 6.0,
-        FULFILLMENTRATE: 0.6,
-      },
-      {
-        SHIFTDATE: new Date(2024, 3, 23, 0, 0),
-        TOTALPOSITIONS: 21,
-        TOTALFULFILLMENTS: 6.0,
-        FULFILLMENTRATE: 0.2857142857142857,
-      },
-      {
-        SHIFTDATE: new Date(2024, 3, 22, 0, 0),
-        TOTALPOSITIONS: 18,
-        TOTALFULFILLMENTS: 2.0,
-        FULFILLMENTRATE: 0.1111111111111111,
-      },
-      {
-        SHIFTDATE: new Date(2024, 3, 21, 0, 0),
-        TOTALPOSITIONS: 10,
-        TOTALFULFILLMENTS: 0.0,
-        FULFILLMENTRATE: 0.0,
-      },
-    ];
+  const snowflakeData = useMemo(async () => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchSnowflakeData({ table: "sample" });
+        console.log("🚀 ~ fetchData ~ data:", data);
+        setDataState({ loading: false, data });
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+        setDataState({ loading: false, data: null });
+      }
+    };
+
+    fetchData();
   }, []);
 
   const onOpen = () => {
@@ -996,7 +937,7 @@ const Dashboard = () => {
             <div className="mx-1" />
             <div className="w-1/2">
               {/* KPI */}
-              {/* <ShiftFullfilmentVisualization data={snowflakeData} />
+              {/* <ShiftFullfilmentVisualization data={dataState?.data} />
               <div className="my-2" /> */}
 
               {/* <GaugeChart coverageEfficiency={90} /> */}
