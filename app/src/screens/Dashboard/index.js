@@ -71,6 +71,7 @@ import Charts, {
   ShiftFullfilmentVisualization,
 } from "./Charts";
 import { fetchSnowflakeData } from "../../services/mysql";
+import WhosOnComponent from "./WhosOnComponent";
 
 // import { reverseFormatDate } from "../../services/micro";
 const getSummaryData = (type) => {
@@ -301,11 +302,6 @@ const Dashboard = () => {
   for (let i = 0; i < numDaysInView; i++) {
     const d = new Date(date);
     d.setDate(d.getDate() + i);
-
-    // // If we have an endDate and our current date exceeds it, stop the loop.
-    // if (endDate && d > new Date(endDate)) {
-    //   break;
-    // }
 
     dates.push(
       d.toLocaleDateString("en-US", {
@@ -849,9 +845,26 @@ const Dashboard = () => {
                 </div>
               </div>
 
+              <InfoCard
+                navbar={
+                  <div className="flex">
+                    {navTabs.map((tab, index) => (
+                      <NavTab
+                        key={index}
+                        title={tab.title}
+                        isActive={currentTab === tab.title}
+                        onClick={() => handleTabChange(tab.title)}
+                      />
+                    ))}
+                  </div>
+                }
+                title={"Who's ON"}
+                viewAllClick={() => navigate("/whoson")}
+                dataComponents={<WhosOnComponent shifts={filteredTimecards} />}
+              />
               {/* <div className="my-3" /> */}
 
-              <InfoCard
+              {/* <InfoCard
                 navbar={
                   <div className="flex">
                     {navTabs.map((tab, index) => (
@@ -909,7 +922,7 @@ const Dashboard = () => {
                       />
                     );
                   })}
-              />
+              /> */}
               {type !== FACILITY ? (
                 <>
                   <div className="my-2" />
