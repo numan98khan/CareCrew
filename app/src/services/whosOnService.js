@@ -184,9 +184,10 @@ export function enrichWhosOn(timecardsData, currentTab, currentViewDate) {
     timecard.shiftDate === formatDate(currentViewDate);
   switch (currentTab) {
     case "Scheduled":
-      return enrichedTimecards?.filter(
-        (timecard) => !timecard?.clockInTime && isDateMatching(timecard)
-      );
+      return enrichedTimecards;
+    // ?.filter(
+    //   (timecard) => !timecard?.clockInTime && isDateMatching(timecard)
+    // );
     case "Clocked In":
       return enrichedTimecards?.filter(
         (timecard) =>
