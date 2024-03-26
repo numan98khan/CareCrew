@@ -353,8 +353,9 @@ const Dashboard = () => {
 
       const filteredTimecard = timecards?.filter(
         (obj) =>
-          formatDate(new Date(obj?.shift?.shiftStartDT)) === formattedDate &&
-          !obj?.isCallOff
+          formatDate(new Date(obj?.shift?.shiftStartDT)) === formattedDate
+        // &&
+        // !obj?.isCallOff
       );
 
       return enrichWhosOn(

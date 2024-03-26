@@ -476,7 +476,7 @@ export const PercentageCard = ({ title, percent }) => {
   };
 
   return (
-    <div className="percentage-card flex flex-row justify-between pl-4 shadow-lg rounded-2xl w-full py-0 bg-white">
+    <div className="percentage-card flex flex-row justify-between pl-4 shadow-lg rounded-lg w-full py-0 bg-white">
       <div className="text-left flex flex-col justify-center ">
         <label className="text font-bold self-start">{title}</label>
       </div>

@@ -1,112 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  PieChart,
-  Pie,
-  Sector,
-  Cell,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  LineChart,
-  Line,
-  Radar,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  AreaChart,
-  Area,
-  ResponsiveContainer,
-  Text,
-} from "recharts";
 import themeStyles from "../../styles/theme.styles";
 import { displayTime } from "../../services/micro";
+import Avatar from "../../components/Avatar";
 // import themeStyles from "../../styles/theme.styles";
 
-// Dummy data
-const dataPieChart = [
-  { name: "Morning", value: 400 },
-  { name: "Evening", value: 300 },
-  { name: "Night", value: 300 },
-];
-const dataBarChart = [
-  { name: "Monday", shifts: 8 },
-  { name: "Tuesday", shifts: 9 },
-  { name: "Wednesday", shifts: 7 },
-  { name: "Thursday", shifts: 6 },
-  { name: "Friday", shifts: 8 },
-  { name: "Saturday", shifts: 10 },
-  { name: "Sunday", shifts: 5 },
-];
-const dataLineChart = [
-  { name: "Week 1", hours: 40 },
-  { name: "Week 2", hours: 42 },
-  { name: "Week 3", hours: 38 },
-  { name: "Week 4", hours: 47 },
-];
-// Adding dummy data for the new Area Chart
-const dataAreaChart = [
-  { name: "Jan", totalHours: 2400 },
-  { name: "Feb", totalHours: 2210 },
-  { name: "Mar", totalHours: 2290 },
-  { name: "Apr", totalHours: 2000 },
-  { name: "May", totalHours: 2181 },
-  { name: "Jun", totalHours: 2500 },
-  { name: "Jul", totalHours: 2100 },
-];
-
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
-
-// Updated dummy data for new KPIs
-const dataRadarChart = [
-  { subject: "Flexibility", A: 120, fullMark: 150 },
-  { subject: "Staffing", A: 98, fullMark: 150 },
-  { subject: "Workload", A: 86, fullMark: 150 },
-  { subject: "Satisfaction", A: 99, fullMark: 150 },
-  { subject: "Efficiency", A: 85, fullMark: 150 },
-];
-
-// Adjusting the size of all charts to make them smaller
-const chartSize = {
-  width: 300,
-  height: 250,
-};
-
-// Card styling
-const cardStyle = {
-  // background: "#fff",
-  // borderRadius: "8px",
-  // boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-  // margin: "10px",
-  // padding: "20px",
-  // padding: "10px",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-};
-
-const Heading = (props) => {
-  return (
-    <h2 className="text-PRIMARY_COLOR font-bold text-left">{props.text}</h2>
-  );
-};
-
-// The shifts data remains the same
-// const shifts = [
-//   { id: 1, person: "Alice", startTime: "09:00", endTime: "14:00" },
-//   { id: 1, person: "Alice", startTime: "09:00", endTime: "20:00" },
-//   { id: 2, person: "Bob", startTime: "10:00", endTime: "18:00" },
-//   { id: 3, person: "Charlie", startTime: "12:00", endTime: "20:00" },
-// ];
-
 // Utility function to convert time (HH:MM) to a decimal hour (HH.MM)
-const timeToDecimal = (time) => {
-  const date = new Date(time);
-
+const timeToDecimal = (date) => {
   const hours = date.getHours();
   const minutes = date.getMinutes();
   return hours + minutes / 60;
@@ -132,51 +31,166 @@ const WhosOnComponent = ({ shifts }) => {
   }, []);
 
   // 24 hours in the schedule
-  const hours = Array.from(new Array(24), (_, index) => `${index}:00`);
+  const hours = Array.from(new Array(25), (_, index) => `${index}:00`);
+
+  // const now = new Date("2024-03-25T23:13:30.173Z"); // Current time
+  const now = new Date(); // Current time
+
+  const nowDecimal = timeToDecimal(now);
+  // Calculate current time indicator position
+  const currentTimePosition = nowDecimal * (timelineWidth / hours.length);
 
   return (
-    <div className="flex flex-row bg-white">
-      <div className="flex flex-col w-[20%]"></div>
-      <div className="flex flex-col w-[80%]">
-        <div ref={timelineRef} className="flex overflow-x-auto">
-          {hours?.map((hour, index) => (
-            <div
-              key={index}
-              className="flex-1 text-center"
-              style={{ fontSize: 10 }}
-            >
-              {hour}
-            </div>
-          ))}
+    <div className=" flex flex-col bg-white ">
+      <div className="flex flex-row">
+        <div className="flex flex-col w-[20%]"></div>
+        <div className="flex flex-col w-[80%]">
+          <div ref={timelineRef} className="flex overflow-x-auto">
+            {hours?.map((hour, index) => (
+              <div
+                key={index}
+                className="flex-1 text-center text-gray-400"
+                style={{ fontSize: 8 }}
+              >
+                {hour}
+              </div>
+            ))}
+          </div>
         </div>
-        <div>
+      </div>
+
+      <div className=" flex flex-row ">
+        <div className="flex flex-col w-[20%]">
           {shifts?.map((shift, index) => {
-            const startTimeDecimal = timeToDecimal(shift?.shift?.shiftStartDT);
-
-            const endTimeDecimal = timeToDecimal(shift?.shift?.shiftEndDT);
-            const duration = endTimeDecimal - startTimeDecimal;
-
-            const shiftWidth = (duration / 24) * timelineWidth;
-            const shiftStart = (startTimeDecimal + 0.5) * (timelineWidth / 24);
-
             return (
               <div
                 key={shift.id}
-                className="text-white rounded-full text-[9px] m-1 py-2"
+                className=" text-black  text-[9px] m-[1.5px] py-2  rounded-full border"
                 style={{
-                  left: `${shiftStart}px`,
-                  width: `${shiftWidth}px`,
-                  marginLeft: `${shiftStart}px`, // Adjusted to avoid overlap, increase spacing as needed
-
                   textAlign: "center",
-                  backgroundColor: themeStyles?.GRAY,
                 }}
               >
-                {displayTime(shift?.shift?.shiftStartDT)} -{" "}
-                {displayTime(shift?.shift?.shiftEndDT)}
+                {/* <Avatar /> */}
+                <div className="text-gray-500">
+                  {shift?.person?.firstName + " " + shift?.person?.lastName}
+                </div>
               </div>
             );
           })}
+        </div>
+        <div className=" relative flex flex-col w-[80%]">
+          {/* Adjusting the top value of the Current Time Indicator to start under the hours indicators */}
+          <div
+            style={{
+              position: "absolute",
+              // top: hoursIndicatorHeight, // Position the line under the hours indicators
+              bottom: 0,
+              left: `${currentTimePosition}px`,
+              width: "2px",
+              borderLeft: "2px dashed", // Customize as needed
+              borderColor: themeStyles?.SECONDARY_COLOR,
+              height: "100%",
+              zIndex: 10,
+            }}
+          ></div>
+          <div>
+            {shifts?.map((shift, index) => {
+              const startTimeDecimal = timeToDecimal(
+                new Date(shift?.shift?.shiftStartDT)
+              );
+              const endTimeDecimal = timeToDecimal(
+                new Date(shift?.shift?.shiftEndDT)
+              );
+
+              const clockInTimeDecimal = timeToDecimal(
+                new Date(shift?.clockInTime)
+              );
+              const clockOutTimeDecimal = timeToDecimal(
+                new Date(shift?.clockOutTime)
+              );
+
+              const duration = endTimeDecimal - startTimeDecimal;
+              const overlayWidth =
+                (shift?.clockOutTime ? clockOutTimeDecimal : nowDecimal) -
+                clockInTimeDecimal;
+              const shiftWidth = (duration / hours.length) * timelineWidth;
+              const shiftStart =
+                (startTimeDecimal + 0.5) * (timelineWidth / hours.length);
+
+              const shiftClockInStart =
+                (clockInTimeDecimal + 0.5) * (timelineWidth / hours.length);
+
+              const shiftClockOutStart =
+                clockOutTimeDecimal * (timelineWidth / hours.length);
+
+              return shift?.clockInTime ? (
+                <div
+                  key={shift.id}
+                  className="flex flex-row text-white text-[9px] m-1 py-0 "
+                  style={{
+                    left: `${shiftStart}px`,
+                    width: `${shiftWidth}px`,
+                    marginLeft: `${shiftStart}px`,
+                    textAlign: "center",
+                    backgroundColor: themeStyles?.PRIMARY_LIGHT_COLOR + "51",
+                  }}
+                >
+                  <div
+                    style={{
+                      // width: `${(overlayWidth / duration) * 100}%`,
+                      width: `${shiftClockInStart - shiftStart}px`,
+                      backgroundColor: "#da1e28",
+                    }}
+                  />
+                  <div
+                    className="py-[1.3vh] m-0 h-full text-center text-[9px] font-medium leading-none text-white truncate"
+                    style={{
+                      width: `${(overlayWidth / duration) * 100}%`,
+                      // marginLeft: `${shiftClockInStart - shiftStart}px`,
+                      // marginLeft: `${shiftClockInStart - shiftStart}px`,
+                      backgroundColor: "#198038",
+
+                      color: "#FFF",
+                    }}
+                  >
+                    {displayTime(shift?.clockInTime)}{" "}
+                    {shift?.clockOutTime
+                      ? " - " + displayTime(shift?.clockInTime)
+                      : null}
+                  </div>
+
+                  <div
+                    style={{
+                      flex: 1,
+                      backgroundColor: "#f1c21b",
+                    }}
+                  />
+                </div>
+              ) : (
+                <div
+                  key={shift.id}
+                  className=" text-white  text-[9px] m-1 py-2"
+                  style={{
+                    left: `${shiftStart}px`,
+                    width: `${shiftWidth}px`,
+                    marginLeft: `${shiftStart}px`,
+                    textAlign: "center",
+                    backgroundColor: themeStyles?.PRIMARY_LIGHT_COLOR + "51",
+                  }}
+                >
+                  <div
+                    className="relative rounded-full z-50 truncate"
+                    style={{
+                      color: themeStyles?.PRIMARY_COLOR + "91",
+                    }}
+                  >
+                    {displayTime(shift?.shift?.shiftStartDT)} -{" "}
+                    {displayTime(shift?.shift?.shiftEndDT)}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>
