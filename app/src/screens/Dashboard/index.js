@@ -8,8 +8,10 @@ import NewsCard from "../../components/NewsCard";
 
 import OpenIcon from "../../assets/icons/summaryIcons/open";
 import ConfirmedIcon from "../../assets/icons/summaryIcons/confirmed";
+import InprogressIcon from "../../assets/icons/summaryIcons/inprogress";
 import CompletedIcon from "../../assets/icons/summaryIcons/completed";
 import CancellationIcon from "../../assets/icons/summaryIcons/cancellation";
+import LateIcon from "../../assets/icons/summaryIcons/late";
 import CallOffIcon from "../../assets/icons/summaryIcons/calloff";
 
 import NavTab from "../../components/NavTab";
@@ -94,7 +96,7 @@ const getSummaryData = (type) => {
       points: 0,
       label: "Shifts in Progress",
       gradient: true,
-      icon: <ConfirmedIcon size={0.6} />,
+      icon: <InprogressIcon size={0.6} />,
       datakey: "inprogress",
     },
     {
@@ -125,7 +127,7 @@ const getSummaryData = (type) => {
       points: 0,
       label: "Late",
       gradient: true,
-      icon: <CancellationIcon size={0.6} />,
+      icon: <LateIcon size={0.6} />,
       datakey: "late",
     },
   ];

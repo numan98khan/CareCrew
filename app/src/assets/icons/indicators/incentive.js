@@ -1,29 +1,52 @@
 import * as React from "react";
 import themeStyles from "../../../styles/theme.styles";
 
+// function SvgComponent(props) {
+//   const size = props.size ? props.size * 1.6 : 16;
+//   const color = props.color ? props.color : themeStyles.SECONDARY_COLOR;
+//   return (
+//     <svg
+//       width={size}
+//       height={size}
+//       viewBox="0 0 16 16"
+//       fill="none"
+//       xmlns="http://www.w3.org/2000/svg"
+//       {...props}
+//     >
+//       <g clipPath="url(#clip0_4758_11382)">
+//         <path
+//           d="M4.064 1.59a1 1 0 00-1.397.918V14A.667.667 0 104 14v-2.895l8.893-3.854c.803-.348.803-1.487 0-1.835L4.064 1.59z"
+//           fill={color}
+//         />
+//       </g>
+//       <defs>
+//         <clipPath id="clip0_4758_11382">
+//           <path fill="#fff" d="M0 0H16V16H0z" />
+//         </clipPath>
+//       </defs>
+//     </svg>
+//   );
+// }
+
 function SvgComponent(props) {
-  const size = props.size ? props.size * 1.6 : 16;
+  const size = props.size ? props.size * 2.0 : 20;
   const color = props.color ? props.color : themeStyles.SECONDARY_COLOR;
   return (
     <svg
+      xmlns="http://www.w3.org/2000/svg"
       width={size}
       height={size}
-      viewBox="0 0 16 16"
+      viewBox="0 0 24 24"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
+      stroke={color}
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="feather feather-flag"
       {...props}
     >
-      <g clipPath="url(#clip0_4758_11382)">
-        <path
-          d="M4.064 1.59a1 1 0 00-1.397.918V14A.667.667 0 104 14v-2.895l8.893-3.854c.803-.348.803-1.487 0-1.835L4.064 1.59z"
-          fill={color}
-        />
-      </g>
-      <defs>
-        <clipPath id="clip0_4758_11382">
-          <path fill="#fff" d="M0 0H16V16H0z" />
-        </clipPath>
-      </defs>
+      <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
+      <path d="M4 22L4 15" />
     </svg>
   );
 }
