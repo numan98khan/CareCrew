@@ -22,7 +22,7 @@ const theme_og = {
   RED_LIGHT: "#F330471A",
   RED: "#F00",
 
-  SECONDARY_COLOR: "#FFAF32",
+  SECONDARY_COLOR: "#ec1c24",
 
   TEXT_LIGHT_THEME: "rgba(0, 0, 0, 1)",
   TEXT_DARK_THEME: "rgba(255, 255, 255, 1)",

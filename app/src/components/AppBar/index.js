@@ -8,7 +8,9 @@ import theme from "../../styles/theme.styles";
 
 import Logo from "../../assets/logo/logo";
 
-import CareCrewLogo from "../../assets/logo/carecrew";
+// import CareCrewLogo from "../../assets/logo/carecrew";
+import CareCrewLogo from "../../assets/logo/aptcare";
+
 import MenuIcon from "../../assets/icons/menu";
 import NotificationIcon from "../../assets/icons/notifications";
 
@@ -225,7 +227,7 @@ const AppBar = ({ children, type }) => {
        */}
 
       <div className="items-center w-full  justify-between flex">
-        <CareCrewLogo size={2} className="ml-2" />
+        <CareCrewLogo size={1.2} className="ml-2" />
         {/* <Logo size={5} className="ml-2" /> */}
 
         {isDebug && (

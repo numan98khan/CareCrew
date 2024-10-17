@@ -8,6 +8,13 @@ import { Storage } from "aws-amplify";
 import { displayTime } from "../../services/micro";
 import themeStyles from "../../styles/theme.styles";
 
+const truncateString = (str, maxLength) => {
+  if (str.length > maxLength) {
+    return str.slice(0, maxLength) + "...";
+  }
+  return str;
+};
+
 export default function AvailableEmployee({
   index,
   employee,
@@ -83,7 +90,7 @@ export default function AvailableEmployee({
                 textAlign: "left",
               }}
             >
-              {employee?.email}
+              {truncateString(employee?.email, 15)}
             </p>
           </div>
         </div>

@@ -10,12 +10,12 @@ export default {
   RED: "#F33047",
   APP_DARK_BG_COLOR: "#282828",
 
-  PRIMARY_COLOR: "#00233c",
+  PRIMARY_COLOR: "#5393b3",
   // PRIMARY_COLOR: "#18A3AC",
 
   PRIMARY_COLOR_2: "#16478E",
 
-  PRIMARY_LIGHT_COLOR: "#99a7b1",
+  PRIMARY_LIGHT_COLOR: "#A3CDE3",
   // PRIMARY_LIGHT_COLOR: "#a2dadd",
 
   PRIMARY_NEUTRAL: "#86d1e61A",
@@ -28,7 +28,7 @@ export default {
 
   RED_LIGHT: "#F330471A",
 
-  SECONDARY_COLOR: "#fd7e14",
+  SECONDARY_COLOR: "#ec1c24",
   // SECONDARY_COLOR: "#f6994f",
 
   TEXT_LIGHT_THEME: "rgba(0, 0, 0, 1)",

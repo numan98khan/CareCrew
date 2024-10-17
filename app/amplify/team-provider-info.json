@@ -1,4 +1,28 @@
 {
+  "aptcare": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-carecrew-aptcare-ec812-authRole",
+      "UnauthRoleArn": "arn:aws:iam::444847376742:role/amplify-carecrew-aptcare-ec812-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::444847376742:role/amplify-carecrew-aptcare-ec812-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-carecrew-aptcare-ec812-deployment",
+      "UnauthRoleName": "amplify-carecrew-aptcare-ec812-unauthRole",
+      "StackName": "amplify-carecrew-aptcare-ec812",
+      "StackId": "arn:aws:cloudformation:us-east-1:444847376742:stack/amplify-carecrew-aptcare-ec812/097c3c20-22b0-11ef-a643-0ede63643383",
+      "AmplifyAppId": "dbeg78fkr1yz1"
+    },
+    "categories": {
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "dbeg78fkr1yz1",
+          "type": "manual"
+        }
+      },
+      "auth": {
+        "CareCrew": {}
+      }
+    }
+  },
   "staging": {
     "awscloudformation": {
       "AuthRoleName": "amplify-carecrew-staging-183739-authRole",

@@ -55,7 +55,8 @@ export const fetchSnowflakeData = async (params) => {
     const result = await API.get(apiName, path, myInit);
     console.log("🚀 ~ fetchApiData ~ result:", result);
     const parsedBody = JSON.parse(result.body);
-    return parsedBody;
+    // return parsedBody;
+    return [];
 
     try {
       console.log("🚀 ~ fetchSnowflakeData ~ parsedBody:", parsedBody);

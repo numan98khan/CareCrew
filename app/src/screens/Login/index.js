@@ -6,7 +6,8 @@ import Input from "../../components/Input";
 import Button from "../../components/Button";
 import Check from "../../components/Check";
 
-import Logo from "../../assets/logo/carecrew";
+// import Logo from "../../assets/logo/carecrew";
+import Logo from "../../assets/logo/aptcare";
 import TagLine from "../../assets/logo/tagline";
 
 import Loading from "../Loading";
@@ -315,7 +316,7 @@ const LoginLayout = ({ children }) => (
   <div className="flex flex-col justify-between w-full h-screen">
     <div className="h-full">
       <div className="absolute top-5 left-5">
-        <Logo size={3} className="mb-14" />
+        <Logo size={2} className="mb-14" />
       </div>
       <div className="flex justify-center items-center w-full bg-gray-50 h-full">
         <div className="items-center border border-gray-200 rounded-lg shadow w-1/4">

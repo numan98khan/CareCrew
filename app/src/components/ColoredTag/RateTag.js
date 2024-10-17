@@ -14,7 +14,7 @@ const RateTag = ({ title, small }) => {
       } `}
       style={{ backgroundColor: themeStyles?.SECONDARY_COLOR }}
     >
-      <p className="text-bold text-black">{title}</p>
+      <p className="text-bold text-white">{title}</p>
     </label>
   );
 };
