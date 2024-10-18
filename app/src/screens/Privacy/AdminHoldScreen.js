@@ -53,10 +53,8 @@ function AdminHoldScreen() {
         <Header text={"Contact Us"} />
         <Information text={"For any questions, please contact us at:"} />
         <div className="flex flex-row space-y-1 items-center">
-          <Information text={"1. Email: info@instacarenursing.com"} />
-          {/* <label className="text-SECONDARY_COLOR">
-            info@instacarenursing.com
-          </label> */}
+          <Information text={"1. Email: numan98khan@gmail.com"} />
+
           {/* <Information text={"2. Phone number: "} /> */}
         </div>
       </div>

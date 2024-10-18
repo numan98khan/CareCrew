@@ -20,6 +20,8 @@ import {
   PolarRadiusAxis,
   AreaChart,
   Area,
+  ResponsiveContainer,
+  Text,
 } from "recharts";
 import themeStyles from "../../styles/theme.styles";
 
@@ -250,4 +252,261 @@ const Charts = () => {
   );
 };
 
-export default Charts;
+// export const ShiftFullfilmentVisualization = ({ data }) => {
+//   return (
+//     <div className="bg-white rounded-lg py-2">
+//       <ResponsiveContainer width="100%" height={400}>
+//         <LineChart
+//           data={data}
+//           margin={{
+//             top: 5,
+//             right: 30,
+//             left: 20,
+//             bottom: 5,
+//           }}
+//         >
+//           <CartesianGrid strokeDasharray="3 3" />
+//           <XAxis
+//             dataKey="SHIFTDATE"
+//             tickFormatter={(tickItem) =>
+//               new Date(tickItem).toLocaleDateString()
+//             }
+//           />
+//           <YAxis />
+//           <Tooltip
+//             labelFormatter={(label) => new Date(label).toLocaleDateString()}
+//           />
+//           <Legend />
+//           <Line
+//             type="monotone"
+//             dataKey="TOTALPOSITIONS"
+//             stroke="#8884d8"
+//             activeDot={{ r: 8 }}
+//           />
+
+//           <Line
+//             type="monotone"
+//             dataKey="TOTALFULFILLMENTS"
+//             stroke="#8884d8"
+//             activeDot={{ r: 8 }}
+//           />
+//         </LineChart>
+//       </ResponsiveContainer>
+//     </div>
+//   );
+// };
+
+export const ShiftFullfilmentVisualization = ({ data }) => {
+  console.log("🚀 ~ ShiftFullfilmentVisualization ~ data:", data);
+
+  const data_filtered = data?.slice(24, 36);
+
+  // const data_filtered = data;
+
+  return (
+    <div className="bg-white rounded-lg py-2">
+      <div className="w-full p-2 flex items-center">
+        <label className="text-xs font-bold text-left">
+          Overall Shift Fulfillment
+        </label>
+      </div>
+      <ResponsiveContainer width="100%" height={300}>
+        <AreaChart
+          data={data_filtered}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis
+            dataKey="SHIFTDATE"
+            tickFormatter={(tickItem) =>
+              new Date(tickItem).toLocaleDateString()
+            }
+          />
+          <YAxis />
+          <Tooltip
+            labelFormatter={(label) => new Date(label).toLocaleDateString()}
+          />
+          <Legend />
+
+          <Area
+            // type="monotone"
+            dataKey="TOTALPOSITIONS"
+            stroke="#FF0000"
+            fill="#FF0000"
+            // fillOpacity={0.3}
+
+            fillOpacity={0.1}
+          />
+          <Line type="monotone" dataKey="TOTALPOSITIONS" stroke="#FF0000" />
+
+          <Area
+            // type="monotone"
+            dataKey="TOTALFULFILLMENTS"
+            stroke="#008000"
+            fill="#00FF00"
+            fillOpacity={0.3}
+          />
+          <Line type="monotone" dataKey="TOTALFULFILLMENTS" stroke="#008000" />
+        </AreaChart>
+      </ResponsiveContainer>
+    </div>
+  );
+};
+
+export const GaugeChart = ({ coverageEfficiency }) => {
+  // Calculate the rest of the gauge that is not covered
+  const emptyPart = 100 - coverageEfficiency;
+
+  // Data array for the pie chart
+  const data = [
+    { name: "Coverage", value: coverageEfficiency },
+    { name: "Empty", value: emptyPart },
+  ];
+
+  // Colors for the covered and empty parts of the gauge
+  const COLORS = ["#0088FE", "#00C49F"]; // Blue for coverage, green for empty
+
+  // Customized sector (to create a hollow center)
+  const renderActiveShape = (props) => {
+    const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } =
+      props;
+
+    return (
+      <Sector
+        cx={cx}
+        cy={cy}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        fill={fill}
+      />
+    );
+  };
+
+  return (
+    <div className="bg-white rounded-lg py-2">
+      <ResponsiveContainer
+        // width="100%"
+        height={300}
+      >
+        <PieChart>
+          <Pie
+            data={data}
+            cx="50%"
+            cy="70%"
+            startAngle={180}
+            endAngle={0}
+            innerRadius="80%"
+            outerRadius="100%"
+            dataKey="value"
+            stroke="none"
+            activeIndex={0}
+            activeShape={renderActiveShape} // Use the customized sector for the first (active) segment
+          >
+            {data.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={COLORS[index % COLORS.length]}
+              />
+            ))}
+          </Pie>
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
+  );
+};
+
+export const PercentageCard = ({ title, percent }) => {
+  const data = [
+    { name: "Completed", value: percent },
+    { name: "Remaining", value: 100 - percent },
+  ];
+
+  const COLORS = [themeStyles?.SECONDARY_COLOR, "#eee"]; // Completed color and remaining color
+
+  // Custom label component to render the percentage in the center
+  const renderCustomLabel = ({ cx, cy }) => {
+    const percentString = `${percent}`;
+    const digitCount = percentString.length;
+    let dxForPercent = 0; // Adjust based on digit count
+    let dxForNumber = 0; // Adjust based on digit count
+
+    // Adjust the position dynamically based on the number of digits
+    if (digitCount === 1) {
+      dxForPercent = +5; // Closer for single-digit percentages
+      dxForNumber = -5; // Closer for single-digit percentages
+    } else if (digitCount === 2) {
+      dxForPercent = +10; // A bit further for two digits
+      dxForNumber = -6; // Closer for single-digit percentages
+    } else {
+      dxForPercent = +14; // Even further for three digits
+      dxForNumber = -6; // Closer for single-digit percentages
+    }
+
+    return (
+      <>
+        <text
+          x={cx + dxForNumber}
+          y={cy} // Slightly move up the percentage value to make room for '%'
+          textAnchor="middle"
+          dominantBaseline="central"
+          className="progress-label"
+          fontSize={18}
+        >
+          {percentString}
+        </text>
+        <text
+          x={cx + dxForPercent}
+          y={cy + 2} // Move '%' slightly below the number
+          textAnchor="middle"
+          dominantBaseline="central"
+          className="progress-label"
+          fontSize={10}
+        >
+          %
+        </text>
+      </>
+    );
+  };
+
+  return (
+    <div className="percentage-card flex flex-row justify-between pl-4 shadow-lg rounded-lg w-full py-0 bg-white">
+      <div className="text-left flex flex-col justify-center ">
+        <label className="text font-bold self-start">{title}</label>
+      </div>
+
+      <ResponsiveContainer width="30%" height={"100%"}>
+        <PieChart>
+          <Pie
+            data={data}
+            cx="50%"
+            cy="50%"
+            startAngle={90}
+            endAngle={-270}
+            innerRadius="70%"
+            outerRadius="80%"
+            paddingAngle={0}
+            dataKey="value"
+            label={renderCustomLabel} // Use custom label for rendering text
+            labelLine={false}
+          >
+            {data.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={COLORS[index % COLORS.length]}
+              />
+            ))}
+          </Pie>
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
+  );
+};
+
+// export default Charts;

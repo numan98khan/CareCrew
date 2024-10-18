@@ -6,6 +6,7 @@
 
 import * as React from "react";
 import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { Facility } from "../models";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
 } | null;
@@ -75,7 +76,7 @@ export declare type FacilityUpdateFormProps = React.PropsWithChildren<{
     overrides?: FacilityUpdateFormOverridesProps | undefined | null;
 } & {
     id?: string;
-    facility?: any;
+    facility?: Facility;
     onSubmit?: (fields: FacilityUpdateFormInputValues) => FacilityUpdateFormInputValues;
     onSuccess?: (fields: FacilityUpdateFormInputValues) => void;
     onError?: (fields: FacilityUpdateFormInputValues, errorMessage: string) => void;

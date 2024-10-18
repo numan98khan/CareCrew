@@ -7,9 +7,9 @@
 /* eslint-disable */
 import * as React from "react";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import { Invoice } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { API } from "aws-amplify";
-import { createInvoice } from "../graphql/mutations";
+import { DataStore } from "aws-amplify";
 export default function InvoiceCreateForm(props) {
   const {
     clearOnSuccess = true,
@@ -128,14 +128,7 @@ export default function InvoiceCreateForm(props) {
               modelFields[key] = null;
             }
           });
-          await API.graphql({
-            query: createInvoice.replaceAll("__typename", ""),
-            variables: {
-              input: {
-                ...modelFields,
-              },
-            },
-          });
+          await DataStore.save(new Invoice(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -144,8 +137,7 @@ export default function InvoiceCreateForm(props) {
           }
         } catch (err) {
           if (onError) {
-            const messages = err.errors.map((e) => e.message).join("\n");
-            onError(modelFields, messages);
+            onError(modelFields, err.message);
           }
         }
       }}

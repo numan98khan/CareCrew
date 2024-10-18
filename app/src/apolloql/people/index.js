@@ -165,7 +165,7 @@ export const useListPeople = ({
   }
 
   const filter = {
-    // _deleted: { ne: true },
+    _deleted: { ne: true },
     ...(role !== undefined && { role: { eq: role } }),
     ...(status !== undefined && { status: { eq: status } }),
     ...(rating !== undefined && { rating: { ge: rating, lt: rating + 1 } }),

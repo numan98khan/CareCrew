@@ -14,10 +14,9 @@ import {
   SwitchField,
   TextField,
 } from "@aws-amplify/ui-react";
+import { Reminders } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { API } from "aws-amplify";
-import { getReminders } from "../graphql/queries";
-import { updateReminders } from "../graphql/mutations";
+import { DataStore } from "aws-amplify";
 export default function RemindersUpdateForm(props) {
   const {
     id: idProp,
@@ -67,12 +66,7 @@ export default function RemindersUpdateForm(props) {
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
-        ? (
-            await API.graphql({
-              query: getReminders.replaceAll("__typename", ""),
-              variables: { id: idProp },
-            })
-          )?.data?.getReminders
+        ? await DataStore.query(Reminders, idProp)
         : remindersModelProp;
       setRemindersRecord(record);
     };
@@ -131,13 +125,13 @@ export default function RemindersUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          date: date ?? null,
-          time: time ?? null,
-          datetime: datetime ?? null,
-          receiverType: receiverType ?? null,
-          note: note ?? null,
-          read: read ?? null,
-          message: message ?? null,
+          date,
+          time,
+          datetime,
+          receiverType,
+          note,
+          read,
+          message,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -167,22 +161,17 @@ export default function RemindersUpdateForm(props) {
               modelFields[key] = null;
             }
           });
-          await API.graphql({
-            query: updateReminders.replaceAll("__typename", ""),
-            variables: {
-              input: {
-                id: remindersRecord.id,
-                ...modelFields,
-              },
-            },
-          });
+          await DataStore.save(
+            Reminders.copyOf(remindersRecord, (updated) => {
+              Object.assign(updated, modelFields);
+            })
+          );
           if (onSuccess) {
             onSuccess(modelFields);
           }
         } catch (err) {
           if (onError) {
-            const messages = err.errors.map((e) => e.message).join("\n");
-            onError(modelFields, messages);
+            onError(modelFields, err.message);
           }
         }
       }}

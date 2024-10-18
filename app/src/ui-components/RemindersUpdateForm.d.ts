@@ -6,6 +6,7 @@
 
 import * as React from "react";
 import { GridProps, SelectFieldProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { Reminders } from "../models";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
 } | null;
@@ -54,7 +55,7 @@ export declare type RemindersUpdateFormProps = React.PropsWithChildren<{
     overrides?: RemindersUpdateFormOverridesProps | undefined | null;
 } & {
     id?: string;
-    reminders?: any;
+    reminders?: Reminders;
     onSubmit?: (fields: RemindersUpdateFormInputValues) => RemindersUpdateFormInputValues;
     onSuccess?: (fields: RemindersUpdateFormInputValues) => void;
     onError?: (fields: RemindersUpdateFormInputValues, errorMessage: string) => void;

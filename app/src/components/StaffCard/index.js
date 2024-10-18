@@ -75,9 +75,7 @@ const StaffCard = ({ people, editProfileFunction, deleteStaffFunction }) => {
         <h5 className="mb-1 text-xl font-medium text-black">
           {people.firstName + " " + people?.lastName}
         </h5>
-        <span className="text-sm text-PRIMARY_LIGHT_COLOR">
-          Instacare Staff
-        </span>
+        <span className="text-sm text-PRIMARY_LIGHT_COLOR">CareCrew Staff</span>
       </div>
     </div>
   );

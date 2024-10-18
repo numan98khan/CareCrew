@@ -1,6 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
 
-export const GET_PEOPLE_OLD = /* GraphQL */ `
+export const GET_PEOPLE = /* GraphQL */ `
   query GetPeople($id: ID!) {
     getPeople(id: $id) {
       id
@@ -69,26 +69,25 @@ export const GET_PEOPLE_OLD = /* GraphQL */ `
       availability
       createdAt
       updatedAt
-      _version
       _deleted
-      _lastChangedAt
+      _version
       __typename
     }
   }
 `;
 
-export const GET_PEOPLE = /* GraphQL */ `
-  query GetPeople($id: ID!) {
-    getPeople(id: $id) {
-      id
-      email
-      firstName
-      lastName
-      permissions
-      type
-    }
-  }
-`;
+// export const GET_PEOPLE = /* GraphQL */ `
+//   query GetPeople($id: ID!) {
+//     getPeople(id: $id) {
+//       id
+//       email
+//       firstName
+//       lastName
+//       permissions
+//       type
+//     }
+//   }
+// `;
 
 export const LIST_PEOPLE = gql`
   query ListPeople(

@@ -320,6 +320,9 @@ const LoginLayout = ({ children }) => (
       <div className="flex justify-center items-center w-full bg-gray-50 h-full">
         <div className="items-center border border-gray-200 rounded-lg shadow w-1/4">
           {children}
+          {/* <div className="p-2 text-center font-bold text-PRIMARY_COLOR text-3xl">
+            Coming Soon!
+          </div> */}
         </div>
       </div>
     </div>

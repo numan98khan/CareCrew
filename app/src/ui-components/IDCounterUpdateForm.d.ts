@@ -6,6 +6,7 @@
 
 import * as React from "react";
 import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { IDCounter } from "../models";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
 } | null;
@@ -42,7 +43,7 @@ export declare type IDCounterUpdateFormProps = React.PropsWithChildren<{
     overrides?: IDCounterUpdateFormOverridesProps | undefined | null;
 } & {
     id?: string;
-    iDCounter?: any;
+    iDCounter?: IDCounter;
     onSubmit?: (fields: IDCounterUpdateFormInputValues) => IDCounterUpdateFormInputValues;
     onSuccess?: (fields: IDCounterUpdateFormInputValues) => void;
     onError?: (fields: IDCounterUpdateFormInputValues, errorMessage: string) => void;

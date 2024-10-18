@@ -82,32 +82,32 @@ const Facilities = () => {
   );
 
   // SUBSCRIPTION DISABLED
-  // useEffect(() => {
-  //   const subscriptionFacility = API.graphql(
-  //     graphqlOperation(onUpdateFacility)
-  //   ).subscribe({
-  //     next: async ({
-  //       value: {
-  //         data: { onUpdateFacility },
-  //       },
-  //     }) => {
-  //       if (onUpdateFacility) {
-  //         // Call your context setters here
+  useEffect(() => {
+    const subscriptionFacility = API.graphql(
+      graphqlOperation(onUpdateFacility)
+    ).subscribe({
+      next: async ({
+        value: {
+          data: { onUpdateFacility },
+        },
+      }) => {
+        if (onUpdateFacility) {
+          // Call your context setters here
 
-  //         if (refetchFacilities) {
-  //           refetchFacilities();
-  //         }
-  //       }
-  //     },
-  //     error: (error) => {
-  //       console.error("Error with the facilities subscription: ", error);
-  //     },
-  //   });
+          if (refetchFacilities) {
+            refetchFacilities();
+          }
+        }
+      },
+      error: (error) => {
+        console.error("Error with the facilities subscription: ", error);
+      },
+    });
 
-  //   return () => {
-  //     subscriptionFacility.unsubscribe();
-  //   };
-  // }, []);
+    return () => {
+      subscriptionFacility.unsubscribe();
+    };
+  }, []);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 21; // adjust this as needed

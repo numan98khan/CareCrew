@@ -103,7 +103,7 @@ const getFacilityDetailed = /* GraphQL */ `
 `;
 
 // START;
-// INSTACARE
+// CareCrew
 export const externalNotificationToInstacare = async (
   message,
   isEmail,

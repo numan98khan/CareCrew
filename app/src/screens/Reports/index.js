@@ -110,7 +110,7 @@ const optionTableMap = {
     name: "TOTAL_CANCELLATIONS_V",
     isFacilityRelation: true,
   },
-  "Total Instacare Cancellations": {
+  "Total CareCrew Cancellations": {
     name: "TOTAL_INSTACARE_CANCELLATIONS_V",
     isFacilityRelation: false,
   },
@@ -131,7 +131,7 @@ const optionTableMap = {
   //   isFacilityRelation: false,
   // },
   // PENDING
-  // "Total Bill to Instacare": "TotalCallOffs",
+  // "Total Bill to CareCrew": "TotalCallOffs",
   // "Total Bill to Facility": "TotalCallOffs",
   // "PBJ Reports": "TotalCallOffs",
   // "Facility Report": "TotalCallOffs",

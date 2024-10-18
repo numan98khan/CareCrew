@@ -26,6 +26,10 @@ const SummaryCard = ({
     };
   }
 
+  gradientStyle = {
+    background: "#FFF", // replace with your desired gradient colors
+  };
+
   // Inside your component...
   const [animationProps, setAnimationProps] = useSpring(() => ({
     scale: 1,
@@ -92,30 +96,35 @@ const SummaryCard = ({
       // }
       // ${gradient ? "bg-gradient-primary" : "bg-PRIMARY_COLOR"}`}
 
-      className={`flex flex-col justify-between px-4 shadow-lg rounded-2xl w-full py-2 ${
+      className={`flex flex-col justify-between px-4 shadow-lg rounded-lg w-full py-2 space-y-1 ${
         !disableHover && ScaleHover
       } 
       `}
     >
-      {/* <div
-        style={gradientStyle}
-        className="flex flex-col justify-between px-4 shadow-lg rounded-lg w-full py-2"
-      > */}
-      <div className="flex justify-between ">
+      <div className="flex justify-between ">{icon}</div>
+      <div className="flex justify-between flex-col">
         <label
-          className="text-3xl font-bold"
-          style={{ color: themeStyles.SECONDARY_COLOR }}
+          className="font-bold text-left"
+          style={{
+            color: themeStyles.SECONDARY_COLOR,
+            fontSize: disableHover ? 38 : 20,
+          }}
         >
           {count}
         </label>
-
-        {icon}
+        <label
+          className=" font-bold self-start text-left"
+          style={{ color: themeStyles?.PRIMARY_COLOR, fontSize: 12 }}
+        >
+          {text}
+        </label>
       </div>
-      <label className="text-sm font-bold self-start" style={{ color: "#FFF" }}>
+      {/* <label
+        className=" font-bold self-start text-left bg-gray-300"
+        style={{ color: themeStyles?.PRIMARY_COLOR, fontSize: 12 }}
+      >
         {text}
-      </label>
-      {/* {} */}
-      {/* </div> */}
+      </label> */}
     </div>
   );
 };

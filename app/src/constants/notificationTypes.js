@@ -7,7 +7,7 @@ export const CLOCK_OUT_ALERT = "CLOCK_OUT_ALERT";
 export const SUPPORT_TICKET = "SUPPORT_TICKET";
 export const SHIFT_REQUEST = "SHIFT_REQUEST";
 
-// INSTACARE
+// CareCrew
 export const FACILITY_CANCELLATION = "FACILITY_CANCELLATION";
 export const EMPLOYEE_CALLOFF = "EMPLOYEE_CALLOFF";
 export const EMPLOYEE_LATE = "EMPLOYEE_LATE";
@@ -98,8 +98,8 @@ export const IMPORTANT_NOTIFICATIONS = [
 ];
 
 export const NotificationTypeMap = {
-  ADMIN_REMINDER: "Reminder from InstaCare",
-  SHIFT_ASSIGNMENT: "Shift Assignment from InstaCare",
+  ADMIN_REMINDER: "Reminder from CareCrew",
+  SHIFT_ASSIGNMENT: "Shift Assignment from CareCrew",
   MESSAGE_NOTIFICATIONS: "Message notification",
   NEWS_ALERT: "News Alert",
   CLOCK_OUT_ALERT: "You clocked out of a shift",

@@ -210,7 +210,7 @@ export const shifts = {
   floorNumber: "12F",
   supervisor: "people[0].id",
   incentives: {
-    incentiveBy: "Instacare or Facility", // this only has these type options,
+    incentiveBy: "CareCrew or Facility", // this only has these type options,
     incentiveType: "Fixed or Hourly", // this only has these type options,
     incentiveAmount: 100,
     notes: "Lorem ipsum",

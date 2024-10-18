@@ -359,7 +359,7 @@ function BulkShiftCard({
                       index?.day
                     )
                   }
-                  options={["InstaCare", "Facility"]}
+                  options={["CareCrew", "Facility"]}
                 />
               )}
             </div>

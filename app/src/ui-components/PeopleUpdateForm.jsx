@@ -15,10 +15,9 @@ import {
   TextAreaField,
   TextField,
 } from "@aws-amplify/ui-react";
+import { People } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { API } from "aws-amplify";
-import { getPeople } from "../graphql/queries";
-import { updatePeople } from "../graphql/mutations";
+import { DataStore } from "aws-amplify";
 export default function PeopleUpdateForm(props) {
   const {
     id: idProp,
@@ -228,12 +227,7 @@ export default function PeopleUpdateForm(props) {
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
-        ? (
-            await API.graphql({
-              query: getPeople.replaceAll("__typename", ""),
-              variables: { id: idProp },
-            })
-          )?.data?.getPeople
+        ? await DataStore.query(People, idProp)
         : peopleModelProp;
       setPeopleRecord(record);
     };
@@ -326,47 +320,47 @@ export default function PeopleUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          surrogateID: surrogateID ?? null,
-          firstName: firstName ?? null,
-          lastName: lastName ?? null,
-          phoneNumber: phoneNumber ?? null,
-          country: country ?? null,
-          streetAddress: streetAddress ?? null,
-          city: city ?? null,
-          state: state ?? null,
-          zip: zip ?? null,
-          timezone: timezone ?? null,
-          language: language ?? null,
-          isEmailNotifications: isEmailNotifications ?? null,
-          isTextNotification: isTextNotification ?? null,
-          effectiveStartDate: effectiveStartDate ?? null,
-          driverLicenseNumber: driverLicenseNumber ?? null,
-          driverLicenseState: driverLicenseState ?? null,
-          SSN: SSN ?? null,
-          uniformSize: uniformSize ?? null,
-          isCompleteDrugScreening: isCompleteDrugScreening ?? null,
-          emergencyContactName: emergencyContactName ?? null,
-          emergencyContactNumber: emergencyContactNumber ?? null,
-          emergencyContactRelationship: emergencyContactRelationship ?? null,
-          milesToWork: milesToWork ?? null,
-          licenseCode: licenseCode ?? null,
-          profilePicture: profilePicture ?? null,
-          role: role ?? null,
-          status: status ?? null,
-          personalNote: personalNote ?? null,
-          payrollCycle: payrollCycle ?? null,
-          email: email ?? null,
-          points: points ?? null,
-          rating: rating ?? null,
-          position: position ?? null,
-          isTerminated: isTerminated ?? null,
-          lastActivity: lastActivity ?? null,
-          lastActivityNotifications: lastActivityNotifications ?? null,
-          adminHold: adminHold ?? null,
-          permissions: permissions ?? null,
-          type: type ?? null,
-          availability: availability ?? null,
-          immunization: immunization ?? null,
+          surrogateID,
+          firstName,
+          lastName,
+          phoneNumber,
+          country,
+          streetAddress,
+          city,
+          state,
+          zip,
+          timezone,
+          language,
+          isEmailNotifications,
+          isTextNotification,
+          effectiveStartDate,
+          driverLicenseNumber,
+          driverLicenseState,
+          SSN,
+          uniformSize,
+          isCompleteDrugScreening,
+          emergencyContactName,
+          emergencyContactNumber,
+          emergencyContactRelationship,
+          milesToWork,
+          licenseCode,
+          profilePicture,
+          role,
+          status,
+          personalNote,
+          payrollCycle,
+          email,
+          points,
+          rating,
+          position,
+          isTerminated,
+          lastActivity,
+          lastActivityNotifications,
+          adminHold,
+          permissions,
+          type,
+          availability,
+          immunization,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -396,22 +390,17 @@ export default function PeopleUpdateForm(props) {
               modelFields[key] = null;
             }
           });
-          await API.graphql({
-            query: updatePeople.replaceAll("__typename", ""),
-            variables: {
-              input: {
-                id: peopleRecord.id,
-                ...modelFields,
-              },
-            },
-          });
+          await DataStore.save(
+            People.copyOf(peopleRecord, (updated) => {
+              Object.assign(updated, modelFields);
+            })
+          );
           if (onSuccess) {
             onSuccess(modelFields);
           }
         } catch (err) {
           if (onError) {
-            const messages = err.errors.map((e) => e.message).join("\n");
-            onError(modelFields, messages);
+            onError(modelFields, err.message);
           }
         }
       }}

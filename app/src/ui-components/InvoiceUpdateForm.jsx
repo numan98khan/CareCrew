@@ -7,10 +7,9 @@
 /* eslint-disable */
 import * as React from "react";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import { Invoice } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { API } from "aws-amplify";
-import { getInvoice } from "../graphql/queries";
-import { updateInvoice } from "../graphql/mutations";
+import { DataStore } from "aws-amplify";
 export default function InvoiceUpdateForm(props) {
   const {
     id: idProp,
@@ -53,12 +52,7 @@ export default function InvoiceUpdateForm(props) {
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
-        ? (
-            await API.graphql({
-              query: getInvoice.replaceAll("__typename", ""),
-              variables: { id: idProp },
-            })
-          )?.data?.getInvoice
+        ? await DataStore.query(Invoice, idProp)
         : invoiceModelProp;
       setInvoiceRecord(record);
     };
@@ -115,11 +109,11 @@ export default function InvoiceUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          dueDate: dueDate ?? null,
-          amount: amount ?? null,
-          surrogateID: surrogateID ?? null,
-          receiver: receiver ?? null,
-          receiverID: receiverID ?? null,
+          dueDate,
+          amount,
+          surrogateID,
+          receiver,
+          receiverID,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -149,22 +143,17 @@ export default function InvoiceUpdateForm(props) {
               modelFields[key] = null;
             }
           });
-          await API.graphql({
-            query: updateInvoice.replaceAll("__typename", ""),
-            variables: {
-              input: {
-                id: invoiceRecord.id,
-                ...modelFields,
-              },
-            },
-          });
+          await DataStore.save(
+            Invoice.copyOf(invoiceRecord, (updated) => {
+              Object.assign(updated, modelFields);
+            })
+          );
           if (onSuccess) {
             onSuccess(modelFields);
           }
         } catch (err) {
           if (onError) {
-            const messages = err.errors.map((e) => e.message).join("\n");
-            onError(modelFields, messages);
+            onError(modelFields, err.message);
           }
         }
       }}

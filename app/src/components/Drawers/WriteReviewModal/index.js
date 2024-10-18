@@ -20,7 +20,7 @@ function WriteReviewModal({ open, onClose, subtitle, peopleID }) {
       await createReview({
         rating: rating,
         review: review,
-        facilityName: "InstaCare Admin",
+        facilityName: "CareCrew Admin",
         peopleID: peopleID,
       });
       // Optionally, provide feedback that the review was created successfully

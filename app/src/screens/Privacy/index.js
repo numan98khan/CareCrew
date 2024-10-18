@@ -15,14 +15,14 @@ function PrivacyScreen() {
     <div className="flex flex-col h-full p-3 items-center bg-PRIMARY_COLOR">
       <div className="flex flex-col h-full w-[50%] p-10 border-2 border-white space-y-3 rounded-3xl">
         <label className="text-SECONDARY_COLOR text-3xl font-bold">
-          Privacy Policy for Instacare Nursing
+          Privacy Policy for CareCrew Nursing
         </label>
 
         <Information text={"Last updated: September 12, 2023"} />
         <Header text={"Introduction"} />
 
         <Information
-          text={`Welcome to the privacy policy for Instacare Nursing ("we", "us", or "our"). This policy describes how we collect, use, and disclose your personal information when you use our mobile application for shift booking and management ("App").`}
+          text={`Welcome to the privacy policy for CareCrew Nursing ("we", "us", or "our"). This policy describes how we collect, use, and disclose your personal information when you use our mobile application for shift booking and management ("App").`}
         />
 
         <Header text={"Information We Collect"} />
@@ -110,11 +110,7 @@ function PrivacyScreen() {
           }
         />
         <div className="flex flex-row space-y-1 items-center">
-          <Information text={"1. Email: info@instacarenursing.com"} />
-          {/* <label className="text-SECONDARY_COLOR">
-            info@instacarenursing.com
-          </label> */}
-          {/* <Information text={"2. Phone number: "} /> */}
+          <Information text={"1. Email: numan98khan@gmail.com"} />
         </div>
       </div>
     </div>

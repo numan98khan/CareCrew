@@ -15,6 +15,8 @@ import RateTag from "../ColoredTag/RateTag";
 import { MainHover, ScaleHover } from "../../styles/animations";
 // import WhosOnItem from "../../components/WhosOn/index";
 
+import ClockUpIcon from "../../assets/icons/clockUp";
+
 const ShiftCard = ({
   index,
   shift,
@@ -112,15 +114,15 @@ const ShiftCard = ({
                 </label>
 
                 <label
-                  className="text-[7px] text-left"
+                  className="text-xxs text-left"
                   style={{ color: themeStyles?.RED }}
                 >
-                  {shift?.lateReason?.replace("Instacare", "CareCrew")}
+                  {shift?.lateReason}
                 </label>
 
                 {isMarkedLate && (
                   <label
-                    className="text-[7px] text-left"
+                    className="text-xxs text-left"
                     style={{ color: themeStyles?.RED }}
                   >
                     {"Marked Late"}
@@ -128,49 +130,55 @@ const ShiftCard = ({
                 )}
                 {isComplete && (
                   <label
-                    className="text-[7px] text-left"
-                    style={{ color: themeStyles?.GREEN }}
+                    className="text-xxs text-left font-bold"
+                    style={{ color: themeStyles?.PRIMARY_COLOR }}
                   >
                     {"Completed"}
                   </label>
                 )}
 
-                <div className="py-1">
+                {/* <div className="py-1">
                   <RateTag title={rateTag} />
-                </div>
+                </div> */}
 
-                <div className="flex py-1">
+                <div
+                  className="flex flex-row justify-center items-center space-x-1 mt-1"
+                  // className="flex py-1"
+                >
+                  <div className="">
+                    <RateTag title={rateTag} />
+                  </div>
                   <OpenIndicator
                     isOpen={isAssigned}
                     size={iconSize}
-                    className="mr-2"
+                    // className="mr-2"
                   />
 
-                  {isIncentive ? (
-                    <IncentiveIndicator size={iconSize} className="mr-2" />
-                  ) : null}
+                  {isIncentive ? <IncentiveIndicator size={iconSize} /> : null}
 
-                  {isGuarantee ? (
-                    <GuaranteeIndicator size={iconSize} className="mr-2" />
-                  ) : null}
+                  {isGuarantee ? <GuaranteeIndicator size={iconSize} /> : null}
 
-                  {isLate ? (
-                    <WatchIndicator size={iconSize} className="mr-2" />
-                  ) : null}
+                  {isLate ? <WatchIndicator size={iconSize} /> : null}
 
-                  {isCallOff ? (
-                    <UserXIndicator size={iconSize} className="mr-2" />
+                  {isCallOff ? <UserXIndicator size={iconSize} /> : null}
+
+                  {shift?.clockInTime ? (
+                    !shift?.clockOutTime ? (
+                      <ClockUpIcon
+                        size={iconSize}
+                        // className="mr-2"
+                        color={"#7EE69B"}
+                      />
+                    ) : null
                   ) : null}
                 </div>
               </div>
             </div>
 
-            <div className="flex h-full flex-col justify-between items-center bg-black">
+            {/* <div className="flex h-full flex-col justify-between items-center bg-black">
               <div className="flex h-full justify-end">
-                {/* <ColoredTag small title={type} /> */}
               </div>
-              {/* <label className="text-xxs text-grey">{shiftTiming}</label> */}
-            </div>
+            </div> */}
           </div>
 
           {/* {dataComponents} */}

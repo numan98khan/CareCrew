@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 
-import OpenIconRed from "../../../assets/icons/openIcon";
+import OpenIconRed from "../../../assets/icons/indicators/open";
 
-import AssignedIcon from "../../../assets/icons/assignedIcon";
-import IncentivesIcon from "../../../assets/icons/incentives";
-import GaraunteeIcon from "../../../assets/icons/garaunteeIcon";
+import AssignedIcon from "../../../assets/icons/indicators/green";
+import IncentivesIcon from "../../../assets/icons/indicators/incentive";
+import GaraunteeIcon from "../../../assets/icons/indicators/guarantee";
 import LateIcon from "../../../assets/icons/lateIcon";
 import CallOff from "../../../assets/icons/callOf";
 import { useAuth } from "../../../context";

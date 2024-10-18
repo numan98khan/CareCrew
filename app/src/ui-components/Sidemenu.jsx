@@ -1367,7 +1367,7 @@ export default function Sidemenu(props) {
         left="184px"
         padding="0px 0px 0px 0px"
         whiteSpace="pre-wrap"
-        children="Instacare Staff"
+        children="CareCrew Staff"
         {...getOverrideProps(overrides, "RN")}
       ></Text>
       <Icon

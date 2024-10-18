@@ -7,10 +7,9 @@
 /* eslint-disable */
 import * as React from "react";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import { FCMLookup } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { API } from "aws-amplify";
-import { getFCMLookup } from "../graphql/queries";
-import { updateFCMLookup } from "../graphql/mutations";
+import { DataStore } from "aws-amplify";
 export default function FCMLookupUpdateForm(props) {
   const {
     id: idProp,
@@ -51,12 +50,7 @@ export default function FCMLookupUpdateForm(props) {
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
-        ? (
-            await API.graphql({
-              query: getFCMLookup.replaceAll("__typename", ""),
-              variables: { id: idProp },
-            })
-          )?.data?.getFCMLookup
+        ? await DataStore.query(FCMLookup, idProp)
         : fCMLookupModelProp;
       setFCMLookupRecord(record);
     };
@@ -95,10 +89,10 @@ export default function FCMLookupUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          other_token: other_token ?? null,
-          fcm_token: fcm_token ?? null,
-          apns_token: apns_token ?? null,
-          topic: topic ?? null,
+          other_token,
+          fcm_token,
+          apns_token,
+          topic,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -128,22 +122,17 @@ export default function FCMLookupUpdateForm(props) {
               modelFields[key] = null;
             }
           });
-          await API.graphql({
-            query: updateFCMLookup.replaceAll("__typename", ""),
-            variables: {
-              input: {
-                id: fCMLookupRecord.id,
-                ...modelFields,
-              },
-            },
-          });
+          await DataStore.save(
+            FCMLookup.copyOf(fCMLookupRecord, (updated) => {
+              Object.assign(updated, modelFields);
+            })
+          );
           if (onSuccess) {
             onSuccess(modelFields);
           }
         } catch (err) {
           if (onError) {
-            const messages = err.errors.map((e) => e.message).join("\n");
-            onError(modelFields, messages);
+            onError(modelFields, err.message);
           }
         }
       }}

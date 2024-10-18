@@ -7,9 +7,9 @@
 /* eslint-disable */
 import * as React from "react";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import { FCMLookup } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { API } from "aws-amplify";
-import { createFCMLookup } from "../graphql/mutations";
+import { DataStore } from "aws-amplify";
 export default function FCMLookupCreateForm(props) {
   const {
     clearOnSuccess = true,
@@ -106,14 +106,7 @@ export default function FCMLookupCreateForm(props) {
               modelFields[key] = null;
             }
           });
-          await API.graphql({
-            query: createFCMLookup.replaceAll("__typename", ""),
-            variables: {
-              input: {
-                ...modelFields,
-              },
-            },
-          });
+          await DataStore.save(new FCMLookup(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -122,8 +115,7 @@ export default function FCMLookupCreateForm(props) {
           }
         } catch (err) {
           if (onError) {
-            const messages = err.errors.map((e) => e.message).join("\n");
-            onError(modelFields, messages);
+            onError(modelFields, err.message);
           }
         }
       }}

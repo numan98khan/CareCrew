@@ -55,7 +55,7 @@ const AuthNav = () => {
         {/* </div> */}
 
         {/* <div className="flex flex-row flex-grow"> */}
-        <div className="flex" style={{ height: "94vh" }}>
+        <div className="flex" style={{ height: "95vh" }}>
           <div className="h-full">
             <SideMenu
               items={filteredMenuItems}

@@ -176,31 +176,31 @@ const AppBar = ({ children, type }) => {
     resetLastNotificationsActivity(personalData?.id);
   };
 
-  // const { notifications, refetch } = useListNotifications({
-  //   userId: user?.attributes?.sub,
-  //   setAlertNotification: setAlertNotification,
-  //   type: type,
-  // });
+  const { notifications, refetch } = useListNotifications({
+    userId: user?.attributes?.sub,
+    setAlertNotification: setAlertNotification,
+    type: type,
+  });
 
-  // const newNotifications = useMemo(() => {
-  //   return notifications.filter((notification) => {
-  //     return (
-  //       personalData?.lastActivityNotifications &&
-  //       new Date(notification.createdAt).getTime() >
-  //         new Date(personalData.lastActivityNotifications).getTime()
-  //     );
-  //   });
-  // }, [notifications, personalData?.lastActivityNotifications]);
+  const newNotifications = useMemo(() => {
+    return notifications.filter((notification) => {
+      return (
+        personalData?.lastActivityNotifications &&
+        new Date(notification.createdAt).getTime() >
+          new Date(personalData.lastActivityNotifications).getTime()
+      );
+    });
+  }, [notifications, personalData?.lastActivityNotifications]);
 
-  // const filteredNotifications = useMemo(() => {
-  //   // console.log("🚀 ~ file: index.js:168 ~ notifications:", notifications);
+  const filteredNotifications = useMemo(() => {
+    // console.log("🚀 ~ file: index.js:168 ~ notifications:", notifications);
 
-  //   return notifications.sort(function (a, b) {
-  //     return b._lastChangedAt - a._lastChangedAt;
-  //   });
+    return notifications.sort(function (a, b) {
+      return b._lastChangedAt - a._lastChangedAt;
+    });
 
-  //   // return notifications;
-  // }, [notifications]);
+    // return notifications;
+  }, [notifications]);
 
   const closeModal = () => {
     setModalIsOpen(false);
@@ -219,13 +219,13 @@ const AppBar = ({ children, type }) => {
     <div
       className="flex top-0 p-2 items-center justify-between px-4 shadow-lg bg-white"
       // className="flex top-0 p-2 items-center justify-between px-4 shadow-lg bg-white"
-      style={{ height: "6vh" }}
+      style={{ height: "5vh" }}
     >
       {/* {children}
        */}
 
       <div className="items-center w-full  justify-between flex">
-        <CareCrewLogo size={2.6} className="ml-2" />
+        <CareCrewLogo size={2} className="ml-2" />
         {/* <Logo size={5} className="ml-2" /> */}
 
         {isDebug && (
@@ -249,27 +249,17 @@ const AppBar = ({ children, type }) => {
         )}
 
         <div className="flex items-center">
-          {/* <div
-            ref={notificationButtonRef}
-            className="rounded-full p-2 transition duration-300 ease-in-out hover:shadow-lg dark:hover:shadow-black/30"
-            // on
-          >
-            <NotificationIcon
-              onClick={openNotificationModal}
-              className="rounded-full"
-            />
-          </div> */}
-
           <div
             ref={notificationButtonRef}
             className="relative rounded-full p-2 transition duration-300 ease-in-out hover:shadow-lg dark:hover:shadow-black/30"
           >
             <NotificationIcon
+              size={0.8}
               onClick={openNotificationModal}
               className="rounded-full"
             />
 
-            {/* {newNotifications.length > 0 && (
+            {newNotifications.length > 0 && (
               <span
                 className={`bg-SECONDARY_COLOR badge ${
                   isBadgeAnimating ? "animate-bounce" : ""
@@ -277,10 +267,10 @@ const AppBar = ({ children, type }) => {
               >
                 {newNotifications.length}
               </span>
-            )} */}
+            )}
           </div>
           <div
-            className="flex border rounded-full h-full items-center transition duration-300 ease-in-out hover:shadow-lg dark:hover:shadow-black/30"
+            className="flex  rounded-full h-full items-center transition duration-300 ease-in-out hover:shadow-lg dark:hover:shadow-black/30"
             style={{
               // width: "30px",
               // height: "30px",
@@ -290,26 +280,9 @@ const AppBar = ({ children, type }) => {
             onClick={openModal}
             ref={buttonRef}
           >
-            <div
-              className="border rounded-full h-full mr-2 flex items-center justify-center text-white "
-              style={{
-                width: "35px",
-                height: "35px",
-                //   padding: 10,
-                backgroundColor: theme.PRIMARY_COLOR,
-              }}
-            >
-              <label>
-                {personalData
-                  ? Array.from(personalData?.firstName)[0].toUpperCase()
-                  : null}
-                {personalData
-                  ? Array.from(personalData?.lastName)[0].toUpperCase()
-                  : null}
-              </label>
-            </div>
-
-            <MenuIcon className="mr-3" />
+            {/* <MenuIcon className="mr-3" />
+             */}
+            <label>{personalData?.email}</label>
           </div>
         </div>
       </div>
@@ -361,12 +334,12 @@ const AppBar = ({ children, type }) => {
         {/* </div> */}
       </Modal>
 
-      {/* <NotificationModal
+      <NotificationModal
         open={notificationModalIsOpen}
         onClose={closeNotificationModal}
         position={notificationPosition}
         notifications={filteredNotifications}
-      /> */}
+      />
     </div>
   );
 };

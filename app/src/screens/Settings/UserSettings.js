@@ -11,7 +11,7 @@ function UserSettings() {
   // const { people } = useAdmin();
 
   const [settings, setSettings] = useState({
-    userType: "Instacare Staff",
+    userType: "CareCrew Staff",
   });
 
   const togglePermission = (section, index) => {
@@ -63,8 +63,8 @@ function UserSettings() {
         <DropDown
           value={settings.userType}
           setValue={setSettingKey("userType")}
-          options={["Instacare Staff", "Facilities", "Employees"]}
-          labels={["Instacare Staff", "Facilities", "Employees"]}
+          options={["CareCrew Staff", "Facilities", "Employees"]}
+          labels={["CareCrew Staff", "Facilities", "Employees"]}
         />
         <ToggleOptions />
       </div>

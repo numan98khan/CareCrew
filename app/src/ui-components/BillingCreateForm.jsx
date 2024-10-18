@@ -13,9 +13,9 @@ import {
   SwitchField,
   TextField,
 } from "@aws-amplify/ui-react";
+import { Billing } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { API } from "aws-amplify";
-import { createBilling } from "../graphql/mutations";
+import { DataStore } from "aws-amplify";
 export default function BillingCreateForm(props) {
   const {
     clearOnSuccess = true,
@@ -230,14 +230,7 @@ export default function BillingCreateForm(props) {
               modelFields[key] = null;
             }
           });
-          await API.graphql({
-            query: createBilling.replaceAll("__typename", ""),
-            variables: {
-              input: {
-                ...modelFields,
-              },
-            },
-          });
+          await DataStore.save(new Billing(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -246,8 +239,7 @@ export default function BillingCreateForm(props) {
           }
         } catch (err) {
           if (onError) {
-            const messages = err.errors.map((e) => e.message).join("\n");
-            onError(modelFields, messages);
+            onError(modelFields, err.message);
           }
         }
       }}
