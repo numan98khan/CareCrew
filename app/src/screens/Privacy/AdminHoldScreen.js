@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { ScaleHover } from "../../styles/animations";
 import { useNavigate } from "react-router-dom";
 import { Auth } from "aws-amplify";
+import themeStyles from "../../styles/theme.styles";
 
 async function signOut() {
   try {
@@ -28,7 +29,10 @@ function AdminHoldScreen() {
   );
 
   return (
-    <div className="flex flex-col h-screen p-3 items-center bg-PRIMARY_COLOR">
+    <div
+      style={{ backgroundColor: themeStyles?.PRIMARY_COLOR }}
+      className="flex flex-col h-screen p-3 items-center "
+    >
       <div className="absolute right-3">
         <div
           onClick={() => signOut()}

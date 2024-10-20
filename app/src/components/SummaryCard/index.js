@@ -94,7 +94,6 @@ const SummaryCard = ({
       // className={`flex flex-col justify-between px-4 shadow-lg rounded-2xl w-full py-2 ${
       //   !disableHover && ScaleHover
       // }
-      // ${gradient ? "bg-gradient-primary" : "bg-PRIMARY_COLOR"}`}
 
       className={`flex flex-col justify-between px-4 shadow-lg rounded-lg w-full py-2 space-y-1 ${
         !disableHover && ScaleHover

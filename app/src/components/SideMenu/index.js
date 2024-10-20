@@ -6,6 +6,7 @@ import theme from "../../styles/theme.styles";
 import { useAuth } from "../../context";
 import { ADMIN } from "../../constants/userTypes";
 import { ScaleHover } from "../../styles/animations";
+import themeStyles from "../../styles/theme.styles";
 
 const SideMenu = ({ items }) => {
   const location = useLocation();
@@ -23,7 +24,8 @@ const SideMenu = ({ items }) => {
 
   return (
     <div
-      className={`flex flex-col bg-PRIMARY_COLOR h-full ${
+      style={{ backgroundColor: themeStyles?.PRIMARY_COLOR }}
+      className={`flex flex-col h-full ${
         isExpanded ? "w-[165px]" : "w-12"
       } transition-all duration-300 ease-in-out justify-between`}
     >

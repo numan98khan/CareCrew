@@ -50,8 +50,6 @@ function TimecardDetailsModal({
       direction="right"
       overlayOpacity={0}
       style={{ bottom: "0", top: "initial", height: "94vh", width: "300px" }}
-
-      // className="bg-PRIMARY_COLOR p-2"
     >
       <div
         // id="timecard-modal-content"

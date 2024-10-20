@@ -3,7 +3,7 @@
 const themeVariables = require("./src/styles/theme.styles"); // Adjust the path as necessary
 
 module.exports = {
-  content: ["./src/**/*.{html,js,tsx}"],
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
       transitionProperty: {
@@ -39,12 +39,12 @@ module.exports = {
         greycus: "rgba(2, 5, 10, 0.50)",
 
         greyhighlight: "rgba(2, 5, 10, 0.05)",
-        PRIMARY_COLOR: themeVariables.PRIMARY_COLOR,
-        PRIMARY_COLOR_2: themeVariables?.PRIMARY_COLOR,
-        PRIMARY_LIGHT_COLOR: themeVariables.PRIMARY_LIGHT_COLOR,
+        PRIMARY_COLOR: "#00233c", //themeVariables.PRIMARY_COLOR,
+        PRIMARY_COLOR_2: "#00233c", //themeVariables?.PRIMARY_COLOR,
+        PRIMARY_LIGHT_COLOR: "#99a7b1", //themeVariables.PRIMARY_LIGHT_COLOR,
         // PRIMARY_LIGHT_DARKER: "#D8F1F7",
         PRIMARY_LIGHT_DARKER: "#D8F1F7", // Adjusted to fit the new theme
-        PRIMARY_NEUTRAL_COLOR: themeVariables.PRIMARY_NEUTRAL_COLOR,
+        PRIMARY_NEUTRAL_COLOR: "#F3FAFD", //themeVariables.PRIMARY_NEUTRAL_COLOR,
         // DELETE_LIGHT_PRIMARY: "#F330471A",
         // TEXT_FIELD_BACKGROUND: "#F3FAFD",
         DELETE_LIGHT_PRIMARY: themeVariables.RED_LIGHT,

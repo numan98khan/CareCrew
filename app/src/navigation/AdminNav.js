@@ -22,6 +22,7 @@ import AddFacility from "../screens/AddFacility";
 import AllNotifications from "../screens/AllNotifications";
 import TotalBilling from "../screens/TotalBilling";
 import { STAFF_PERMISSIONS } from "../constants/permissions";
+import themeStyles from "../styles/theme.styles";
 
 // import  from "../assets/icons/menuIcons/";
 // import  from "../assets/icons/menuIcons/";
@@ -49,7 +50,10 @@ const AuthNav = () => {
   // console.log("Admin Permissions");
   return (
     <Router>
-      <div className="flex flex-col min-h-max w-full fixed bg-PRIMARY_NEUTRAL_COLOR">
+      <div
+        style={{ backgroundColor: themeStyles?.PRIMARY_NEUTRAL_COLOR }}
+        className="flex flex-col min-h-max w-full fixed "
+      >
         {/* <div style={{}}> */}
         <AppBar type={permissions?.type}>My App</AppBar>
         {/* </div> */}

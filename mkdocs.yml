@@ -1,4 +1,25 @@
-site_name: My Docs
+site_name: CareCrew Documentation
 site_url: https://carecrew.co/
 theme:
   name: material
+nav:
+  - Home: index.md
+  - Dashboard: dashboard.md
+  - Schedule: schedule.md
+  - Add Shifts: add_shifts.md
+  - People Management: people.md
+  - Timecards: timecards.md
+  - Invoices: invoices.md
+  - Settings: settings.md
+  - Support: support.md
+  - Who's ON: whos_on.md
+  - Facilities: facilities.md
+# nav:
+#   - Home: index.md
+#   - Dashboard: dashboard.md
+#   - Schedule Management: schedule.md
+#   - People Management: people.md
+#   - Timecards: timecards.md
+#   - Invoices: invoices.md
+#   - Settings: settings.md
+#   - Support: support.md

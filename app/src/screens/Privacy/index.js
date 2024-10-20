@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import themeStyles from "../../styles/theme.styles";
 
 function PrivacyScreen() {
   const Header = ({ text }) => (
@@ -12,7 +13,10 @@ function PrivacyScreen() {
   );
 
   return (
-    <div className="flex flex-col h-full p-3 items-center bg-PRIMARY_COLOR">
+    <div
+      style={{ backgroundColor: themeStyles?.PRIMARY_COLOR }}
+      className="flex flex-col h-full p-3 items-center "
+    >
       <div className="flex flex-col h-full w-[50%] p-10 border-2 border-white space-y-3 rounded-3xl">
         <label className="text-SECONDARY_COLOR text-3xl font-bold">
           Privacy Policy for CareCrew Nursing

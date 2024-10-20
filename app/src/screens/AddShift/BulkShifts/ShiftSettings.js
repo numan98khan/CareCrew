@@ -26,16 +26,23 @@ function ShiftSettings({ onEdit, inputIndex, note }) {
         <SettingsIcon size={4} color={themeStyles.PRIMARY_COLOR} />
         {isMenuOpen && (
           <div className="absolute bg-transparent flex flex-row space-x-1">
-            <div className="rounded-full bg-PRIMARY_COLOR p-1">
+            <div
+              style={{ backgroundColor: themeStyles?.PRIMARY_COLOR }}
+              className="rounded-full p-1"
+            >
               <IncentiveIcon color={"#FFF"} size={7} />
             </div>
 
-            <div className="rounded-full bg-PRIMARY_COLOR p-1">
+            <div
+              style={{ backgroundColor: themeStyles?.PRIMARY_COLOR }}
+              className="rounded-full  p-1"
+            >
               <CancellationGuaranteeIcon color={"#FFF"} size={7} />
             </div>
             <div
               onClick={() => setIsEditNotesModalOpen(true)}
-              className="rounded-full bg-PRIMARY_COLOR p-1"
+              style={{ backgroundColor: themeStyles?.PRIMARY_COLOR }}
+              className="rounded-full p-1"
             >
               <EditIcon color={"#FFF"} size={4} />
             </div>

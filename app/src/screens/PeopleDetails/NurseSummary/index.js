@@ -17,6 +17,7 @@ import { ADMIN, EMPLOYEE } from "../../../constants/userTypes";
 import PointsModal from "./PointsModal";
 
 import ChevronIcon from "../../../assets/icons/downChevron";
+import themeStyles from "../../../styles/theme.styles";
 
 const NurseSummary = ({
   people,
@@ -84,7 +85,10 @@ const NurseSummary = ({
         />
       ) : null}
       <Toaster />
-      <div className="flex flex-row h-auto rounded-2xl px-2 py-2 text-white text-left font-bold bg-PRIMARY_COLOR items-center">
+      <div
+        style={{ backgroundColor: themeStyles?.PRIMARY_COLOR }}
+        className="flex flex-row h-auto rounded-2xl px-2 py-2 text-white text-left font-bold items-center"
+      >
         <div className="flex items-center justify-center border-SECONDARY_COLOR border-[3px] rounded-full">
           {/* <Avatar /> */}
           <Avatar
