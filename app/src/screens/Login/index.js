@@ -311,18 +311,34 @@ const Login = () => {
 //   </div>
 // );
 
+// const LoginLayout = ({ children }) => (
+//   <div className="flex flex-col justify-between w-full h-screen">
+//     <div className="h-full">
+//       <div className="absolute top-5 left-5">
+//         <Logo size={3} className="mb-14" />
+//       </div>
+//       <div className="flex justify-center items-center w-full bg-gray-50 h-full">
+//         <div className="items-center border border-gray-200 rounded-lg shadow w-1/4">
+//           {children}
+//           {/* <div className="p-2 text-center font-bold text-PRIMARY_COLOR text-3xl">
+//             Coming Soon!
+//           </div> */}
+//         </div>
+//       </div>
+//     </div>
+//     <Footer />
+//   </div>
+// );
+
 const LoginLayout = ({ children }) => (
   <div className="flex flex-col justify-between w-full h-screen">
     <div className="h-full">
-      <div className="absolute top-5 left-5">
+      <div className="flex justify-center md:justify-start items-center absolute top-5 left-0 right-0 md:left-5">
         <Logo size={3} className="mb-14" />
       </div>
       <div className="flex justify-center items-center w-full bg-gray-50 h-full">
-        <div className="items-center border border-gray-200 rounded-lg shadow w-1/4">
+        <div className="items-center border border-gray-200 rounded-lg shadow w-full md:w-2/3 lg:w-1/3 ">
           {children}
-          {/* <div className="p-2 text-center font-bold text-PRIMARY_COLOR text-3xl">
-            Coming Soon!
-          </div> */}
         </div>
       </div>
     </div>
@@ -358,6 +374,7 @@ const SignInForm = ({
   <form
     onSubmit={handleLogin}
     className="w-full bg-white rounded px-8 pt-6 pb-8"
+    // className="w-full bg-white rounded px-8 pt-6 pb-8"
   >
     <label className="text-lg font-bold" htmlFor="email">
       Sign In

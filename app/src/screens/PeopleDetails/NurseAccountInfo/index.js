@@ -10,15 +10,14 @@ import { hasPermission } from "../../../services/micro";
 
 const AccountInfo = ({ people, type }) => {
   const isEmailNotifications = hasPermission(people, "Email");
-
   const isTextNotifications = hasPermission(people, "Text Message");
 
   return (
     <>
       {people?.id && (
         <div className="min-h-max px-3 mt-3 pb-3 bg-white">
-          <div className="flex flex-row ">
-            <div className="flex flex-col text-left w-1/3 align  p-4">
+          <div className="flex flex-col md:flex-row">
+            <div className="flex flex-col text-left w-full md:w-1/3 p-2 md:p-4">
               <InfoTitle text={"Account Information"} />
 
               <div className="flex flex-wrap">
@@ -43,8 +42,8 @@ const AccountInfo = ({ people, type }) => {
               </div>
             </div>
 
-            {type === ADMIN ? (
-              <div className="flex flex-col text-left w-1/3 align  p-4">
+            {type === ADMIN && (
+              <div className="flex flex-col text-left w-full md:w-1/3 p-2 md:p-4">
                 <InfoTitle text={"Address"} />
 
                 <div className="flex flex-wrap">
@@ -63,20 +62,18 @@ const AccountInfo = ({ people, type }) => {
                     <InfoData text={people?.city} />
                   </InfoBox>
                   <InfoBox>
-                    {" "}
                     <InfoSubTitle text={"State"} />
                     <InfoData text={people?.state} />
                   </InfoBox>
                   <InfoBox>
-                    {" "}
                     <InfoSubTitle text={"Zip"} />
                     <InfoData text={people?.zip} />
                   </InfoBox>
                 </div>
               </div>
-            ) : null}
+            )}
 
-            <div className="flex flex-col text-left w-1/3 align  p-4">
+            <div className="flex flex-col text-left w-full md:w-1/3 p-2 md:p-4">
               <InfoTitle text={"General"} />
 
               <div className="flex flex-wrap">
@@ -92,11 +89,11 @@ const AccountInfo = ({ people, type }) => {
             </div>
           </div>
 
-          {type === ADMIN ? (
+          {type === ADMIN && (
             <>
               <div className="my-2" />
-              <div className="flex flex-row ">
-                <div className="flex flex-col text-left w-1/3 align  p-4">
+              <div className="flex flex-col md:flex-row">
+                <div className="flex flex-col text-left w-full md:w-1/3 p-2 md:p-4">
                   <InfoTitle text={"Notifications"} />
 
                   <div className="flex flex-wrap">
@@ -104,7 +101,9 @@ const AccountInfo = ({ people, type }) => {
                       <InfoSubTitle text={"Send Email Notifications"} />
                       <label
                         className={`${
-                          isEmailNotifications ? "text-green" : "text-red-500"
+                          isEmailNotifications
+                            ? "text-green-500"
+                            : "text-red-500"
                         } text-xs font-bold`}
                       >
                         {isEmailNotifications ? "YES" : "NO"}
@@ -112,10 +111,11 @@ const AccountInfo = ({ people, type }) => {
                     </div>
                     <div className="flex w-full justify-between py-1">
                       <InfoSubTitle text={"Send Text Notification"} />
-
                       <label
                         className={`${
-                          isTextNotifications ? "text-green" : "text-red-500"
+                          isTextNotifications
+                            ? "text-green-500"
+                            : "text-red-500"
                         } text-xs font-bold`}
                       >
                         {isTextNotifications ? "YES" : "NO"}
@@ -124,21 +124,21 @@ const AccountInfo = ({ people, type }) => {
                   </div>
 
                   <div className="my-2" />
-
                   <InfoTitle text={"Security"} />
 
                   <div className="flex flex-wrap">
-                    <div className="flex flex-col flex-grow ">
+                    <div className="flex flex-col flex-grow">
                       <InfoSubTitle text={"First Name"} />
                       <InfoData text={people.firstName} />
                     </div>
-                    <div className="flex flex-col flex-grow ">
+                    <div className="flex flex-col flex-grow">
                       <InfoSubTitle text={"Last Name"} />
                       <InfoData text={people.lastName} />
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-col text-left w-1/3 align  p-4">
+
+                <div className="flex flex-col text-left w-full md:w-1/3 p-2 md:p-4">
                   <InfoTitle text={"Basic Information"} />
 
                   <div className="flex flex-wrap">
@@ -172,20 +172,16 @@ const AccountInfo = ({ people, type }) => {
                         <InfoData text={people.uniformSize} />
                       </InfoBox>
                     )}
-
                     <div className="flex w-full justify-between py-1">
                       <InfoSubTitle text={"Completed Drug Screening"} />
-                      {/* <Toggle isChecked={people.isCompleteDrugScreening} /> */}
-
                       <label className="text-red-500 text-xs font-bold">
                         OFF
                       </label>
                     </div>
                   </div>
-
-                  <div className="my-2" />
                 </div>
-                <div className="flex flex-col text-left w-1/3 align  p-4">
+
+                <div className="flex flex-col text-left w-full md:w-1/3 p-2 md:p-4">
                   <InfoTitle text={"Emergency Contact Information"} />
 
                   <div className="flex flex-wrap">
@@ -222,17 +218,15 @@ const AccountInfo = ({ people, type }) => {
                       </InfoBox>
                     )}
                   </div>
-
-                  <div className="my-2" />
                 </div>
               </div>
             </>
-          ) : null}
+          )}
 
-          <div className="flex flex-row ">
-            <div className="flex flex-col text-left w-1/3 align  p-4">
+          <div className="flex flex-col md:flex-row">
+            <div className="flex flex-col text-left w-full md:w-1/3 p-2 md:p-4">
               <InfoTitle text={"Personal Note"} />
-              <div className="flex flex-col flex-grow ">
+              <div className="flex flex-col flex-grow">
                 <InfoSubTitle text={"Notes"} />
                 <InfoData text={people.personalNote} />
               </div>

@@ -112,49 +112,44 @@ function Staff({ setIsStaffDetails, setSelectedStaff }) {
         </div>
       ) : (
         <>
-          <div className="flex flex-wrap p-4">
-            {staff?.map((item) => {
-              return (
-                <div className={``}>
-                  <StaffCard
-                    people={item}
-                    editProfileFunction={() => {
-                      setSelectedStaff(item);
-                      setIsStaffDetails(true);
-                    }}
-                    deleteStaffFunction={() => {
-                      // setSelectedStaff(item);
-                      // setIsStaffDetails(true);
-                      setPersonToDelete(item);
-                      setIsDeleteConfirmModalOpen(true);
-
-                      // ErrorToast("Deleting staff is not permitted");
-                    }}
-                  />
-                </div>
-              );
-            })}
+          {/* Staff Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 w-full">
+            {staff?.map((item) => (
+              <div key={item.id} className="w-full">
+                <StaffCard
+                  people={item}
+                  editProfileFunction={() => {
+                    setSelectedStaff(item);
+                    setIsStaffDetails(true);
+                  }}
+                  deleteStaffFunction={() => {
+                    setPersonToDelete(item);
+                    setIsDeleteConfirmModalOpen(true);
+                  }}
+                />
+              </div>
+            ))}
           </div>
-          <div className="flex mt-auto justify-between w-1/6">
-            {" "}
+
+          {/* Add Member Button */}
+          <div className="mt-6 w-full flex justify-center">
             <Button
               children={"ADD MEMBER"}
-              onClick={() => {
-                navigate("/addStaffMember");
-              }}
+              onClick={() => navigate("/addStaffMember")}
+              className="w-full md:w-1/4"
             />
           </div>
         </>
       )}
+
+      {/* Confirmation Modal */}
       <ConfirmationModal
         modalIsOpen={isDeleteConfirmModalOpen}
         closeModal={() => setIsDeleteConfirmModalOpen(false)}
         message={"Are you sure you want to terminate this staff member?"}
-        onConfirm={() => {
-          terminateEmployee(personToDelete);
-        }}
+        onConfirm={() => terminateEmployee(personToDelete)}
         onCancel={() => {
-          setPersonToDelete();
+          setPersonToDelete(null);
           setIsDeleteConfirmModalOpen(false);
         }}
       />

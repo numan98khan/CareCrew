@@ -278,7 +278,7 @@ const People = ({ route }) => {
     return (
       <div className="flex flex-col min-h-full px-3 pb-3">
         <div className="flex flex-col">
-          <div className="flex flex-row py-1 justify-start space-x-4 items-center mb-2 mt-2">
+          <div className="flex flex-col md:flex-row py-1 justify-start space-y-4 md:space-y-0 md:space-x-4 items-center mb-2 mt-2">
             <BackButton onClick={onBackClickHandler} />
             <PageHeader text={"People"} />
           </div>
@@ -289,21 +289,26 @@ const People = ({ route }) => {
         <div>
           <div className="flex flex-col">
             <div
-              style={{ height: "50px" }}
-              className="w-full bg-white flex mt-3"
+              className="w-full bg-white flex flex-col md:flex-row justify-center md:justify-start mt-3"
+              style={{ height: "auto", minHeight: "50px" }}
             >
               {navTabs.map((tab, index) => (
                 <NavTab
                   key={index}
                   title={tab.title}
                   amount={tab.title === "Members" ? tab.amount : ""}
-                  // isActive={tab.isActive}
                   isActive={currentTab === tab.title}
                   onClick={() => handleTabChange(tab.title)}
+                  className="text-sm md:text-base px-4 py-2 md:px-6" // Responsive padding
                 />
               ))}
             </div>
-            <div>{tabContent}</div>
+            <div className="mt-4">
+              <div className="flex flex-col md:flex-row gap-4">
+                {/* Content for the active tab */}
+                {tabContent}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -467,32 +472,24 @@ const People = ({ route }) => {
           />
           <div className="flex flex-col mx-2">
             <div className="flex py-1 justify-start">
-              <div className="flex flex-row items-center justify-between w-full">
-                <div className="flex items-center">
+              <div className="flex flex-col md:flex-row items-center justify-between w-full">
+                <div className="flex items-center space-y-2 md:space-y-0 md:space-x-6">
                   <PageHeader text={"People"} />
-                  {/* <input
-                    type="text"
-                    id="people_search"
-                    className="text-sm rounded-full ps-3.5 h-8 w-80 ml-6 mt-2"
-                    placeholder="Search by name"
-                  /> */}
                   <input
                     type="text"
                     id="people_search"
                     value={searchQuery}
                     onChange={handleSearchChange}
-                    className="text-sm rounded-full ps-3.5 h-8 w-80 ml-6 mt-2"
+                    className="text-sm rounded-full ps-3.5 h-8 w-full md:w-80 mt-2"
                     placeholder="Search by name"
                   />
                 </div>
                 {type === ADMIN && (
-                  <div>
+                  <div className="mt-2 md:mt-0">
                     <IconButton
                       color={theme.SECONDARY_COLOR}
                       text={"+ADD USER"}
-                      onClick={() => {
-                        setIsAdd(true);
-                      }}
+                      onClick={() => setIsAdd(true)}
                     />
                   </div>
                 )}
@@ -512,9 +509,8 @@ const People = ({ route }) => {
             </div>
           ) : (
             <Table
-              // setFilterModalOpen={setOpen}
               setFilterModalOpen={setOpen}
-              data={filteredEmployees}
+              data={currentItems}
               config={"people"}
               handlePageChange={handlePageChange}
               currentPage={currentPage}
@@ -534,22 +530,20 @@ const People = ({ route }) => {
                   "Are you sure you want to terminate this employee?"
                 );
                 setIsDeleteConfirmModalOpen(true);
-
-                console.log("Delete action button for people", item);
               }}
               adminHoldAction={(item) => {
                 setPersonToHold(item);
                 setWarningMessage(
                   item?.adminHold
-                    ? "Are you sure you want to put this employee out of Admin Hold?"
-                    : "Are you sure you want to put this employee on employee hold?"
+                    ? "Are you sure you want to remove this employee from Admin Hold?"
+                    : "Are you sure you want to put this employee on Admin Hold?"
                 );
                 setIsDeleteConfirmModalOpen(true);
-                console.log("HOLD");
               }}
               canPutOnAdminHold={canPutOnAdminHold}
             />
           )}
+
           <ConfirmationModal
             modalIsOpen={isDeleteConfirmModalOpen}
             closeModal={() => setIsDeleteConfirmModalOpen(false)}
@@ -560,32 +554,11 @@ const People = ({ route }) => {
                 "Are you sure you want to terminate this employee?"
               ) {
                 terminateEmployee(personToDelete);
-              }
-
-              if (
-                warningMessage !==
-                "Are you sure you want to terminate this employee?"
-              ) {
-                console.log("HOLDING EMPLOYEE", personToHold);
+              } else {
                 adminHoldEmployee(personToHold);
-                // terminateEmployee(personToDelete);
               }
             }}
-            onCancel={() => {
-              if (
-                warningMessage ===
-                "Are you sure you want to terminate this employee?"
-              ) {
-                setPersonToDelete();
-              }
-              if (
-                warningMessage ===
-                "Are you sure you want to put this employee on employee hold?"
-              ) {
-                setPersonToHold();
-              }
-              setIsDeleteConfirmModalOpen(false);
-            }}
+            onCancel={() => setIsDeleteConfirmModalOpen(false)}
           />
         </div>
       ) : isEdit ? (
@@ -596,5 +569,4 @@ const People = ({ route }) => {
     </>
   );
 };
-
 export default People;

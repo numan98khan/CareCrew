@@ -28,9 +28,7 @@ const NurseSummary = ({
   editDisabled,
 }) => {
   const { type } = useAuth();
-
   const navigate = useNavigate();
-
   const [textToCopy, setTextToCopy] = useState("");
   const [isCopied, setIsCopied] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -47,7 +45,7 @@ const NurseSummary = ({
   const onSuccessToast = () => {
     toast.success(`Copied ID`, {
       duration: 3000,
-      position: "top-center", //section of the browser page
+      position: "top-center", // section of the browser page
     });
   };
 
@@ -74,8 +72,8 @@ const NurseSummary = ({
 
   const dotsize = "10px";
   return (
-    <div>
-      {isMyProfile ? (
+    <div className="flex flex-col">
+      {isMyProfile && (
         <StatusModal
           open={modalIsOpen}
           onClose={closeModal}
@@ -83,14 +81,14 @@ const NurseSummary = ({
           people={people}
           refetch={refetch}
         />
-      ) : null}
+      )}
       <Toaster />
       <div
         style={{ backgroundColor: themeStyles?.PRIMARY_COLOR }}
-        className="flex flex-row h-auto rounded-2xl px-2 py-2 text-white text-left font-bold items-center"
+        className="flex flex-col md:flex-row h-auto rounded-2xl px-3 py-4 text-white text-left font-bold items-center gap-4"
       >
+        {/* Avatar Section */}
         <div className="flex items-center justify-center border-SECONDARY_COLOR border-[3px] rounded-full">
-          {/* <Avatar /> */}
           <Avatar
             size={20}
             imgSrc={people?.profilePicture}
@@ -98,11 +96,9 @@ const NurseSummary = ({
           />
         </div>
 
-        <div
-          style={{ width: "150%" }}
-          className="ml-6 flex flex-col h-full gap-3"
-        >
-          <div className="flex flex-col gap-0">
+        {/* Information Section */}
+        <div className="flex flex-col w-full md:w-3/5 gap-4">
+          <div className="flex flex-col gap-2">
             <div className="text-2xl">
               <h1>
                 {people?.firstName} {people?.lastName}
@@ -110,17 +106,17 @@ const NurseSummary = ({
             </div>
             <div>
               <h3 className="text-base text-PRIMARY_LIGHT_COLOR">
-                {people?.role ? people?.role : " "}
+                {people?.role || " "}
               </h3>
             </div>
           </div>
 
-          <div className=" flex flex-row items-center gap-3">
-            <div className="flex flex-row items-center gap-1">
-              <div className="flex mr-1 font-normal items-center text-xs text-PRIMARY_LIGHT_COLOR">
-                Emp. ID:{" "}
-                <span className="ml-2" style={{ fontWeight: "bolder" }}>
-                  {" "}
+          {/* ID and Status Section */}
+          <div className="flex flex-col md:flex-row gap-4 items-center">
+            <div className="flex flex-row items-center gap-2">
+              <div className="flex font-normal items-center text-xs text-PRIMARY_LIGHT_COLOR">
+                Emp. ID:
+                <span className="ml-2 font-bold">
                   {people?.type === EMPLOYEE ? people?.surrogateID : people?.id}
                 </span>
               </div>
@@ -131,14 +127,11 @@ const NurseSummary = ({
               </CopyToClipboard>
             </div>
 
-            <div className={`flex flex-row `}>
-              <div
-                style={{ fontSize: "12px" }}
-                className="font-normal mr-2 text-base text-PRIMARY_LIGHT_COLOR"
-              >
+            <div className="flex flex-row items-center gap-2">
+              <span className="font-normal text-xs text-PRIMARY_LIGHT_COLOR">
                 Status:
-              </div>
-              <div className={`flex flex-row items-center gap-1 ${ScaleHover}`}>
+              </span>
+              <div className={`flex items-center gap-1 ${ScaleHover}`}>
                 <div
                   style={{
                     height: dotsize,
@@ -150,65 +143,49 @@ const NurseSummary = ({
                 <div
                   ref={buttonRef}
                   onClick={openModal}
-                  className="mr-4 text-xs font-semibold cursor-pointer flex flex-row items-center"
+                  className="text-xs font-semibold cursor-pointer flex flex-row items-center"
                 >
-                  {people?.status ? people?.status : " "}
+                  {people?.status || " "}
                   <ChevronIcon size={7} />
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+        {/* Points and Rating Section */}
         {!isMyProfile && (
-          <div className="flex flex-col justify-center pt-9">
-            <div className="flex flex-row">
-              {/* {people?.points >== 0 && ( */}
+          <div className="flex flex-col items-center md:items-end gap-4">
+            <div className="flex flex-row gap-2">
               <div
-                onClick={() => {
-                  // openPointModal();
-                }}
-                className=" flex flex-row w-20 h-8 px-1 rounded-3xl mr-2 text-sm justify-around items-center text-PRIMARY_COLOR bg-SECONDARY_COLOR"
+                onClick={openPointModal}
+                className="flex flex-row items-center w-24 h-8 px-1 rounded-3xl text-sm justify-around text-PRIMARY_COLOR bg-SECONDARY_COLOR cursor-pointer"
               >
                 <Clock />
                 {people?.points} pts
               </div>
-              {/* )} */}
-
-              {/* {people?.rating && ( */}
-              <div className="flex flex-row w-20 px-1 h-8 rounded-3xl justify-around items-center text-sm text-PRIMARY_COLOR bg-SECONDARY_COLOR">
+              <div className="flex flex-row items-center w-24 h-8 px-1 rounded-3xl text-sm text-PRIMARY_COLOR bg-SECONDARY_COLOR">
                 <StarIcon />
                 {people?.rating}/5
               </div>
-              {/* )} */}
             </div>
           </div>
         )}
 
-        <div className="flex flex-col w-full justify-center mr-8">
-          <div className="flex flex-row justify-end items-center">
-            {isMyProfile || (
-              <button
-                className={`rounded-full bg-SECONDARY_COLOR w-12 h-12 mr-4 ${ScaleHover}`}
-                onClick={() => navigate("/messaging", { state: people })}
-              >
-                <Mail />
-              </button>
-            )}
+        {/* Action Buttons Section */}
+        <div className="flex flex-col items-end gap-2 w-full md:w-auto">
+          {!isMyProfile && (
+            <button
+              className={`rounded-full bg-SECONDARY_COLOR w-12 h-12 mr-4 ${ScaleHover}`}
+              onClick={() => navigate("/messaging", { state: people })}
+            >
+              <Mail />
+            </button>
+          )}
 
-            {!editDisabled && (type === ADMIN || isMyProfile) ? (
-              <div className="w-1/3">
-                <Button
-                  children={"Edit"}
-                  onClick={
-                    () => setIsEdit(true)
-                    // navigate("/people", {
-                    //   state: { people: people, isEdit: true },
-                    // })
-                  }
-                />
-              </div>
-            ) : null}
-          </div>
+          {!editDisabled && (type === ADMIN || isMyProfile) && (
+            <Button children={"Edit"} onClick={() => setIsEdit(true)} />
+          )}
         </div>
       </div>
 
