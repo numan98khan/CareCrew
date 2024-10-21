@@ -40,16 +40,44 @@ const WhosOnComponent = ({ shifts }) => {
     const shiftStartDT = new Date(shift?.shift?.shiftStartDT);
     const shiftEndDT = new Date(shift?.shift?.shiftEndDT);
 
+    const nowDecimal = timeToDecimal(new Date());
+
     const startTimeDecimal = timeToDecimal(shiftStartDT);
     const endTimeDecimal = timeToDecimal(shiftEndDT);
 
+    // const desiredClockInDT = new Date(shift.desiredClockInTime);
+    // const desiredClockOutDT = new Date(shift.desiredClockOutTime);
+    // const desiredClockInDecimal = timeToDecimal(desiredClockInDT);
+    // const desiredClockOutDecimal = timeToDecimal(desiredClockOutDT);
+
     const desiredClockInDT = new Date(shift.desiredClockInTime);
     const desiredClockOutDT = new Date(shift.desiredClockOutTime);
+
+    // Helper function to convert time to decimal
+    // const timeToDecimal = (dateTime) =>
+    //   dateTime.getHours() + dateTime.getMinutes() / 60;
     const desiredClockInDecimal = timeToDecimal(desiredClockInDT);
-    const desiredClockOutDecimal = timeToDecimal(desiredClockOutDT);
+
+    // Check if desiredClockOutDT is on the next day
+    const isNextDay =
+      desiredClockOutDT.getDate() !== desiredClockInDT.getDate();
+    const desiredClockOutDecimal = isNextDay
+      ? 24
+      : timeToDecimal(desiredClockOutDT);
 
     const shiftStartPosition = (startTimeDecimal + 0.5) * hourlyWidth;
-    const idealDuration = desiredClockOutDecimal - desiredClockInDecimal;
+    const idealDuration =
+      ((shift?.clockInTime != null && shift?.clockOutTime == null
+        ? nowDecimal
+        : 0) > desiredClockOutDecimal
+        ? nowDecimal
+        : desiredClockOutDecimal) - desiredClockInDecimal;
+    console.log(
+      "🚀 ~ processShift ~ idealShiftWidth:",
+      desiredClockInDecimal,
+      desiredClockOutDecimal
+    );
+
     const idealShiftWidth = hourlyWidth * idealDuration;
 
     const shiftData = {
@@ -84,22 +112,24 @@ const WhosOnComponent = ({ shifts }) => {
         clockInDecimal > desiredClockInDecimal
           ? hourlyWidth * (clockInDecimal - desiredClockInDecimal)
           : 0;
-      const overtimeWidth =
-        clockOutDecimal > desiredClockOutDecimal
+
+      const overtimeWidth = shift.clockOutTime
+        ? clockOutDecimal > desiredClockOutDecimal
           ? hourlyWidth * (clockOutDecimal - desiredClockOutDecimal)
-          : 0;
+          : 0
+        : hourlyWidth * (nowDecimal - desiredClockOutDecimal);
 
       const shiftClockInPosition = (clockInDecimal + 0.5) * hourlyWidth;
 
-      console.log(
-        "🚀 ~ processShift ~ idealShiftWidth:",
-        desiredClockInDecimal,
-        desiredClockOutDecimal,
-        idealShiftWidth,
-        shiftWidth,
-        shift.clockOutTime == null,
-        shift
-      );
+      // console.log(
+      //   "🚀 ~ processShift ~ idealShiftWidth:",
+      //   desiredClockInDecimal,
+      //   desiredClockOutDecimal,
+      //   idealShiftWidth,
+      //   shiftWidth,
+      //   shift.clockOutTime == null,
+      //   shift
+      // );
 
       return {
         ...shiftData,

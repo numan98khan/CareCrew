@@ -222,6 +222,8 @@ const Dashboard = () => {
   };
 
   const filteredTimecards = useMemo(() => {
+    console.log("🚀 ~ filteredTimecards ~ timecards:", timecards);
+
     if (timecards && employee) {
       const formattedDate = formatDate(currentViewDate);
 
@@ -229,6 +231,12 @@ const Dashboard = () => {
         (obj) =>
           formatDate(new Date(obj?.shift?.shiftStartDT)) === formattedDate
       );
+
+      // const filteredTimecard = timecards.filter(
+      //   (obj) =>
+      //     // formatDate(new Date(obj?.shift?.shiftStartDT)) === formattedDate
+      //     true
+      // );
 
       return enrichWhosOn(
         filteredTimecard
