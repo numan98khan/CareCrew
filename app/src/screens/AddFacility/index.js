@@ -77,13 +77,6 @@ const AddFacility = ({
       (contact) => contact.email !== emailToRemove
     );
 
-    // Log for debugging
-    console.log(
-      "🚀 ~ file: index.js:65 ~ removeContact ~ updatedContacts:",
-      updatedContacts,
-      facility?.contacts
-    );
-
     // Update facility state
     setFacility((prevFacility) => ({
       ...prevFacility,
@@ -105,18 +98,12 @@ const AddFacility = ({
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
     // Latitude and Longitude format validation using regex
-    // Matches numbers with at least 6 decimal points
     const latLngPattern = /^-?\d+\.\d{6,}$/;
-    // const latLngPattern = /^-?\d+\.\d{6,}$/;
 
     // Some basic validations
     if (!facility.facilityName) {
       return "Facility name is required.";
     }
-
-    // if (!facility.aboutFacility) {
-    //   return "About facility is required.";
-    // }
 
     if (!facility.streetAddress) {
       return "Street address is required.";
@@ -137,7 +124,6 @@ const AddFacility = ({
       return "Zip code can only be 5 digits.";
     }
 
-    // TEMP DISABLE
     if (!facility.lat || !latLngPattern.test(facility.lat)) {
       return "Latitude is required and should be a float with at least 6 decimal points.";
     }
@@ -165,9 +151,6 @@ const AddFacility = ({
     // Validate details for all contacts
     for (let i = 0; i < facility.contacts.length; i++) {
       const contact = facility.contacts[i];
-      // if (!contact.name) {
-      //   return `Contact ${i + 1} name is required.`;
-      // }
       if (!contact.firstName) {
         return `Contact ${i + 1} first name is required.`;
       }
@@ -221,11 +204,9 @@ const AddFacility = ({
       fileRef,
       uploadFile
     );
-    // refetchFacilities();
     if (goBackHandler && createUsersResponse === 1) {
       goBackHandler();
     }
-    // navigate("/facilities");
     setIsLoading(false);
   };
 
@@ -264,16 +245,15 @@ const AddFacility = ({
         ref={fileInput}
         style={{ display: "none" }}
         onChange={handleFileChange}
-        accept="image/*" // Add this line
+        accept="image/*"
       />
       <div className="flex flex-col items-start w-full">
         <PageHeader text={isEdit ? "Change Facility" : "Add Facility"} />
       </div>
       <div className="min-h-max px-3 mt-3 pb-3 bg-white">
-        <div className="flex flex-row ">
-          <div className="flex flex-col items-center" style={{ width: "55%" }}>
-            <div className="flex my-3 flex-row justify-around w-full bg-red">
-              {/* <ImageUploader /> */}
+        <div className="flex flex-col md:flex-row">
+          <div className="flex flex-col items-center w-full md:w-7/12">
+            <div className="flex my-3 flex-row justify-around w-full">
               <ImageUploader
                 imagePlaceholder={imagePlaceholder}
                 handleDivClick={handleDivClick}
@@ -281,7 +261,7 @@ const AddFacility = ({
               />
             </div>
 
-            <div className="mb-2 flex flex-row justify-around w-full items-center  ">
+            <div className="mb-2 flex flex-col w-full items-center">
               <BasicInformationForm
                 facility={facility}
                 setFacilityKey={setFacilityKey}
@@ -289,7 +269,7 @@ const AddFacility = ({
               />
             </div>
 
-            <div className="mb-2 flex flex-row justify-around w-full items-center">
+            <div className="mb-2 flex flex-col w-full items-center">
               <AddressForm
                 facility={facility}
                 setFacilityKey={setFacilityKey}
@@ -297,7 +277,7 @@ const AddFacility = ({
               />
             </div>
 
-            <div className="mb-2 flex flex-row justify-around w-full items-center  ">
+            <div className="mb-2 flex flex-col w-full items-center">
               <ContactInfoForm
                 facility={facility}
                 setArrayFacilityKey={setArrayFacilityKey}
@@ -317,11 +297,7 @@ const AddFacility = ({
                   disabled={isLoading}
                 />
               ) : (
-                <Button
-                  children={"POST"}
-                  onClick={publish}
-                  // disabled={isLoading}
-                />
+                <Button children={"POST"} onClick={publish} />
               )}
               <div className="mx-1" />
 
@@ -330,13 +306,13 @@ const AddFacility = ({
                 color={themeStyles.GRAY}
                 disabled={isLoading}
                 onClick={() => {
-                  isEdit ? goBackHandler() : goBackHandler();
+                  goBackHandler();
                 }}
               />
             </div>
           </div>
 
-          <div className="p-4" style={{ width: "45%" }}>
+          <div className="p-4 w-full md:w-5/12">
             <PermissionsTab
               permissions={permissions}
               togglePermission={togglePermission}

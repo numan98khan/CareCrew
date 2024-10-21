@@ -28,6 +28,7 @@ import { ScaleHover } from "../../styles/animations";
 
 import notificationSound from "../../assets/notification.mp3";
 import { resetLastNotificationsActivity } from "../../services/notifications/resetter";
+import MenuIconComponent from "../../assets/icons/menuIcons/menu";
 
 // ...
 
@@ -48,7 +49,7 @@ export async function signOut(navigate) {
 // Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
 Modal.setAppElement("#root");
 
-const AppBar = ({ children, type }) => {
+const AppBar = ({ children, type, toggleMenu }) => {
   // const [isDebug, setIsDebug] = useState(true);
 
   // const { user } = useAuth();
@@ -225,6 +226,9 @@ const AppBar = ({ children, type }) => {
        */}
 
       <div className="items-center w-full  justify-between flex">
+        <button className="lg:hidden mr-2" onClick={toggleMenu}>
+          <MenuIconComponent size={8} />
+        </button>
         <CareCrewLogo size={2} className="ml-2" />
         {/* <Logo size={5} className="ml-2" /> */}
 
@@ -269,8 +273,9 @@ const AppBar = ({ children, type }) => {
               </span>
             )}
           </div>
+
           <div
-            className="flex  rounded-full h-full items-center transition duration-300 ease-in-out hover:shadow-lg dark:hover:shadow-black/30"
+            className="hidden lg:block    rounded-full h-full items-center transition duration-300 ease-in-out hover:shadow-lg dark:hover:shadow-black/30"
             style={{
               // width: "30px",
               // height: "30px",
