@@ -28,6 +28,7 @@ import { ScaleHover } from "../../styles/animations";
 
 import notificationSound from "../../assets/notification.mp3";
 import { resetLastNotificationsActivity } from "../../services/notifications/resetter";
+import themeStyles from "../../styles/theme.styles";
 
 // ...
 
@@ -55,7 +56,7 @@ const AppBar = ({ children, type }) => {
 
   const { user, signIn, personalData } = useAuth();
 
-  const [isDebug, setIsDebug] = useState(false);
+  const [isDebug, setIsDebug] = useState(true);
 
   const navigate = useNavigate();
 
@@ -229,7 +230,10 @@ const AppBar = ({ children, type }) => {
         {/* <Logo size={5} className="ml-2" /> */}
 
         {isDebug && (
-          <div className="text-xs font-bold text-PRIMARY_COLOR flex flex-row">
+          <div
+            // style={{ color: themeStyles?.SECONDARY_COLOR }}
+            className="text-xs font-bold text-PRIMARY_COLOR flex flex-row"
+          >
             <div className="mr-4 flex flex-col">
               <span>NY Time: {currentTime}</span>
               <span>CH Time: {currentTimeCH}</span>
@@ -240,7 +244,8 @@ const AppBar = ({ children, type }) => {
               </span>
               <button
                 onClick={clearCache}
-                className={`mr-2 ${ScaleHover} bg-SECONDARY_COLOR rounded-sm`}
+                style={{ backgroundColor: themeStyles?.SECONDARY_COLOR }}
+                className={`mr-2 ${ScaleHover} rounded-sm`}
               >
                 Clear Cache
               </button>

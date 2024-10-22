@@ -16,8 +16,7 @@ import InputField from "../../components/Input";
 import Button from "../../components/Button";
 import { statuses } from "../../constants/status";
 
-import { Auth, API, graphqlOperation } from "aws-amplify";
-
+import { API, graphqlOperation } from "aws-amplify";
 import {
   useCreateTemplate,
   useDeleteTemplates,
@@ -38,19 +37,16 @@ const tTemplate = {
 
 function Templates() {
   const { user } = useAuth();
-
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [template, setTemplate] = useState(tTemplate);
   const [currentPage, setCurrentPage] = useState(1);
   const [isEdit, setIsEdit] = useState(false);
 
-  // Inside your Templates function
   const { createTemplate } = useCreateTemplate();
   const { updateTemplate } = useUpdateTemplate();
   const {
     loading,
-    error,
     templates,
     refetch: refetchTemplates,
   } = useListTemplates(true);
@@ -134,12 +130,6 @@ function Templates() {
   const { deleteTemplateQuery } = useDeleteTemplates();
   const handleDelete = async (id) => {
     try {
-      console.log(
-        "🚀 ~ file: Templates.js:122 ~ handleDelete ~ template:",
-        template
-      );
-      // Fetch the latest version if necessary
-      // const latestNewsItem = fetchLatestVersion(newsId);
       const templateData = (
         await API.graphql(
           graphqlOperation(getTemplates, {
@@ -147,10 +137,6 @@ function Templates() {
           })
         )
       )?.data?.getTemplates;
-      // console.log(
-      //   "🚀 ~ file: Templates.js:128 ~ handleDelete ~ templateData:",
-      //   templateData
-      // );
 
       await deleteTemplateQuery({
         id: templateData?.id,
@@ -159,12 +145,12 @@ function Templates() {
 
       await refetchTemplates();
       SuccessToast("Template deleted successfully");
-      // Refresh the list or remove the item from the local state
     } catch (error) {
       console.error(error);
       ErrorToast("An error occurred while deleting the template");
     }
   };
+
   return (
     <>
       <div
@@ -193,13 +179,10 @@ function Templates() {
           config={"templates"}
           handlePageChange={handlePageChange}
           currentPage={currentPage}
-          // totalPages={totalPages}
           createPageNumbers={createPageNumbers}
           TABLE_HEAD={TABLE_HEAD}
           setSelectedTemplate={setTemplate}
           editAction={() => setIsEdit(true)}
-          // deleteAction={() => console.log("Delete action button for people")}
-
           deleteAction={handleDelete}
         />
       )}
@@ -212,7 +195,6 @@ function Templates() {
         style={{
           overlay: {
             backgroundColor: "rgba(0, 0, 0, 0.2)",
-            // zIndex: 1000, // this should be higher than AppBar's z-index
           },
           content: {
             top: "50%",
@@ -221,8 +203,9 @@ function Templates() {
             bottom: "auto",
             marginRight: "-50%",
             transform: "translate(-50%, -50%)",
-            height: "70%",
-            width: "40%",
+            height: "70%", // Increase height for responsiveness
+            width: "90%", // Change width to full for smaller screens
+            maxWidth: "500px", // Set a max width for larger screens
             border: "10px",
             boxShadow: "0px 4px 16px 0px rgba(196, 196, 196, 0.70)",
             display: "flex",
@@ -232,11 +215,12 @@ function Templates() {
         }}
       >
         <label className="text-2xl font-bold mb-2">Email Template</label>
-        <div className="flex flex-row mb-3">
+        <div className="flex flex-col sm:flex-row mb-3">
           <InputField
             placeholder={"Subject"}
             value={template?.subject}
             setValue={setTemplateKey("subject")}
+            className="w-full sm:w-auto"
           />
           <div className="mx-1" />
           <DropDown
@@ -244,6 +228,7 @@ function Templates() {
             placeholder={"Status"}
             value={template?.status}
             setValue={setTemplateKey("status")}
+            className="w-full sm:w-auto"
           />
         </div>
         <div className="flex-1">
@@ -251,15 +236,14 @@ function Templates() {
             editorState={editorState}
             onEditorStateChange={setEditorState}
           />
-          {/* <div className="h-20 bg-slate-400" /> */}
         </div>
         <div className="my-5" />
-        <div className="flex flex-row">
+        <div className="flex flex-col sm:flex-row">
           <Button
             children={isEdit ? "Update" : "Add"}
             onClick={handleAddOrUpdate}
+            className="w-full sm:w-auto"
           />
-
           <div className="mx-1" />
           <Button
             children={"Cancel"}
@@ -268,6 +252,7 @@ function Templates() {
               setTemplate(null);
               closeModal();
             }}
+            className="w-full sm:w-auto"
           />
         </div>
       </Modal>

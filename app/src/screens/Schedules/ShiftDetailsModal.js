@@ -972,7 +972,10 @@ const ShiftDetailsModal = ({
           selectedShift={selectedShift}
         />
         <div className="flex flex-col items-center justify-center">
-          <div className="flex flex-col relative bg-PRIMARY_COLOR w-full justify-center items-center py-2">
+          <div
+            style={{ backgroundColor: themeStyles?.PRIMARY_COLOR }}
+            className="flex flex-col relative  w-full justify-center items-center py-2"
+          >
             {type !== EMPLOYEE &&
               openEditModal &&
               !(type === FACILITY && isShiftInPast) &&
@@ -985,7 +988,10 @@ const ShiftDetailsModal = ({
                   <KebabMenuWhite />
                 </div>
               )}
-            <label className="text-PRIMARY_LIGHT_COLOR text-xxs ">
+            <label
+              style={{ color: themeStyles?.PRIMARY_LIGHT_COLOR }}
+              className=" text-xxs "
+            >
               SHIFT DETAILS
             </label>
             <div className="my-3" />

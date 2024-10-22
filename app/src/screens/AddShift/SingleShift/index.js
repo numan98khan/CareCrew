@@ -28,7 +28,6 @@ function SingleShift({
   canEditShit,
   closeModal,
 }) {
-  // Second Row
   const shiftTimes = [
     {
       name: "Morning Shift:  7:00AM - 3:00PM",
@@ -48,39 +47,20 @@ function SingleShift({
   ];
 
   const [isPastShift, setIsPastShift] = useState(false);
-
   const { type } = useAuth();
 
-  // Step 2: Define state for modal visibility
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  // Optional: Define a state for the warning message if dynamic messages are needed
   const [warningMessage, setWarningMessage] = useState("");
 
   const removeTrailingZ = (timeStr) => {
     if (!timeStr) return null;
-    // Remove 'Z' if it's at the end
-    const cleanedTimeStr = timeStr.endsWith("Z")
-      ? timeStr.slice(0, -1)
-      : timeStr;
-
-    return cleanedTimeStr;
-    // const cleanedTimeStr = timeStr;
-
-    // Split by 'T' to separate date and time, then take only the time part
-    // const [, timeOnly] = cleanedTimeStr.split("T");
-    // return timeOnly;
+    return timeStr.endsWith("Z") ? timeStr.slice(0, -1) : timeStr;
   };
 
   const checkIfPastShift = () => {
-    // if (!shift?.shiftStart) {
-    //   setIsPastShift(true);
-    //   return;
-    // }
-
     if (isEdit && isPastShift) {
       return;
     }
-
     const selectedDateTime = new Date(
       `${shift?.date}T${removeTrailingZ(shift?.shiftStart)}`
     );
@@ -92,7 +72,6 @@ function SingleShift({
     checkIfPastShift();
   }, [shift?.date, shift?.shiftStart]);
 
-  // State to hold the selected shift times
   const [selectedShiftTimes, setSelectedShiftTimes] = useState([]);
 
   const handleShiftTimeClick = (shiftTime) => {
@@ -115,7 +94,6 @@ function SingleShift({
 
   useMemo(() => {
     if (myFacility) {
-      console.log("🚀 ~ file: index.js:64 ~ useMemo ~ myFacility:", myFacility);
       setShiftKey("facilityID")(myFacility.id);
       const bobj = myFacility?.Billing;
 
@@ -131,85 +109,44 @@ function SingleShift({
     }
   }, [myFacility, shift?.roleRequired]);
 
-  useMemo(() => {
-    console.log(
-      "MEMO TRIGERRED",
-      !myFacility && shift?.roleRequired !== null && shift?.facilityID !== null
-    );
-    if (
-      !myFacility &&
-      shift?.roleRequired !== null &&
-      shift?.facilityID !== null
-    ) {
-      const bobj = facilities.find(
-        (obj) => obj.id === shift?.facilityID
-      )?.Billing;
-      // console.log("🚀 ~ file: index.js:85 ~ useMemo ~ bobj:", bobj);
-
-      const selectedRate =
-        shift?.roleRequired === "CNA"
-          ? bobj?.hourlyRateCNA
-          : shift?.roleRequired === "RN"
-          ? bobj?.hourlyRateRN
-          : bobj?.hourlyRateLPN;
-
-      if (shift?.isHoliday) {
-        setShiftKey("rate")(selectedRate * 1.5);
-      } else {
-        setShiftKey("rate")(selectedRate);
-      }
-    }
-  }, [shift?.roleRequired, shift?.facilityID, shift?.isHoliday]);
-
   return (
     <div className="flex flex-col p-4 space-y-4 h-full justify-between">
-      {/* First Row */}
       <div className="space-y-2">
         {isPastShift && (
           <div className="text-red-500">
             Warning: This shift is scheduled in the past.
           </div>
         )}
-        <div className="grid grid-cols-4 gap-4">
+        {/* Responsive grid with 1 column on small screens and 4 columns on larger screens */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="flex flex-col">
             <label className="text-xs text-start font-bold">{"Date"}</label>
             <div className="my-1" />
-
             <DatePickerCustom
               date={shift?.date}
               onChange={setShiftKey("date")}
-              // onChange={(date) => setStartDate(date)}
             />
           </div>
-          {myFacility === null ? (
+          {myFacility === null && (
             <div className="flex flex-col">
               <label className="text-xs text-start font-bold">
                 {"Facility"}
               </label>
               <div className="my-1" />
-
               <DropDown
                 placeholder={"Select Facility"}
                 value={shift?.facilityID}
-                setValue={(facilityID) => {
-                  setShiftKey("facilityID")(facilityID);
-
-                  // setShiftKey("rate")(
-                  //   facilities.find((obj) => obj.id === facilityID)?.Billing
-                  //     ?.hourlyRate
-                  // );
-                }}
+                setValue={(facilityID) => setShiftKey("facilityID")(facilityID)}
                 options={facilities.map((obj) => obj.id)}
                 labels={facilities.map((obj) => obj.facilityName)}
               />
             </div>
-          ) : null}
+          )}
 
           {!isEdit && (
             <div className="flex flex-col">
               <label className="text-xs text-start font-bold">{"Role"}</label>
               <div className="my-1" />
-
               <DropDown
                 placeholder={"Select Role"}
                 value={shift?.roleRequired}
@@ -221,7 +158,6 @@ function SingleShift({
           <div className="flex flex-col">
             <label className="text-xs text-start font-bold">{"Quantity"}</label>
             <div className="my-1" />
-
             <Input
               type="number"
               placeholder="Select Number of Positions"
@@ -232,7 +168,7 @@ function SingleShift({
         </div>
 
         {/* Second Row */}
-        <div className="grid grid-cols-3 gap-20">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* First Column */}
           <div className="flex flex-col space-y-4">
             <div
@@ -242,7 +178,6 @@ function SingleShift({
               }
             >
               <label className="text-xs text-start font-bold">Shift Time</label>
-
               {shiftTimes.map((item, i) => (
                 <label
                   key={i}
@@ -262,7 +197,7 @@ function SingleShift({
               ))}
             </div>
 
-            <label className="flex items-center justify-center space-x-2">
+            <label className="flex items-center justify-start space-x-2">
               <Check
                 value={isCustom}
                 onChange={() => {
@@ -280,10 +215,7 @@ function SingleShift({
                   <div className="flex justify-around">
                     <TimePickerCustom
                       time={shift?.shiftStart}
-                      onChange={(date) => {
-                        // console.log("🚀 ~ file: index.js:208 ~ date:", date);
-                        return setShiftKey("shiftStart")(date);
-                      }}
+                      onChange={(date) => setShiftKey("shiftStart")(date)}
                       disabled={!isCustom}
                     />
                   </div>
@@ -306,7 +238,7 @@ function SingleShift({
 
             <div className="flex flex-col space-y-1">
               <label className="text-xs text-start font-bold">
-                Rate (per hour){" "}
+                Rate (per hour)
               </label>
               <Input
                 placeholder="Rate"
@@ -325,10 +257,7 @@ function SingleShift({
                   <RadioButton
                     children="Yes"
                     checked={shift?.cancellationGuarantee}
-                    onChange={() => {
-                      console.log("cancellationGuarantee being TRUED");
-                      setShiftKey("cancellationGuarantee")(true);
-                    }}
+                    onChange={() => setShiftKey("cancellationGuarantee")(true)}
                   />
                   <RadioButton
                     children="No"
@@ -338,29 +267,6 @@ function SingleShift({
                 </div>
               </div>
             )}
-
-            {/* {!isEdit && (
-              <div className="flex flex-col space-y-2">
-                <label className="text-xs text-start font-bold">
-                  Is Holiday?
-                </label>
-                <div className="flex space-x-4 ml-2.5 items-center">
-                  <RadioButton
-                    children="Yes"
-                    checked={shift?.isHoliday}
-                    onChange={() => {
-                      // console.log("cancellationGuarantee being TRUED");
-                      setShiftKey("isHoliday")(true);
-                    }}
-                  />
-                  <RadioButton
-                    children="No"
-                    checked={!shift?.isHoliday}
-                    onChange={() => setShiftKey("isHoliday")(false)}
-                  />
-                </div>
-              </div>
-            )} */}
           </div>
 
           {/* Second Column */}
@@ -397,19 +303,16 @@ function SingleShift({
             <div>
               <label className="text-xs text-start font-bold">Incentives</label>
               <div className="flex space-x-4 items-center">
-                <div className="flex space-x-4 ml-2.5 items-center">
-                  <RadioButton
-                    children="Yes"
-                    checked={shift?.isIncentive}
-                    onChange={() => setShiftKey("isIncentive")(true)}
-                  />
-                  <RadioButton
-                    children="No"
-                    checked={!shift?.isIncentive}
-                    onChange={() => setShiftKey("isIncentive")(false)}
-                  />
-                </div>
-
+                <RadioButton
+                  children="Yes"
+                  checked={shift?.isIncentive}
+                  onChange={() => setShiftKey("isIncentive")(true)}
+                />
+                <RadioButton
+                  children="No"
+                  checked={!shift?.isIncentive}
+                  onChange={() => setShiftKey("isIncentive")(false)}
+                />
                 {myFacility
                   ? null
                   : shift?.isIncentive && (
@@ -426,7 +329,7 @@ function SingleShift({
               </div>
             </div>
 
-            {shift?.isIncentive ? (
+            {shift?.isIncentive && (
               <div>
                 <label className="text-xs text-start font-bold">
                   Incentive Type
@@ -446,14 +349,7 @@ function SingleShift({
                       setNestedShiftKey("incentives", "incentiveType")("fixed")
                     }
                   />
-                  {/* <RadioButton children="$/hr" />
-              <RadioButton children="Fixed" /> */}
-                  {/* <input
-                className="rounded-full bg-TEXT_FIELD_BACKGROUND p-2 w-full"
-                value={10}
-              /> */}
                   <Input
-                    // multiline
                     placeholder={"Incentive Amount"}
                     value={shift?.incentives?.incentiveAmount}
                     setValue={setNestedShiftKey(
@@ -464,25 +360,23 @@ function SingleShift({
                   />
                 </div>
               </div>
-            ) : null}
+            )}
+
             <div className="flex flex-col">
               <label className="text-xs text-start font-bold">Notes</label>
-
               <Input
                 multiline
                 placeholder={"Notes"}
                 value={shift?.incentives?.notes}
                 setValue={setNestedShiftKey("incentives", "notes")}
               />
-              {/* <textarea className="rounded-full bg-TEXT_FIELD_BACKGROUND p-2"></textarea> */}
             </div>
           </div>
         </div>
       </div>
 
       {/* Third Row */}
-      <div className="flex flex-col mt-auto justify-between w-2/4">
-        {" "}
+      <div className="flex flex-col mt-auto justify-between w-full md:w-2/4">
         <div>
           {isEdit && !canEditShit && (
             <label className="text-xs text-red-500">
@@ -490,30 +384,16 @@ function SingleShift({
             </label>
           )}
         </div>
-        <div className="flex flex-row ">
+        <div className="flex flex-row">
           <Button
             children={isEdit ? "SAVE" : "POST"}
-            onClick={async () => {
-              // console.log(shift);
-              setShowConfirmModal(true);
-              // setIsPublishDisabled(true);
-              // try {
-              //   await publishAction();
-              // } catch (error) {
-              //   console.error("Error during publishAction:", error);
-              //   // Handle the error or notify the user as needed
-              // }
-              // setIsPublishDisabled(false);
-            }}
+            onClick={() => setShowConfirmModal(true)}
             disabled={isPublishDisabled || (isEdit && !canEditShit)}
           />
           <div className="mx-1" />
           <Button
             children={"CANCEL"}
-            onClick={() => {
-              // console.log(shift);
-              closeModal();
-            }}
+            onClick={closeModal}
             color={themeStyles.GRAY}
           />
         </div>
@@ -526,22 +406,16 @@ function SingleShift({
         message={"Are you sure you want to publish this shift?"}
         warning={warningMessage}
         onConfirm={async () => {
-          // deletedBulkShift();
           setIsPublishDisabled(true);
           try {
             await publishAction();
           } catch (error) {
             console.error("Error during publishAction:", error);
-            // Handle the error or notify the user as needed
           }
           setIsPublishDisabled(false);
           setShowConfirmModal(false);
         }}
-        onCancel={() => {
-          // Optionally clear selected shifts or other relevant state
-          // console.log("Cancellation action");
-          setShowConfirmModal(false);
-        }}
+        onCancel={() => setShowConfirmModal(false)}
       />
     </div>
   );

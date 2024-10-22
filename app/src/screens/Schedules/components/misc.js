@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useMemo, useRef } from "react";
-
+import React from "react";
 import OpenIconRed from "../../../assets/icons/indicators/open";
-
 import AssignedIcon from "../../../assets/icons/indicators/green";
 import IncentivesIcon from "../../../assets/icons/indicators/incentive";
 import GaraunteeIcon from "../../../assets/icons/indicators/guarantee";
@@ -12,38 +10,39 @@ import { EMPLOYEE } from "../../../constants/userTypes";
 
 export const ShiftIndicators = () => {
   const { type } = useAuth();
+
   return (
-    <div className="w-full h-8 mt-4 flex flex-row items-center justify-end gap-5">
+    <div className="w-full flex flex-wrap items-center justify-center md:justify-end gap-4 p-2">
       {type !== EMPLOYEE && (
-        <div className="flex flex-row gap-2 items-center">
+        <div className="flex flex-row gap-1 items-center">
           <OpenIconRed />
-          <p style={{ fontSize: "13px" }}>Open</p>
+          <p className="text-xs md:text-sm">Open</p>
         </div>
       )}
 
-      <div className="flex flex-row gap-2 items-center">
+      <div className="flex flex-row gap-1 items-center">
         <AssignedIcon />
-        <p style={{ fontSize: "13px" }}>Assigned</p>
+        <p className="text-xs md:text-sm">Assigned</p>
       </div>
 
-      <div className="flex flex-row gap-2 items-center">
+      <div className="flex flex-row gap-1 items-center">
         <IncentivesIcon />
-        <p style={{ fontSize: "13px" }}>Incentive</p>
+        <p className="text-xs md:text-sm">Incentive</p>
       </div>
 
-      <div className="flex flex-row gap-2 items-center">
+      <div className="flex flex-row gap-1 items-center">
         <GaraunteeIcon />
-        <p style={{ fontSize: "13px" }}>Guarantee</p>
+        <p className="text-xs md:text-sm">Guarantee</p>
       </div>
 
-      <div className="flex flex-row gap-2 items-center">
+      <div className="flex flex-row gap-1 items-center">
         <LateIcon />
-        <p style={{ fontSize: "13px" }}>Late</p>
+        <p className="text-xs md:text-sm">Late</p>
       </div>
 
-      <div className="flex flex-row gap-2 items-center">
+      <div className="flex flex-row gap-1 items-center">
         <CallOff />
-        <p style={{ fontSize: "13px" }}>Call Off</p>
+        <p className="text-xs md:text-sm">Call Off</p>
       </div>
     </div>
   );

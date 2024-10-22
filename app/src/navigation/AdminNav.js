@@ -6,7 +6,7 @@ import {
   useLocation,
 } from "react-router-dom";
 
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import "../App.css";
 
 import AppBar from "../components/AppBar";
@@ -22,6 +22,7 @@ import AddFacility from "../screens/AddFacility";
 import AllNotifications from "../screens/AllNotifications";
 import TotalBilling from "../screens/TotalBilling";
 import { STAFF_PERMISSIONS } from "../constants/permissions";
+import themeStyles from "../styles/theme.styles";
 
 // import  from "../assets/icons/menuIcons/";
 // import  from "../assets/icons/menuIcons/";
@@ -30,6 +31,8 @@ import { STAFF_PERMISSIONS } from "../constants/permissions";
 
 const AuthNav = () => {
   const { user, permissions } = useAuth();
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // Added state for menu
 
   // console.log(
   //   "🚀 ~ file: AdminNav.js:32 ~ AuthNav ~ permissions:",
@@ -49,9 +52,18 @@ const AuthNav = () => {
   // console.log("Admin Permissions");
   return (
     <Router>
-      <div className="flex flex-col min-h-max w-full fixed bg-PRIMARY_NEUTRAL_COLOR">
+      <div
+        style={{ backgroundColor: themeStyles?.PRIMARY_NEUTRAL_COLOR }}
+        className="flex flex-col min-h-max w-full fixed "
+      >
         {/* <div style={{}}> */}
-        <AppBar type={permissions?.type}>My App</AppBar>
+        <AppBar
+          type={permissions?.type}
+          toggleMenu={() => setIsMenuOpen(!isMenuOpen)}
+          // toggleMenu={() => {}}
+        >
+          My App
+        </AppBar>
         {/* </div> */}
 
         {/* <div className="flex flex-row flex-grow"> */}
@@ -60,6 +72,8 @@ const AuthNav = () => {
             <SideMenu
               items={filteredMenuItems}
               activePath={"useLocation().pathname"}
+              isMenuOpen={isMenuOpen}
+              toggleMenu={() => setIsMenuOpen(false)}
             />
           </div>
           <div className="w-full overflow-y-auto m-2">
@@ -112,6 +126,13 @@ const AuthNav = () => {
                 />
               ))}
             </Routes>
+
+            {isMenuOpen && (
+              <div
+                className="fixed inset-0 bg-black opacity-50 z-40"
+                onClick={() => setIsMenuOpen(false)}
+              ></div>
+            )}
           </div>
         </div>
       </div>

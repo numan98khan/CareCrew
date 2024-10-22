@@ -663,7 +663,10 @@ const UpcomingShiftModal = ({
         !isArriveLatePressed &&
         !isReportPressed ? (
           <>
-            <div className="flex flex-col relative bg-PRIMARY_COLOR w-full justify-center items-center py-2">
+            <div
+              style={{ backgroundColor: themeStyles?.PRIMARY_COLOR }}
+              className="flex flex-col relative w-full justify-center items-center py-2"
+            >
               <div
                 onClick={openEditModal}
                 ref={buttonRef}

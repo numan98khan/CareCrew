@@ -1,19 +1,14 @@
 import React, { useState, useMemo } from "react";
 import PageHeader from "../../components/Headers/PageHeader";
-import theme from "../../styles/theme.styles";
 import { useNavigate } from "react-router-dom";
-import IconButton from "../../components/Button/IconButton";
-import BackButton from "../../components/Button/BackButton";
 import NotificationTab from "../../components/Modals/NotificationModal/NotificationTab";
-
 import { useListNotifications } from "../../apolloql/notifications";
 import {
   IMPORTANT_NOTIFICATIONS_INSTACARE,
   IMPORTANT_NOTIFICATIONS_FACILITY,
   IMPORTANT_NOTIFICATIONS_EMPLOYEE,
-  REMINDER,
 } from "../../constants/notificationTypes";
-import { ADMIN, EMPLOYEE, FACILITY } from "../../constants/userTypes";
+import { ADMIN, EMPLOYEE } from "../../constants/userTypes";
 import { useAuth } from "../../context";
 
 function AllNotifications({ onBackClick }) {
@@ -28,12 +23,7 @@ function AllNotifications({ onBackClick }) {
       : IMPORTANT_NOTIFICATIONS_FACILITY;
 
   const [selectedTab, setSelectedTab] = useState(1);
-
   const [alertNotification, setAlertNotification] = useState(null);
-  // const { notifications } = useListNotifications({
-  //   userId: user?.attributes?.sub,
-  //   type: type,
-  // });
 
   const { notifications, refetch } = useListNotifications({
     userId: user?.attributes?.sub,
@@ -42,9 +32,6 @@ function AllNotifications({ onBackClick }) {
   });
 
   const filteredNotifications = useMemo(() => {
-    // return notifications.sort(function (a, b) {
-    //   return b._lastChangedAt - a._lastChangedAt;
-    // });
     return notifications;
   }, [notifications]);
 
@@ -53,51 +40,40 @@ function AllNotifications({ onBackClick }) {
       IMPORTANT_NOTIFICATIONS.includes(obj?.type)
     );
   }, [filteredNotifications]);
+
   const otherNotifications = useMemo(() => {
     return filteredNotifications.filter(
       (obj) => !IMPORTANT_NOTIFICATIONS.includes(obj?.type)
     );
   }, [filteredNotifications]);
 
-  const filterNotifications = useMemo(() => {
-    console.log(
-      "🚀 ~ file: index.js:25 ~ filterNotifications ~ notifications:",
-      notifications
-    );
-    return notifications.filter((notification) =>
-      selectedTab === 1
-        ? notification.type === REMINDER
-        : notification.type !== REMINDER
-    );
-  }, [notifications, selectedTab]);
-
   return (
     <div className="p-3 flex flex-col gap-3">
       <div className="flex justify-start">
         <div className="flex items-center w-full justify-between">
           <div className="flex items-center gap-2">
-            <div onClick={onBackClick}></div>
+            {/* <div onClick={onBackClick}>
+              <BackButton />
+            </div> */}
             <PageHeader text={"Notifications"} />
           </div>
         </div>
       </div>
 
-      <div className="bg-white">
-        <div style={{ width: "25%" }} className="h-fit flex flex-col gap-2">
+      {/* Notification Tabs */}
+      <div className="bg-white sticky top-0 z-10">
+        {/* Make the tabs sticky by applying sticky positioning */}
+        <div className="w-full flex flex-col gap-2 bg-white">
           <div className="grid grid-cols-2 w-full pt-5">
             <p
               onClick={() => {
                 setSelectedTab(1);
               }}
-              style={{
-                borderBottom:
-                  selectedTab === 1 ? "3px solid #7ED1E6" : "3px solid white",
-                fontSize: "12px",
-                fontWeight: "bold",
-                cursor: "pointer",
-                color: selectedTab === 1 ? "black" : "rgba(2, 5, 10, 0.50)",
-              }}
-              className="w-full text-center pb-3"
+              className={`w-full text-center pb-3 text-sm font-bold cursor-pointer ${
+                selectedTab === 1
+                  ? "border-b-2 border-blue-400 text-black"
+                  : "border-b-2 border-transparent text-gray-500"
+              }`}
             >
               Crucial
             </p>
@@ -105,15 +81,11 @@ function AllNotifications({ onBackClick }) {
               onClick={() => {
                 setSelectedTab(2);
               }}
-              style={{
-                borderBottom:
-                  selectedTab === 2 ? "3px solid #7ED1E6" : "3px solid white",
-                fontSize: "12px",
-                fontWeight: "bold",
-                cursor: "pointer",
-                color: selectedTab === 2 ? "black" : "rgba(2, 5, 10, 0.50)",
-              }}
-              className="w-full text-center"
+              className={`w-full text-center pb-3 text-sm font-bold cursor-pointer ${
+                selectedTab === 2
+                  ? "border-b-2 border-blue-400 text-black"
+                  : "border-b-2 border-transparent text-gray-500"
+              }`}
             >
               Non-Crucial
             </p>
@@ -121,8 +93,9 @@ function AllNotifications({ onBackClick }) {
         </div>
       </div>
 
+      {/* Notifications List */}
       {selectedTab === 1 ? (
-        <div className="w-full grid grid-cols-2 gap-2 overflow-auto">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2 overflow-auto">
           {importantNotifications.map((item, index) => (
             <NotificationTab
               key={index}
@@ -136,7 +109,7 @@ function AllNotifications({ onBackClick }) {
           ))}
         </div>
       ) : (
-        <div className="w-full grid grid-cols-2 gap-2 overflow-auto">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2 overflow-auto">
           {otherNotifications.map((item, index) => (
             <NotificationTab
               key={index}

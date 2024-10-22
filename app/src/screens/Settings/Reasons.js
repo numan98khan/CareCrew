@@ -203,8 +203,9 @@ function Reasons() {
             bottom: "auto",
             marginRight: "-50%",
             transform: "translate(-50%, -50%)",
-            // height: "70%",
-            width: "40%",
+            // height: "70%", // Increase height for responsiveness
+            width: "90%", // Change width to full for smaller screens
+            maxWidth: "500px", // Set a max width for larger screens
             border: "10px",
             boxShadow: "0px 4px 16px 0px rgba(196, 196, 196, 0.70)",
             display: "flex",

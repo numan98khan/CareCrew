@@ -232,7 +232,8 @@ const TableComponent = ({
                 {TABLE_HEAD.map((head, index) => (
                   <th
                     key={head}
-                    className="border-b border-blue-gray-100 bg-PRIMARY_COLOR py-2"
+                    style={{ backgroundColor: themeStyles?.PRIMARY_COLOR }}
+                    className="border-b border-blue-gray-100  py-2"
                   >
                     {index === 0 && config === "timecards" ? (
                       <CheckBox

@@ -249,20 +249,23 @@ function BulkShiftCard({
                 <div className="absolute bg-transparent flex flex-row space-x-1">
                   <div
                     onClick={() => setIsIncentiveModalOpen(true)}
-                    className="rounded-full bg-PRIMARY_COLOR p-1"
+                    style={{ backgroundColor: themeStyles?.PRIMARY_COLOR }}
+                    className="rounded-full p-1"
                   >
                     <IncentiveIcon color={"#FFF"} size={7} />
                   </div>
 
                   <div
                     onClick={() => setIsGuaranteeModalOpen(true)}
-                    className="rounded-full bg-PRIMARY_COLOR p-1"
+                    style={{ backgroundColor: themeStyles?.PRIMARY_COLOR }}
+                    className="rounded-full p-1"
                   >
                     <CancellationGuaranteeIcon color={"#FFF"} size={7} />
                   </div>
                   <div
                     onClick={() => openEditNotesModal(inputIndex)}
-                    className="rounded-full bg-PRIMARY_COLOR p-1"
+                    style={{ backgroundColor: themeStyles?.PRIMARY_COLOR }}
+                    className="rounded-full p-1"
                   >
                     <EditIcon color={"#FFF"} size={4} />
                   </div>

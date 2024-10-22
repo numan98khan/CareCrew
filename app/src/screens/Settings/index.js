@@ -1,17 +1,11 @@
-import React, { useState, useEffect } from "react";
-import IconButton from "../../components/Button/IconButton";
-import theme from "../../styles/theme.styles";
-
+import React, { useState } from "react";
 import PageHeader from "../../components/Headers/PageHeader";
-// import NavTab from "../../components/NavTab";
 import NavTab from "../../components/NavTab";
-import DateDropDown from "../../components/DateDropDown";
 import Staff from "./Staff";
 import UserSettings from "./UserSettings";
 import Billing from "./Billing.js";
 import Templates from "./Templates.js";
 import News from "./News.js";
-import Points from "./Points.js";
 import Reasons from "./Reasons";
 import MyProfile from "../MyProfile";
 import { useAuth } from "../../context";
@@ -20,6 +14,7 @@ import { SUPER_ADMIN } from "../../constants/permissions";
 function Settings() {
   const { user } = useAuth();
   const isSuperAdmin = SUPER_ADMIN === user?.attributes?.email;
+
   const navTabs = isSuperAdmin
     ? [
         { title: "Staff", isActive: false },
@@ -38,12 +33,12 @@ function Settings() {
   const [currentTab, setCurrentTab] = useState(
     isSuperAdmin ? "Staff" : "Billing"
   );
+  const [isStaffDetails, setIsStaffDetails] = useState(false);
+  const [selectedStaff, setSelectedStaff] = useState(null);
+
   const handleTabChange = (newTab) => {
     setCurrentTab(newTab);
   };
-
-  const [isStaffDetails, setIsStaffDetails] = useState(false);
-  const [selectedStaff, setSelectedStaff] = useState(null);
 
   return (
     <>
@@ -60,7 +55,8 @@ function Settings() {
             </div>
           </div>
 
-          <div style={{ height: "50px" }} className="w-full bg-white flex mt-3">
+          {/* Responsive Tab Navigation */}
+          <div className="w-full bg-white mt-3 overflow-x-auto flex justify-start space-x-2">
             {navTabs.map((tab, index) => (
               <NavTab
                 key={index}
@@ -71,43 +67,25 @@ function Settings() {
             ))}
           </div>
 
-          {isSuperAdmin && currentTab === "Staff" ? (
-            <div
-              className="flex-1 bg-white flex-grow mt-2 p-3 rounded-lg item-start justify-between "
-              // className="h-full bg-black relative flex-grow mt-2 p-3 rounded-lg item-start justify-between "
-            >
-              {isSuperAdmin ? (
-                <Staff
-                  setIsStaffDetails={setIsStaffDetails}
-                  setSelectedStaff={setSelectedStaff}
-                />
-              ) : null}
-            </div>
-          ) : currentTab === "User Settings" ? (
-            <div
-              className="flex-1 bg-white flex-grow mt-2 p-3 rounded-lg item-start justify-between "
-              // className="h-full bg-black relative flex-grow mt-2 p-3 rounded-lg item-start justify-between "
-            >
-              {" "}
+          {/* Dynamic Content Section */}
+          <div className="flex-1 bg-white flex-grow mt-2 p-3 rounded-lg">
+            {isSuperAdmin && currentTab === "Staff" ? (
+              <Staff
+                setIsStaffDetails={setIsStaffDetails}
+                setSelectedStaff={setSelectedStaff}
+              />
+            ) : currentTab === "User Settings" ? (
               <UserSettings />
-            </div>
-          ) : currentTab === "Billing" ? (
-            <div
-              className="flex-1 bg-white flex-grow mt-2 p-3 rounded-lg item-start justify-between "
-              // className="h-full bg-black relative flex-grow mt-2 p-3 rounded-lg item-start justify-between "
-            >
-              {" "}
+            ) : currentTab === "Billing" ? (
               <Billing />
-            </div>
-          ) : currentTab === "Templates" ? (
-            <Templates />
-          ) : currentTab === "News" ? (
-            <News />
-          ) : // ) : currentTab === "Points" ? (
-          //   <Points />
-          currentTab === "Reasons" ? (
-            <Reasons />
-          ) : null}
+            ) : currentTab === "Templates" ? (
+              <Templates />
+            ) : currentTab === "News" ? (
+              <News />
+            ) : currentTab === "Reasons" ? (
+              <Reasons />
+            ) : null}
+          </div>
         </div>
       ) : (
         <MyProfile

@@ -222,6 +222,8 @@ const Dashboard = () => {
   };
 
   const filteredTimecards = useMemo(() => {
+    console.log("🚀 ~ filteredTimecards ~ timecards:", timecards);
+
     if (timecards && employee) {
       const formattedDate = formatDate(currentViewDate);
 
@@ -229,6 +231,12 @@ const Dashboard = () => {
         (obj) =>
           formatDate(new Date(obj?.shift?.shiftStartDT)) === formattedDate
       );
+
+      // const filteredTimecard = timecards.filter(
+      //   (obj) =>
+      //     // formatDate(new Date(obj?.shift?.shiftStartDT)) === formattedDate
+      //     true
+      // );
 
       return enrichWhosOn(
         filteredTimecard
@@ -509,8 +517,8 @@ const Dashboard = () => {
         <div>
           <div className="flex flex-col">
             <div
-              style={{ height: "50px" }}
-              className="w-full bg-white flex mt-3"
+              style={{ height: "50px", backgroundColor: "white" }}
+              className="w-full flex mt-3"
             >
               {navTabsEmployee.map((tab, index) => (
                 <NavTab
@@ -583,50 +591,43 @@ const Dashboard = () => {
         </>
       ) : selectedTab === "dash" ? (
         <div className="px-3">
-          <div className="flex justify-start ">
-            <div className="flex items-center w-full justify-between">
-              <div className="flex flex-row items-center z-50 space-x-1">
-                <PageHeader text={"Dashboard"} />
-              </div>
-              <DateDropDown
-                date={currentViewDate}
-                onChange={handleCurrentViewDateChange}
-              />
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="flex flex-row items-center z-50 space-x-1">
+              <PageHeader text={"Dashboard"} />
             </div>
+            <DateDropDown
+              date={currentViewDate}
+              onChange={handleCurrentViewDateChange}
+            />
           </div>
 
-          <div className="flex flex-grow h-full">
-            <div className="w-[65%] space-y-2 ">
-              <div className="flex flex-row ">
-                <div className="flex flex-wrap w-full">
-                  {summaryData.map((item, index) => (
-                    <div key={index} className="w-1/6 p-1 flex ">
-                      <SummaryCard
-                        text={item.label}
-                        shifts={summaryShifts?.[item.datakey]}
-                        data={summaryShifts}
-                        datakey={item.datakey}
-                        icon={item.icon}
-                        onClick={() => {
-                          if (item.datakey !== "daily") {
-                            handleSummaryCardClick(true, item.datakey);
-                          }
-                        }}
-                        disableHover={item.datakey === "daily"}
-                      />
-                    </div>
-                  ))}
-
-                  <div className="w-[33.5%] p-1 flex">
-                    <PercentageCard
-                      title={"Efficient Fill Rate"}
-                      percent={91}
+          <div className="flex flex-col md:flex-row flex-grow h-full mt-4">
+            <div className="w-full md:w-[65%] space-y-2">
+              <div className="flex flex-wrap">
+                {summaryData.map((item, index) => (
+                  <div key={index} className="w-1/2 sm:w-1/3 md:w-1/6 p-1">
+                    <SummaryCard
+                      text={item.label}
+                      shifts={summaryShifts?.[item.datakey]}
+                      data={summaryShifts}
+                      datakey={item.datakey}
+                      icon={item.icon}
+                      onClick={() => {
+                        if (item.datakey !== "daily") {
+                          handleSummaryCardClick(true, item.datakey);
+                        }
+                      }}
+                      disableHover={item.datakey === "daily"}
                     />
                   </div>
+                ))}
 
-                  <div className="w-[33%] p-1 flex">
-                    <PercentageCard title={"No-show Rate"} percent={10} />
-                  </div>
+                <div className="w-1/2 sm:w-1/3 md:w-1/3 p-1">
+                  <PercentageCard title={"Efficient Fill Rate"} percent={91} />
+                </div>
+
+                <div className="w-1/2 sm:w-1/3 md:w-1/3 p-1">
+                  <PercentageCard title={"No-show Rate"} percent={10} />
                 </div>
               </div>
 
@@ -648,8 +649,8 @@ const Dashboard = () => {
                 dataComponents={<WhosOnComponent shifts={filteredTimecards} />}
               />
             </div>
-            <div className="mx-1" />
-            <div className="w-[35%]">
+            <div className="md:mx-1 my-4 md:my-0" />
+            <div className="w-full md:w-[35%]">
               <ShiftFullfilmentVisualization data={null} />
               <div className="my-2" />
               <InfoCard

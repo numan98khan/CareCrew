@@ -136,45 +136,40 @@ const EditProfileInfo = ({ user, refetch, isMyProfile }) => {
           </div>
         </div>
       </div>
+
       <div className="my-2" />
       {isMyProfile ? (
-        <div className="flex flex-row ">
-          <div className="flex flex-col text-left w-1/3 align gap-3 p-4">
+        <div className="flex flex-col md:flex-row w-full">
+          <div className="flex flex-col text-left w-full md:w-1/3 gap-3 p-4">
             <InfoTitle text={"Security"} />
 
-            <div className="flex flex-row gap-5 items-center">
-              {/* <div className="flex flex-col gap-0">
-              <p style={{ fontSize: "14px" }}>Account Password</p>
-            </div> */}
+            <div className="flex flex-col md:flex-row gap-5 items-start md:items-center">
               <div className="flex flex-col gap-5">
-                <Button
-                  // onClick={() => setShowChangePasswordModal(true)}
-                  onClick={openModal}
-                  children={"CHANGE PASSWORD"}
-                />
+                <Button onClick={openModal} children={"CHANGE PASSWORD"} />
               </div>
             </div>
           </div>
         </div>
       ) : null}
+
       {isMyProfile ? (
-        <div className="flex flex-row ">
-          <div className="flex flex-col text-left w-1/3 align gap-3 p-4">
+        <div className="flex flex-col md:flex-row w-full">
+          <div className="flex flex-col text-left md:w-1/3 w-full gap-3 p-4">
             <InfoTitle text={"Notifications"} />
 
-            <div className="flex flex-row gap-5 items-center">
-              <div className="flex flex-col w-1/2 gap-0  space-y-2">
-                <p className="text-xxs text-gray-500">
+            <div className="flex flex-col md:flex-row gap-5 items-start md:items-center">
+              <div className="flex flex-col w-full md:w-1/2 gap-0 space-y-2">
+                <p className="text-xs text-gray-500">
                   {`* Enabling notifications on CareCrew keeps you promptly
-                  informed about shift assignments, schedule changes, and
-                  security alerts. Stay updated and empowered for a smoother
-                  work experience.`.replace("CareCrew", "CareCrew")}
+            informed about shift assignments, schedule changes, and
+            security alerts. Stay updated and empowered for a smoother
+            work experience.`.replace("CareCrew", "CareCrew")}
                 </p>
                 <div className="flex flex-row justify-between">
                   <p className="text-xs">Text Message</p>
                   <p
-                    className={`text-xs font-semibold text-${
-                      isTextNotifications ? "green" : "red-500"
+                    className={`text-xs font-semibold ${
+                      isTextNotifications ? "text-green-500" : "text-red-500"
                     }`}
                   >
                     {isTextNotifications ? "Enabled" : "Disabled"}
@@ -183,30 +178,17 @@ const EditProfileInfo = ({ user, refetch, isMyProfile }) => {
                 <div className="flex flex-row justify-between">
                   <p className="text-xs">Email</p>
                   <p
-                    className={`text-xs font-semibold text-${
-                      isEmailNotifications ? "green" : "red-500"
+                    className={`text-xs font-semibold ${
+                      isEmailNotifications ? "text-green-500" : "text-red-500"
                     }`}
                   >
                     {isEmailNotifications ? "Enabled" : "Disabled"}
                   </p>
                 </div>
-                {/* <div className="flex flex-row justify-between">
-                <p className="text-xs">In-App Message</p>
-                <p
-                  className={`text-xs font-semibold text-${
-                    isAppNotifications ? "green" : "red-500"
-                  }`}
-                >
-                  {isAppNotifications ? "Enabled" : "Disabled"}
-                </p>
-              </div> */}
               </div>
-              <div className="flex flex-col gap-5 self-end">
-                <Button
-                  // onClick={() => setShowChangePasswordModal(true)}
-                  onClick={openModalNotification}
-                  children={"CHANGE"}
-                />
+
+              <div className="flex flex-col w-full md:w-auto gap-5 self-start md:self-end">
+                <Button onClick={openModalNotification} children={"CHANGE"} />
               </div>
             </div>
           </div>

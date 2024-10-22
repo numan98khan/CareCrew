@@ -32,28 +32,62 @@ const WhosOnComponent = ({ shifts }) => {
 
   const now = new Date();
   const nowDecimal = timeToDecimal(now);
-  const widthMultiplier = timelineWidth / hours.length;
-  const currentTimePosition = (nowDecimal + 0.5) * widthMultiplier;
+  const hourlyWidth = timelineWidth / 25;
+  const currentTimePosition = (nowDecimal + 0.5) * hourlyWidth;
 
-  // Process shifts data to compute necessary values for rendering
-  const processedShifts = shifts?.map((shift) => {
+  // Helper function to process shift data
+  const processShift = (shift) => {
     const shiftStartDT = new Date(shift?.shift?.shiftStartDT);
     const shiftEndDT = new Date(shift?.shift?.shiftEndDT);
 
+    const nowDecimal = timeToDecimal(new Date());
+
     const startTimeDecimal = timeToDecimal(shiftStartDT);
     const endTimeDecimal = timeToDecimal(shiftEndDT);
-    const duration = endTimeDecimal - startTimeDecimal;
 
-    const shiftStartPosition = (startTimeDecimal + 0.5) * widthMultiplier;
-    const shiftWidth = (duration / hours.length) * timelineWidth;
+    // const desiredClockInDT = new Date(shift.desiredClockInTime);
+    // const desiredClockOutDT = new Date(shift.desiredClockOutTime);
+    // const desiredClockInDecimal = timeToDecimal(desiredClockInDT);
+    // const desiredClockOutDecimal = timeToDecimal(desiredClockOutDT);
+
+    const desiredClockInDT = new Date(shift.desiredClockInTime);
+    const desiredClockOutDT = new Date(shift.desiredClockOutTime);
+
+    // Helper function to convert time to decimal
+    // const timeToDecimal = (dateTime) =>
+    //   dateTime.getHours() + dateTime.getMinutes() / 60;
+    const desiredClockInDecimal = timeToDecimal(desiredClockInDT);
+
+    // Check if desiredClockOutDT is on the next day
+    const isNextDay =
+      desiredClockOutDT.getDate() !== desiredClockInDT.getDate();
+    const desiredClockOutDecimal = isNextDay
+      ? 24
+      : timeToDecimal(desiredClockOutDT);
+
+    const shiftStartPosition = (startTimeDecimal + 0.5) * hourlyWidth;
+    const idealDuration =
+      ((shift?.clockInTime != null && shift?.clockOutTime == null
+        ? nowDecimal
+        : 0) > desiredClockOutDecimal
+        ? nowDecimal
+        : desiredClockOutDecimal) - desiredClockInDecimal;
+    console.log(
+      "🚀 ~ processShift ~ idealShiftWidth:",
+      desiredClockInDecimal,
+      desiredClockOutDecimal
+    );
+
+    const idealShiftWidth = hourlyWidth * idealDuration;
 
     const shiftData = {
       ...shift,
       startTimeDecimal,
       endTimeDecimal,
-      duration,
-      shiftWidth,
       shiftStartPosition,
+      desiredClockInDecimal,
+      desiredClockOutDecimal,
+      idealShiftWidth,
     };
 
     if (shift.clockInTime) {
@@ -61,54 +95,95 @@ const WhosOnComponent = ({ shifts }) => {
       const clockOutDT = shift.clockOutTime
         ? new Date(shift.clockOutTime)
         : now;
-      const clockInTimeDecimal = timeToDecimal(clockInDT);
-      const clockOutTimeDecimal = timeToDecimal(clockOutDT);
-      const overlayWidth = clockOutTimeDecimal - clockInTimeDecimal;
-      const shiftClockInStart = (clockInTimeDecimal + 0.5) * widthMultiplier;
+      const clockInDecimal = timeToDecimal(clockInDT);
+      const clockOutDecimal = timeToDecimal(clockOutDT);
+
+      const shiftWidth =
+        shift.clockOutTime == null
+          ? idealShiftWidth
+          : hourlyWidth * (clockOutDecimal - startTimeDecimal);
+
+      // const shiftWidth = hourlyWidth * 2;
+
+      const greenWidth =
+        hourlyWidth *
+        (Math.min(clockOutDecimal, desiredClockOutDecimal) - clockInDecimal);
+      const redWidth =
+        clockInDecimal > desiredClockInDecimal
+          ? hourlyWidth * (clockInDecimal - desiredClockInDecimal)
+          : 0;
+
+      const overtimeWidth = shift.clockOutTime
+        ? clockOutDecimal > desiredClockOutDecimal
+          ? hourlyWidth * (clockOutDecimal - desiredClockOutDecimal)
+          : 0
+        : hourlyWidth * (nowDecimal - desiredClockOutDecimal);
+
+      const shiftClockInPosition = (clockInDecimal + 0.5) * hourlyWidth;
+
+      // console.log(
+      //   "🚀 ~ processShift ~ idealShiftWidth:",
+      //   desiredClockInDecimal,
+      //   desiredClockOutDecimal,
+      //   idealShiftWidth,
+      //   shiftWidth,
+      //   shift.clockOutTime == null,
+      //   shift
+      // );
 
       return {
         ...shiftData,
-        clockInTimeDecimal,
-        clockOutTimeDecimal,
-        overlayWidth,
-        shiftClockInStart,
+        clockInDecimal,
+        clockOutDecimal,
+        shiftWidth,
+        greenWidth,
+        redWidth,
+        overtimeWidth,
+        shiftClockInPosition,
       };
     }
 
     return shiftData;
-  });
+  };
 
+  // Process shifts data
+  const processedShifts = shifts?.map(processShift);
+
+  // Render functions
   const renderClockedInShift = (shiftData) => {
     const {
       id,
       shiftStartPosition,
       shiftWidth,
-      overlayWidth,
-      shiftClockInStart,
-      duration,
+      greenWidth,
+      redWidth,
+      overtimeWidth,
+      clockInTime,
+      clockOutTime,
+      desiredClockInTime,
+      desiredClockOutTime,
+      idealShiftWidth,
     } = shiftData;
+    // console.log("🚀 ~ renderClockedInShift ~ shiftData:", shiftData);
 
     const shiftStyle = {
-      left: `${shiftStartPosition}px`,
       width: `${shiftWidth}px`,
+      // width: `${shiftWidth || shiftData.idealShiftWidth}px`,
       marginLeft: `${shiftStartPosition}px`,
       textAlign: "center",
-      backgroundColor: `${themeStyles?.PRIMARY_LIGHT_COLOR}51`,
+      // backgroundColor: `${themeStyles?.PRIMARY_LIGHT_COLOR}51`,
     };
-
-    const redBlockWidth = `${shiftClockInStart - shiftStartPosition}px`;
-    const greenBlockWidth = `${(overlayWidth / duration) * 100}%`;
 
     return (
       <div
         key={id}
-        className="flex flex-row text-white text-[9px] m-1 py-0"
+        className="flex flex-row text-SECONDARY_COLOR bg-[#FBC02D] text-[9px] m-1 py-0"
         style={shiftStyle}
       >
-        {now > new Date(shiftData?.shift?.shiftStartDT) && (
+        {redWidth > 0 && (
           <div
             style={{
-              width: redBlockWidth,
+              width: `${redWidth}px`,
               backgroundColor: "#D32F2F", // RED
             }}
           />
@@ -116,33 +191,61 @@ const WhosOnComponent = ({ shifts }) => {
         <div
           className="py-[1.3vh] m-0 h-full text-center font-medium leading-none text-white truncate"
           style={{
-            width: greenBlockWidth,
+            width: `${greenWidth}px`,
             backgroundColor: "#388E3C", // GREEN
+            // fontSize: 4,
           }}
         >
-          {displayTime(shiftData?.clockInTime)}
-          {shiftData?.clockOutTime &&
-            ` - ${displayTime(shiftData?.clockOutTime)}`}
+          {displayTime(
+            clockInTime > desiredClockInTime ? clockInTime : desiredClockInTime
+          )}
+          {clockOutTime == null
+            ? " - on going"
+            : clockOutTime > desiredClockOutTime
+            ? ` - ${displayTime(desiredClockOutTime)}`
+            : clockOutTime && ` - ${displayTime(clockOutTime)}`}
         </div>
-        <div
-          style={{
-            flex: 1,
-            backgroundColor: "#FBC02D", // YELLOW
-          }}
-        />
+
+        {overtimeWidth > 0 && (
+          <div
+            className="py-[1.3vh] m-0 h-full text-center font-medium leading-none text-white truncate"
+            style={{
+              width: `${overtimeWidth}px`,
+              backgroundColor: themeStyles?.SECONDARY_COLOR, // Overtime
+            }}
+          >
+            {displayTime(clockInTime)}
+            {clockOutTime && ` - ${displayTime(clockOutTime)}`}
+          </div>
+        )}
       </div>
     );
   };
 
   const renderScheduledShift = (shiftData) => {
-    const { id, shiftStartPosition, shiftWidth } = shiftData;
+    const {
+      id,
+      shiftStartPosition,
+      idealShiftWidth,
+      shift,
+      desiredClockInTime,
+      desiredClockOutTime,
+    } = shiftData;
+    const now = new Date();
+
+    // console.log(
+    //   "🚀 ~ renderScheduledShift ~ desiredClockInTime:",
+    //   new Date(desiredClockInTime),
+    //   now
+    // );
 
     const shiftStyle = {
       left: `${shiftStartPosition}px`,
-      width: `${shiftWidth}px`,
+      width: `${idealShiftWidth}px`,
       marginLeft: `${shiftStartPosition}px`,
       textAlign: "center",
-      backgroundColor: "#757575", // Gray
+      backgroundColor:
+        now > new Date(desiredClockInTime) ? "#D32F2F" : "#757575", // Gray
     };
 
     return (
@@ -152,8 +255,11 @@ const WhosOnComponent = ({ shifts }) => {
         style={shiftStyle}
       >
         <div className="relative rounded-full z-50 truncate">
-          {displayTime(shiftData?.shift?.shiftStartDT)} -{" "}
-          {displayTime(shiftData?.shift?.shiftEndDT)}
+          {now > new Date(desiredClockInTime)
+            ? "Shift Not Started!"
+            : `${displayTime(shift?.shiftStartDT)} - ${displayTime(
+                shift?.shiftEndDT
+              )}`}
         </div>
       </div>
     );

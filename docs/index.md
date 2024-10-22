@@ -1,17 +1,17 @@
-# Welcome to MkDocs
+# CareCrew Documentation
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+Welcome to the CareCrew documentation. This guide covers all features and functionalities of the CareCrew shift management platform.
 
-## Commands
+Explore the sections to get detailed information on various features like scheduling shifts, managing timecards, facilities, invoices, and more.
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
-
-## Project layout
-
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+## Contents:
+1. [Dashboard](dashboard.md)
+2. [Schedule](schedule.md)
+3. [Add Shifts](add_shifts.md)
+4. [People Management](people.md)
+5. [Timecards](timecards.md)
+6. [Invoices](invoices.md)
+7. [Settings](settings.md)
+8. [Support](support.md)
+9. [Who's ON](whos_on.md)
+10. [Facilities](facilities.md)

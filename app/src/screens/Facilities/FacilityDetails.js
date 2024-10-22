@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import Toggle from "../../components/ToggleSwitch";
-
-// import InfoTitle from "../../components";
 import themeStyles from "../../styles/theme.styles";
-
 import ClipboardIcon from "../../assets/icons/clipboardIcon";
-
 import InfoTitle from "../../components/Headers/InfoTitle";
 import InfoSubTitle from "../../components/Headers/InfoSubTitle";
 import InfoData from "../../components/Headers/InfoData";
@@ -20,12 +16,6 @@ import CopyToClipboard from "react-copy-to-clipboard";
 import { SuccessToast } from "../../services/micro";
 
 const FacilityDetails = ({ facility, editAction }) => {
-  // console.log(
-  //   "🚀 ~ file: FacilityDetails.js:17 ~ FacilityDetails ~ facility:",
-  //   facility
-
-  // );
-
   const [isCopied, setIsCopied] = useState(false);
   const handleCopy = () => {
     setIsCopied(true);
@@ -44,135 +34,110 @@ const FacilityDetails = ({ facility, editAction }) => {
   const closeModal = () => {
     setRequestsModalIsOpen(false);
   };
-  // console.log(facility);
+
   const [isEmailNotifications, setIsEmailNotifications] = useState(true);
+
   return (
-    <div className="min-h-max p-4 mt-3 pb-3 bg-white flex">
-      <div className="flex w-full items-start" style={{ width: "45%" }}>
+    <div className="min-h-max p-4 mt-3 pb-3 bg-white flex lg:flex-row flex-col">
+      {/* Avatar section */}
+      <div className="w-full lg:w-1/3 flex justify-center lg:justify-start items-start">
         <Avatar isSquared={true} isCover={true} alt={facility?.facilityName} />
       </div>
-      <div className="mx-3" />
-      <div style={{ width: "55%" }}>
+
+      {/* Facility details section */}
+      <div className="w-full lg:w-2/3 mt-4 lg:mt-0 lg:ml-6">
         <div className="flex flex-col h-full justify-between">
-          <div className="flex">
+          {/* Facility Name and ID */}
+          <div className="flex justify-between">
             <label className="text-lg font-bold">{facility.facilityName}</label>
-          </div>
-          <div className="flex flex-row items-center gap-1">
-            <div className="flex mr-1 font-normal items-center text-xs text-PRIMARY_COLOR">
-              Facility ID:{" "}
-              <span className="ml-2" style={{ fontWeight: "bolder" }}>
-                {" "}
-                {facility?.id}
-              </span>
+            <div className="flex items-center">
+              <span className="mr-2 text-xs font-bold">Facility ID:</span>
+              <span className="text-xs font-bold">{facility?.id}</span>
+              <CopyToClipboard text={facility?.id} onCopy={handleCopy}>
+                <div className="cursor-pointer ml-2">
+                  <ClipboardIcon />
+                </div>
+              </CopyToClipboard>
             </div>
-            <CopyToClipboard text={facility?.id} onCopy={handleCopy}>
-              <div className="cursor-pointer">
-                <ClipboardIcon />
-              </div>
-            </CopyToClipboard>
           </div>
-          <div className="my-1" />
-          <div className="flex">
-            <label className="text-xs text-left leading-5">
+
+          {/* About Facility */}
+          <div className="my-2">
+            <label className="text-sm text-left leading-5">
               {facility.aboutFacility}
             </label>
           </div>
-          <div className="my-1" />
-          <div>
-            <div className="flex flex-col text-left align  ">
-              <InfoTitle text={"Address"} />
 
-              <div className="flex flex-wrap">
-                <InfoBox isDynamic>
-                  <InfoSubTitle text={"Country"} />
-                  <InfoData text={facility?.country} />
-                </InfoBox>
-                <InfoBox isDynamic>
-                  <InfoSubTitle text={"Street Address"} />
-                  <InfoData text={facility?.streetAddress} />
-                </InfoBox>
-                <InfoBox isDynamic>
-                  <InfoSubTitle text={"City"} />
-                  <InfoData text={facility?.city} />
-                </InfoBox>
-                <InfoBox isDynamic>
-                  {" "}
-                  <InfoSubTitle text={"State"} />
-                  <InfoData text={facility?.state} />
-                </InfoBox>
-                <InfoBox isDynamic>
-                  {" "}
-                  <InfoSubTitle text={"Zip"} />
-                  <InfoData text={facility?.zip} />
-                </InfoBox>
-              </div>
-            </div>
-
-            <div className="my-1" />
-
-            <div className="flex flex-col text-left align ">
-              <InfoTitle text={"Contact Info"} />
-
-              <div className="flex">
-                <InfoBox isDynamic>
-                  <InfoSubTitle text={"First Name"} />
-                  <InfoData text={facility.contacts[0].firstName} />
-                </InfoBox>
-                <InfoBox isDynamic>
-                  <InfoSubTitle text={"Last Name"} />
-                  <InfoData text={facility.contacts[0].lastName} />
-                </InfoBox>
-
-                <InfoBox isDynamic>
-                  <InfoSubTitle text={"Email"} />
-                  <InfoData text={facility.contacts[0]?.email} />
-                </InfoBox>
-
-                <InfoBox isDynamic>
-                  <InfoSubTitle text={"Phone"} />
-                  <InfoData text={facility.contacts[0].phone} />
-                </InfoBox>
-              </div>
+          {/* Address Info */}
+          <div className="my-2">
+            <InfoTitle text={"Address"} />
+            <div className="flex flex-wrap gap-4">
+              <InfoBox isDynamic>
+                <InfoSubTitle text={"Country"} />
+                <InfoData text={facility?.country} />
+              </InfoBox>
+              <InfoBox isDynamic>
+                <InfoSubTitle text={"Street Address"} />
+                <InfoData text={facility?.streetAddress} />
+              </InfoBox>
+              <InfoBox isDynamic>
+                <InfoSubTitle text={"City"} />
+                <InfoData text={facility?.city} />
+              </InfoBox>
+              <InfoBox isDynamic>
+                <InfoSubTitle text={"State"} />
+                <InfoData text={facility?.state} />
+              </InfoBox>
+              <InfoBox isDynamic>
+                <InfoSubTitle text={"Zip"} />
+                <InfoData text={facility?.zip} />
+              </InfoBox>
             </div>
           </div>
 
-          <div className="my-3" />
-          <div className="flex ">
-            <div className="flex flex-row text-left align space-x-2 ">
-              {type === EMPLOYEE ? (
-                <>
-                  <Button children={"REQUEST"} onClick={openModal} />
-                </>
-              ) : (
-                <>
-                  <Button children={"EDIT"} onClick={editAction} />
-                </>
-              )}
-              <Button
-                children={"MESSAGE"}
-                onClick={() => {
-                  navigate("/messaging", {
-                    state: facility?.FacilityPeople?.items[0]?.people,
-                  });
-                }}
-              />
-              {/* <Button children={"CANCEL"} color={themeStyles.GRAY} /> */}
+          {/* Contact Info */}
+          <div className="my-2">
+            <InfoTitle text={"Contact Info"} />
+            <div className="flex flex-wrap gap-4">
+              <InfoBox isDynamic>
+                <InfoSubTitle text={"First Name"} />
+                <InfoData text={facility.contacts[0].firstName} />
+              </InfoBox>
+              <InfoBox isDynamic>
+                <InfoSubTitle text={"Last Name"} />
+                <InfoData text={facility.contacts[0].lastName} />
+              </InfoBox>
+              <InfoBox isDynamic>
+                <InfoSubTitle text={"Email"} />
+                <InfoData text={facility.contacts[0]?.email} />
+              </InfoBox>
+              <InfoBox isDynamic>
+                <InfoSubTitle text={"Phone"} />
+                <InfoData text={facility.contacts[0].phone} />
+              </InfoBox>
             </div>
-            {/* <InfoTitle text={"General"} />
+          </div>
 
-            <div className="flex flex-wrap">
-              <InfoBox isDynamic>
-                <InfoSubTitle text={"Time Zone"} />
-                <InfoData text={"people?.timezone"} />
-              </InfoBox>
-              <InfoBox isDynamic>
-                <InfoSubTitle text={"Language"} />
-                <InfoData text={"people?.language"} />
-              </InfoBox>
-            </div> */}
+          {/* Action Buttons */}
+          <div className="my-4 flex flex-wrap gap-4">
+            {type === EMPLOYEE ? (
+              <Button children={"REQUEST"} onClick={openModal} />
+            ) : (
+              <Button children={"EDIT"} onClick={editAction} />
+            )}
+            <Button
+              children={"MESSAGE"}
+              onClick={() => {
+                navigate("/messaging", {
+                  state: facility?.FacilityPeople?.items[0]?.people,
+                });
+              }}
+            />
           </div>
         </div>
       </div>
+
+      {/* Requests Modal */}
       <RequestsModal
         facility={facility}
         focalPerson={facility?.FacilityPeople?.items[0]?.people}

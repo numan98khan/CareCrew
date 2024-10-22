@@ -104,13 +104,12 @@ const Schedules = () => {
           ?.isSelected;
 
   const [viewMode, setViewMode] = useState("weekly");
-  const [startDate, setStartDate] = useState(""); // Make sure to initialize these values if needed.
+  const [startDate, setStartDate] = useState(""); // Initialize if needed.
   const [endDate, setEndDate] = useState("");
   const [weekOffset, setWeekOffset] = useState(0);
 
   let date = new Date();
   date.setDate(date.getDate() - 1); //
-  // const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   if (viewMode === "weekly") {
     date.setDate(date.getDate() - date.getDay() + 1 + weekOffset * 7);
@@ -119,19 +118,10 @@ const Schedules = () => {
   }
 
   if (startDate && new Date(startDate) > date) {
-    date = new Date(startDate); // If our starting date is before the startDate, adjust it.
+    date = new Date(startDate); // Adjust if starting date is before the startDate.
   }
 
   let numDaysInView = 7;
-  // if (viewMode === "weekly") {
-  //   numDaysInView = 7;
-  // } else if (viewMode === "monthly") {
-  //   const nextMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1);
-  //   const lastDayOfCurrentMonth = new Date(
-  //     nextMonth.setDate(nextMonth.getDate() - 1)
-  //   );
-  //   numDaysInView = lastDayOfCurrentMonth.getDate();
-  // }
 
   const dates = [];
   for (let i = 0; i < numDaysInView; i++) {
@@ -148,8 +138,6 @@ const Schedules = () => {
       })
     );
   }
-
-  //... (rest of your code)
 
   // Hooks for filters and states
   const {
@@ -168,12 +156,6 @@ const Schedules = () => {
     selectedShiftTimings,
     setSelectedShiftTimings,
   } = useFilters();
-
-  // console.log(
-  //   "🚀 ~ file: index.js:195 ~ Schedules ~ dates[0]:",
-  //   dates[0],
-  //   dates[6]
-  // );
 
   const {
     shifts: fetchedShifts,
@@ -256,7 +238,7 @@ const Schedules = () => {
     });
     subscriptions.push(onDeleteShiftSubscription);
 
-    // Subscriptions for Timecards - repeat similar pattern
+    // Subscriptions for Timecards
     const onCreateTimecardSubscription = API.graphql(
       graphqlOperation(onCreateTimecard)
     ).subscribe({
@@ -275,8 +257,6 @@ const Schedules = () => {
     });
     subscriptions.push(onCreateTimecardSubscription);
 
-    // ... You'll do the same for `onUpdateTimecard` and `onDeleteTimecard`
-
     // Cleanup Subscriptions on Component Unmount
     return () => {
       subscriptions.forEach((sub) => sub.unsubscribe());
@@ -288,11 +268,8 @@ const Schedules = () => {
   const [peopleSearchTerm, setPeopleSearchTerm] = useState("");
   const { people } = useListPeople({
     type: EMPLOYEE,
-    undefined, //role: selectedPeopleRole,
   });
   const { facilities } = useListFacilities();
-
-  // Subscription
 
   // useState hooks
   const [shift, setShift] = useState();
@@ -311,13 +288,8 @@ const Schedules = () => {
 
   // useMemo hooks
   const shifts = useMemo(() => {
-    // timecards
-    // console.log("🚀 ~ file: index.js:319 ~ shifts ~ timecards:", timecards.map(obj => obj?.));
     return fetchedShifts
       ?.filter((shift) => {
-        //// EXACT MATCH
-
-        // Either match
         if (selectedShiftTimings) {
           const searchTimingStart = new Date(
             `1970-01-01T${selectedShiftTimings?.split("-")[0]}`
@@ -326,27 +298,22 @@ const Schedules = () => {
             `1970-01-01T${selectedShiftTimings?.split("-")[1]}`
           );
 
-          // Adjust for search timing end times that are on the next day
           if (searchTimingEnd < searchTimingStart) {
             searchTimingEnd.setDate(searchTimingEnd.getDate() + 1);
           }
 
           let startTime, endTime;
 
-          // If it's a Shift, we use shiftStart and shiftEnd
           if (shift.__typename === "Shifts") {
             startTime = new Date(`1970-01-01T${shift.shiftStart + "Z"}`);
             endTime = new Date(`1970-01-01T${shift.shiftEnd + "Z"}`);
-          }
-          // If it's a Timecard, we use clockInTime and clockOutTime
-          else if (shift.__typename === "Timecard") {
+          } else if (shift.__typename === "Timecard") {
             startTime = new Date(shift.clockInTime);
             endTime = shift.clockOutTime
               ? new Date(shift.clockOutTime)
               : new Date();
           }
 
-          // Adjust for end times that are on the next day
           if (endTime < startTime) {
             endTime.setDate(endTime.getDate() + 1);
           }
@@ -354,7 +321,6 @@ const Schedules = () => {
           const overlapsWithSearchTiming =
             startTime >= searchTimingStart && endTime <= searchTimingEnd;
 
-          // If it doesn't overlap, we want to filter it out
           if (!overlapsWithSearchTiming) {
             return false;
           }
@@ -364,13 +330,7 @@ const Schedules = () => {
       .concat(timecards);
   }, [fetchedShifts, timecards, selectedShiftTimings]);
 
-  // console.log("🚀 ~ file: index.js:180 ~ shifts ~ shifts:", shifts);
-
   const filteredPeople = useMemo(() => {
-    // return people.filter((person) => {
-    //   // Replace this condition with your actual filter condition
-    //   return true;
-    // });
     return people.filter(
       (person) =>
         person.firstName
@@ -427,15 +387,7 @@ const Schedules = () => {
     }
   }, [selectedShift]);
 
-  // const { facilities } = useListFacilities();
-
   const openModal = (shift, timecard) => {
-    // console.log(
-    //   "🚀 ~ file: index.js:235 ~ openModal ~ shift:",
-    //   shift,
-    //   timecard
-    // );
-
     setSelectedShift(shift);
     setSelectedTimecard(timecard);
     setSelectedFacilityDetails(
@@ -445,11 +397,8 @@ const Schedules = () => {
   };
 
   const openShiftEditModal = (shift) => {
-    // console.log("🚀 ~ file: index.js:235 ~ openModal ~ shift:", shift);
-
     setMode(MODES.SHIFT_EDIT);
     setSelectedShift(shift);
-    // setSelectedTimecard(timecard);
     setSelectedFacilityDetails(
       facilities?.find((facility) => facility.id === shift.facilityID)
     );
@@ -464,7 +413,6 @@ const Schedules = () => {
     if (MODES.ADD_MEMBERS) {
       setMode(MODES.SHIFT_DETAILS);
     }
-    // console.log(selectedPeople);
     setModalIsOpen(false);
   };
 
@@ -478,8 +426,6 @@ const Schedules = () => {
 
   const handleApplyFilter = () => {
     let updatedFilters = {};
-
-    let employeeId;
 
     if (selectedFacilityId) {
       updatedFilters = {
@@ -543,10 +489,7 @@ const Schedules = () => {
 
   const handleDelete = async (selectedShift, selectedTimecard) => {
     if (selectedTimecard) {
-      if (
-        // selectedTimecard?.clockInTime !== undefined &&
-        selectedTimecard?.clockOutTime
-      ) {
+      if (selectedTimecard?.clockOutTime) {
         ErrorToast("Cannot delete completed timecard.");
         return;
       }
@@ -568,9 +511,6 @@ const Schedules = () => {
               numOfPositions: (
                 parseInt(selectedShift?.numOfPositions) + 1
               ).toString(),
-              // shiftStart: selectedShift?.shiftStart,
-              // shiftEnd: selectedShift?.shiftEnd,
-              // date: selectedShift?.date,
               _version: selectedShift?._version,
             });
             SuccessToast("Shift positions updated successfully");
@@ -599,19 +539,7 @@ const Schedules = () => {
           (obj) => obj?.id === selectedShift?.facilityID
         );
 
-        const formedMessage_OLD = `Shift deleted by ${
-          myFacility?.facilityName
-            ? tempFetchedFacility?.facilityName
-            : "CareCrew"
-        } at ${
-          tempFetchedFacility?.facilityName
-        } on ${new Date()} for ${displayDate(
-          selectedShift?.shiftStartDT
-        )}@${displayTime(selectedShift?.shiftStartDT)}-${displayTime(
-          selectedShift?.shiftEndDT
-        )}`;
-
-        let formedMessage = `Subject: Open Shift Deletion\nThe following shft has been cancelled by ${
+        let formedMessage = `Subject: Open Shift Deletion\nThe following shift has been cancelled by ${
           myFacility?.facilityName ? "Facility" : "CareCrew"
         }:\nFacility: ${
           tempFetchedFacility?.facilityName
@@ -627,14 +555,7 @@ const Schedules = () => {
           displayTime(new Date()?.toISOString())
         }`;
 
-        // console.log(
-        //   "🚀 ~ file: index.js:616 ~ handleDelete ~ selectedShift:",
-        //   selectedShift
-        // );
-
-        // START: Send notification on all platforms to instacare
-
-        // // INTERNAL
+        // INTERNAL
         inApplNotificationToInstacare(
           SHIFT_DELETED,
           "Shift Deleted",
@@ -649,7 +570,7 @@ const Schedules = () => {
           createNotificationQuery
         );
 
-        // // // EXTERNAL
+        // EXTERNAL
         externalNotificationToInstacare(formedMessage, true, false); // CareCrew
         sendNotificationsToFacilityPeople(
           selectedFacility?.id,
@@ -658,14 +579,10 @@ const Schedules = () => {
           false // test disabled
         ); // Facility
 
-        // END.
-
         SuccessToast("Shift deleted successfully");
 
         await refetchShifts();
       } catch (error) {
-        // console.log("🚀 ~ file: index.js:466 ~ handleDelete ~ error:", error);
-
         ErrorToast("Error deleting shift:", error);
       }
     }
@@ -697,7 +614,6 @@ const Schedules = () => {
   };
 
   const setPastShiftDeletionWarning = async () => {
-    console.log("Dleete");
     const getShiftsMinimal = /* GraphQL */ `
       query GetShifts($id: ID!) {
         getShifts(id: $id) {
@@ -713,10 +629,8 @@ const Schedules = () => {
       const fetchedCard = shifts?.find((item) => item?.id === shiftId);
       let shiftDate;
       if (fetchedCard?.__typename === "Shifts") {
-        shiftDate = new Date(fetchedCard.shiftStartDT); // Assuming `date` is a property on Shifts
+        shiftDate = new Date(fetchedCard.shiftStartDT);
         if (shiftDate < currentDate) {
-          // ErrorToast("Warning: Attempting to delete past shifts.");
-
           setWarningMessage(
             "Warning: Selected items contain shifts in the past"
           );
@@ -731,17 +645,10 @@ const Schedules = () => {
           )
         )?.data?.getShifts;
 
-        shiftDate = new Date(fetchedShift.shiftStartDT).toISOString(); // Assuming `date` is a property on Timecard
+        shiftDate = new Date(fetchedShift.shiftStartDT).toISOString();
         const currentDatetimeUTC = new Date().toISOString();
 
-        // console.log(
-        //   "🚀 ~ file: index.js:700 ~ setPastShiftDeletionWarning ~ shiftDate:",
-        //   shiftDate,
-        //   currentDatetimeUTC
-        // );
-
         if (shiftDate < currentDatetimeUTC) {
-          // ErrorToast("Warning: Attempting to delete past timecards.");
           setWarningMessage(
             "Warning: Selected items contain assignments in the past"
           );
@@ -781,8 +688,6 @@ const Schedules = () => {
     setWarningMessage(null);
   };
 
-  // console.log("selectedShift: ", selectedShift);
-
   const [isPublishDisabled, setIsPublishDisabled] = useState(false);
   const [assignInProgress, setAssignInProgress] = useState(false);
 
@@ -814,7 +719,7 @@ const Schedules = () => {
       />
 
       <div className="flex flex-col">
-        <div className="flex py-1 justify-between">
+        <div className="flex flex-col md:flex-row py-1 justify-between">
           <div className="flex items-center">
             <PageHeader text={"Schedule"} />
             <div className="mx-1" />
@@ -824,7 +729,7 @@ const Schedules = () => {
           </div>
 
           {canCreateShift && (
-            <div className="flex items-center">
+            <div className="flex items-center mt-2 md:mt-0">
               <IconButton
                 onClick={() => {
                   navigate("/addshift");
@@ -837,48 +742,43 @@ const Schedules = () => {
         </div>
       </div>
 
-      <Card className="w-full p-3 flex flex-col justify-between ">
-        <div className="flex justify-between items-center">
-          <div className="flex  items-center">
-            <div className="flex text-xxs">Date Range:</div>
-            <div className="mx-1" />
-            <DualDatePicker
-              startDate={startDate}
-              endDate={endDate}
-              onChange={handleDateChange}
-            />
-            {/* <OptionTab options={["Week", "Month", "Year"]} /> */}
-          </div>
+      <Card className="w-full p-3 flex flex-col md:flex-row justify-between items-center">
+        <div className="flex items-center mb-2 md:mb-0">
+          <div className="flex text-xxs">Date Range:</div>
+          <div className="mx-1" />
+          <DualDatePicker
+            startDate={startDate}
+            endDate={endDate}
+            onChange={handleDateChange}
+          />
+        </div>
 
-          <div className="flex items-center">
-            {canDeleteShift && (
-              <button
-                // className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                className="flex rounded-full py-1 px-1 items-center mr-1"
-                // type={type}
-                onClick={() => {
-                  if (deleteShiftsValidation()) {
-                    setPastShiftDeletionWarning();
-                    setShowConfirmModal(true);
-                  }
-                }}
-                style={{
-                  backgroundColor: themeStyles.RED_LIGHT,
-                  // color: "#fff",
-                }}
-              >
-                <DeleteIcon size={8} />
-              </button>
-            )}
-            <IconButton
-              color={themeStyles.PRIMARY_LIGHT_COLOR}
-              text={"Filter"}
-              icon={<FilterIcon size={8} />}
-              onClick={onOpen}
-            />
-          </div>
+        <div className="flex items-center">
+          {canDeleteShift && (
+            <button
+              className="flex rounded-full py-1 px-1 items-center mr-1"
+              onClick={() => {
+                if (deleteShiftsValidation()) {
+                  setPastShiftDeletionWarning();
+                  setShowConfirmModal(true);
+                }
+              }}
+              style={{
+                backgroundColor: themeStyles.RED_LIGHT,
+              }}
+            >
+              <DeleteIcon size={8} />
+            </button>
+          )}
+          <IconButton
+            color={themeStyles.PRIMARY_LIGHT_COLOR}
+            text={"Filter"}
+            icon={<FilterIcon size={8} />}
+            onClick={onOpen}
+          />
         </div>
       </Card>
+
       {/* Info Board */}
       <ShiftsContainer
         loading={loading}
@@ -926,10 +826,10 @@ const Schedules = () => {
             selectedShift={selectedShift}
             selectedTimecard={selectedTimecard}
             selectedFacility={selectedFacility}
-            setSelectedPeople={setSelectedPeople} // replace with your function or state setter
-            assignedTo={assignedTo} // replace with your data or state
-            setMode={setMode} // replace with your function or state setter
-            buttonRef={buttonRef} // replace with your ref
+            setSelectedPeople={setSelectedPeople}
+            assignedTo={assignedTo}
+            setMode={setMode}
+            buttonRef={buttonRef}
             refetchShifts={refetchShifts}
             openShiftEditModal={openShiftEditModal}
             //

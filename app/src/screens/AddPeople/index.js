@@ -724,13 +724,10 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
           />
         </div>
         <div className="min-h-max px-3 mt-3 pb-3 bg-white">
-          <div className="flex flex-row ">
-            <div
-              className="flex flex-col items-center"
-              style={{ width: "55%" }}
-            >
+          <div className="flex flex-col md:flex-row">
+            <div className="flex flex-col items-center w-full md:w-7/12">
               <div className="flex flex-row justify-around w-full ">
-                <div className="flex w-full items-center py-3">
+                <div className="flex flex-row w-full items-center py-3">
                   <div className="bg-lightGrey flex flex-row justify-center items-center w-24 h-24 rounded-3xl overflow-hidden">
                     {imagePlaceholder ? (
                       <img
@@ -752,7 +749,7 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
                   <div className="mx-1" />
                   <div
                     onClick={handleDivClick}
-                    className="bg-[#F3FAFD] hover:scale-105 flex flex-col justify-center items-center w-40 h-full rounded-3xl border-2 border-blue-300 border-dotted"
+                    className="bg-[#F3FAFD] hover:scale-105 flex flex-col justify-center items-center w-40 h-24 rounded-3xl border-2 border-blue-300 border-dotted"
                   >
                     <div className="flex flex-col items-center">
                       <Image />
@@ -760,215 +757,154 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
                     </div>
                   </div>
 
-                  {/* <div className="mx-1" />
-                  <div className="bg-[#F3FAFD] dark:hover:shadow-black/30 flex flex-col justify-center items-center w-40 h-full rounded-3xl border-2 border-blue-300 border-dotted">
-                    <div className="flex flex-col items-center">
-                      <Camera />
-                      <span className="mt-1">Camera</span>
-                    </div>
-                  </div> */}
-                  <div className="mx-1" />
-                  <div className="font-medium text-sm text-[#02050A80] self-end">
+                  {/* <div className="mx-1" /> */}
+                  {/* <div className="font-medium text-sm text-[#02050A80] self-end">
                     {" "}
                     Maximum size : 1MB
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
-              <div className="mb-2 flex flex-row justify-around w-full items-center mt-7">
-                <div className="flex flex-col w-full gap-2">
-                  <div className="flex mb-2">
-                    <InfoTitle text={"Account Information"} />
-                  </div>
-                  <div className="flex flex-row ">
-                    <div className="flex flex-col w-1/2 ">
-                      <div className="flex flex-row">
-                        <Input
-                          color={"#F3FAFD"}
-                          placeholder={"First Name"}
-                          value={people.firstName}
-                          setValue={setPeopleKey("firstName")}
-                        />
-                        <div className="mx-1" />
-                        <Input
-                          color={"#F3FAFD"}
-                          placeholder={"Last Name"}
-                          value={people.lastName}
-                          setValue={setPeopleKey("lastName")}
-                        />
-                      </div>
-                      <div className="my-1" />
-                      <div className="flex flex-row">
-                        <Input
-                          color={"#F3FAFD"}
-                          placeholder={"Email Address"}
-                          value={people.email}
-                          disabled={isEditMyProfile}
-                          setValue={setPeopleKey("email")}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="mx-1" />
-
-                    <div className="flex flex-col w-1/2">
-                      {/* {" "} */}
+              <div className="mb-2 flex flex-col w-full mt-7">
+                <div className="flex mb-2">
+                  <InfoTitle text={"Account Information"} />
+                </div>
+                <div className="flex flex-col md:flex-row">
+                  <div className="flex flex-col w-full md:w-1/2 ">
+                    <div className="flex flex-col md:flex-row">
                       <Input
                         color={"#F3FAFD"}
-                        placeholder={"Phone Number"}
-                        value={people.phoneNumber}
-                        setValue={setPeopleKey("phoneNumber")}
+                        placeholder={"First Name"}
+                        value={people.firstName}
+                        setValue={setPeopleKey("firstName")}
                       />
-                      <div className="my-1" />
-                      {!isEditMyProfile && (
-                        <DropDown
-                          placeholder={"Select Role"}
-                          value={people.role}
-                          setValue={setPeopleKey("role")}
-                          options={["CNA", "RN", "LPN"]}
-                        />
-                      )}
+                      <div className="mx-0 md:mx-1 my-1 md:my-0" />
+                      <Input
+                        color={"#F3FAFD"}
+                        placeholder={"Last Name"}
+                        value={people.lastName}
+                        setValue={setPeopleKey("lastName")}
+                      />
                     </div>
+                    <div className="my-1" />
+                    <Input
+                      color={"#F3FAFD"}
+                      placeholder={"Email Address"}
+                      value={people.email}
+                      disabled={isEditMyProfile}
+                      setValue={setPeopleKey("email")}
+                    />
+                  </div>
+
+                  <div className="mx-0 md:mx-1 my-1 md:my-0" />
+
+                  <div className="flex flex-col w-full md:w-1/2">
+                    <Input
+                      color={"#F3FAFD"}
+                      placeholder={"Phone Number"}
+                      value={people.phoneNumber}
+                      setValue={setPeopleKey("phoneNumber")}
+                    />
+                    <div className="my-1" />
+                    {!isEditMyProfile && (
+                      <DropDown
+                        placeholder={"Select Role"}
+                        value={people.role}
+                        setValue={setPeopleKey("role")}
+                        options={["CNA", "RN", "LPN"]}
+                      />
+                    )}
                   </div>
                 </div>
               </div>
 
               {/* Address Form */}
-              <div className="mb-2 flex flex-row justify-around w-full items-center mt-7">
-                <div className="flex flex-col w-full gap-2">
-                  <div className="flex mb-2">
-                    <InfoTitle text={"Address"} />
-                  </div>
-                  <div className="flex flex-row ">
-                    <div className="flex flex-col w-1/2 ">
+              <div className="mb-2 flex flex-col w-full mt-7">
+                <div className="flex mb-2">
+                  <InfoTitle text={"Address"} />
+                </div>
+                <div className="flex flex-col md:flex-row">
+                  <div className="flex flex-col w-full md:w-1/2 ">
+                    <Input
+                      color={"#F3FAFD"}
+                      placeholder={"Street Address"}
+                      value={people.streetAddress}
+                      setValue={setPeopleKey("streetAddress")}
+                      options={countries.map((item) => item.label)}
+                    />
+                    <div className="my-1" />
+                    <div className="flex flex-col md:flex-row">
                       <Input
                         color={"#F3FAFD"}
-                        placeholder={"Street Address"}
-                        value={people.streetAddress}
-                        setValue={setPeopleKey("streetAddress")}
+                        placeholder={"State"}
+                        value={people.state}
+                        setValue={setPeopleKey("state")}
+                      />
+                      <div className="mx-0 md:mx-1 my-1 md:my-0" />
+                      <Input
+                        color={"#F3FAFD"}
+                        placeholder={"Zip"}
+                        value={people.zip}
+                        setValue={setPeopleKey("zip")}
+                        type="number"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="mx-0 md:mx-1 my-1 md:my-0" />
+
+                  <div className="flex flex-col w-full md:w-1/2">
+                    <Input
+                      color={"#F3FAFD"}
+                      placeholder={"City"}
+                      value={people.city}
+                      setValue={setPeopleKey("city")}
+                    />
+                    <div className="my-1" />
+
+                    <div className="flex flex-row">
+                      <DropDown
+                        placeholder={"Country"}
+                        value={people.country}
+                        setValue={setPeopleKey("country")}
                         options={countries.map((item) => item.label)}
                       />
-                      <div className="my-1" />
-                      <div className="flex flex-row">
-                        <Input
-                          color={"#F3FAFD"}
-                          placeholder={"State"}
-                          value={people.state}
-                          setValue={setPeopleKey("state")}
-                        />
-                        <div className="mx-1" />
-                        <Input
-                          color={"#F3FAFD"}
-                          placeholder={"Zip"}
-                          value={people.zip}
-                          setValue={setPeopleKey("zip")}
-                          type="number"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="mx-1" />
-
-                    <div className="flex flex-col w-1/2">
-                      {/* {" "} */}
-                      <Input
-                        color={"#F3FAFD"}
-                        placeholder={"City"}
-                        value={people.city}
-                        setValue={setPeopleKey("city")}
-                      />
-                      <div className="my-1" />
-
-                      <div className="flex flex-row">
-                        <DropDown
-                          placeholder={"Country"}
-                          value={people.country}
-                          setValue={setPeopleKey("country")}
-                          options={countries.map((item) => item.label)}
-                        />
-                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Address Form */}
-              <div className="mb-2 flex flex-row justify-around w-full items-center mt-7">
-                <div className="flex flex-col w-full gap-2">
-                  <div className="flex mb-2">
-                    <InfoTitle text={"CareCrew Notes"} />
-                  </div>
-                  <div className="flex flex-row ">
-                    <div className="flex flex-col w-full ">
-                      <Input
-                        color={"#F3FAFD"}
-                        placeholder={"Notes"}
-                        value={people.personalNote}
-                        setValue={setPeopleKey("personalNote")}
-                        multiline
-                        rows={5}
-                      />
-                    </div>
-                  </div>
+              <div className="mb-2 flex flex-col w-full mt-7">
+                <div className="flex mb-2">
+                  <InfoTitle text={"CareCrew Notes"} />
+                </div>
+                <div className="flex flex-col w-full ">
+                  <Input
+                    color={"#F3FAFD"}
+                    placeholder={"Notes"}
+                    value={people.personalNote}
+                    setValue={setPeopleKey("personalNote")}
+                    multiline
+                    rows={5}
+                  />
                 </div>
               </div>
 
               {/* General Form */}
               {/* <div className="mb-2 flex flex-row justify-around w-full items-center mt-7">
-                <div className="flex flex-col w-full gap-2">
-                  <div className="flex mb-2">
-                    <InfoTitle text={"General"} />
-                  </div>
-                  <div className="flex flex-row ">
-                    <div className="flex flex-col w-1/2 ">
-                      <div className="flex flex-row">
-                        <DropDown
-                          placeholder={"Time Zone"}
-                          value={people.timezone}
-                          setValue={setPeopleKey("timezone")}
-                          options={timezones}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="mx-1" />
-
-                    <div className="flex flex-col w-1/2">
-                      <DropDown
-                        placeholder={"Language"}
-                        value={people.language}
-                        setValue={setPeopleKey("language")}
-                        options={languages}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div> */}
-
-              {/* Basic Nursing Information */}
-              {isEdit && !isFacilityMember && !isEditMyProfile && (
-                <div className="mb-2 flex flex-row justify-around w-full items-center mt-7 ">
                   <div className="flex flex-col w-full gap-2">
                     <div className="flex mb-2">
-                      <InfoTitle text={"Basic Information"} />
+                      <InfoTitle text={"General"} />
                     </div>
                     <div className="flex flex-row ">
                       <div className="flex flex-col w-1/2 ">
                         <div className="flex flex-row">
-                          <Input
-                            color={"#F3FAFD"}
-                            placeholder={"Driver License Number"}
-                            value={people.driverLicenseNumber}
-                            setValue={setPeopleKey("driverLicenseNumber")}
-                          />
-                        </div>
-                        <div className="my-1" />
-                        <div className="flex flex-row">
-                          <Input
-                            color={"#F3FAFD"}
-                            placeholder={"SSN/TaxID"}
-                            value={people.SSN}
-                            setValue={setPeopleKey("SSN")}
+                          <DropDown
+                            placeholder={"Time Zone"}
+                            value={people.timezone}
+                            setValue={setPeopleKey("timezone")}
+                            options={timezones}
                           />
                         </div>
                       </div>
@@ -976,23 +912,63 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
                       <div className="mx-1" />
 
                       <div className="flex flex-col w-1/2">
-                        <div className="flex flex-row">
-                          <Input
-                            color={"#F3FAFD"}
-                            placeholder={"Driver License Status"}
-                            value={people.driverLicenseState}
-                            setValue={setPeopleKey("driverLicenseState")}
-                          />
-                        </div>
-                        <div className="my-1" />
-                        <div className="flex flex-row">
-                          <DropDown
-                            placeholder={"Uniform Size"}
-                            value={people.uniformSize}
-                            setValue={setPeopleKey("uniformSize")}
-                            options={uniformSizes}
-                          />
-                        </div>
+                        <DropDown
+                          placeholder={"Language"}
+                          value={people.language}
+                          setValue={setPeopleKey("language")}
+                          options={languages}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div> */}
+
+              {/* Basic Nursing Information */}
+              {isEdit && !isFacilityMember && !isEditMyProfile && (
+                <div className="mb-2 flex flex-col w-full mt-7">
+                  <div className="flex mb-2">
+                    <InfoTitle text={"Basic Information"} />
+                  </div>
+                  <div className="flex flex-col md:flex-row ">
+                    <div className="flex flex-col w-full md:w-1/2 ">
+                      <div className="flex flex-col">
+                        <Input
+                          color={"#F3FAFD"}
+                          placeholder={"Driver License Number"}
+                          value={people.driverLicenseNumber}
+                          setValue={setPeopleKey("driverLicenseNumber")}
+                        />
+                      </div>
+                      <div className="my-1" />
+                      <div className="flex flex-col">
+                        <Input
+                          color={"#F3FAFD"}
+                          placeholder={"SSN/TaxID"}
+                          value={people.SSN}
+                          setValue={setPeopleKey("SSN")}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mx-0 md:mx-1 my-1 md:my-0" />
+
+                    <div className="flex flex-col w-full md:w-1/2">
+                      <div className="flex flex-col">
+                        <Input
+                          color={"#F3FAFD"}
+                          placeholder={"Driver License Status"}
+                          value={people.driverLicenseState}
+                          setValue={setPeopleKey("driverLicenseState")}
+                        />
+                      </div>
+                      <div className="my-1" />
+                      <div className="flex flex-col">
+                        <DropDown
+                          placeholder={"Uniform Size"}
+                          value={people.uniformSize}
+                          setValue={setPeopleKey("uniformSize")}
+                          options={uniformSizes}
+                        />
                       </div>
                     </div>
                   </div>
@@ -1002,71 +978,69 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
               {/* Other Nursing Forms */}
               {isEdit && !isFacilityMember && (
                 <>
-                  <div className="mb-2 flex flex-row justify-around w-full items-center mt-7">
-                    <div className="flex flex-col w-full gap-2">
-                      <div className="flex mb-2">
-                        <InfoTitle text={"Emergency Contact"} />
-                      </div>
-                      <div className="flex flex-row ">
-                        <div className="flex flex-col w-1/2 ">
-                          <div className="flex flex-row">
-                            <Input
-                              color={"#F3FAFD"}
-                              placeholder={"Contact Person Name"}
-                              value={people.emergencyContactName}
-                              setValue={setPeopleKey("emergencyContactName")}
-                            />
-                          </div>
-                          <div className="my-1" />
-                          <div className="flex flex-row">
-                            {/* <Input color={"#F3FAFD"}
-                        placeholder={"Relationship"}
-                        value={people.emergencyContactRelationship}
-                        setValue={setPeopleKey("emergencyContactRelationship")}
-                      /> */}
-                            <DropDown
+                  <div className="mb-2 flex flex-col w-full mt-7">
+                    <div className="flex mb-2">
+                      <InfoTitle text={"Emergency Contact"} />
+                    </div>
+                    <div className="flex flex-col md:flex-row ">
+                      <div className="flex flex-col w-full md:w-1/2 ">
+                        <div className="flex flex-col">
+                          <Input
+                            color={"#F3FAFD"}
+                            placeholder={"Contact Person Name"}
+                            value={people.emergencyContactName}
+                            setValue={setPeopleKey("emergencyContactName")}
+                          />
+                        </div>
+                        <div className="my-1" />
+                        <div className="flex flex-col">
+                          {/* <Input color={"#F3FAFD"}
                               placeholder={"Relationship"}
                               value={people.emergencyContactRelationship}
-                              setValue={setPeopleKey(
-                                "emergencyContactRelationship"
-                              )}
-                              options={relationshipTypes}
-                            />
-                          </div>
-                          <div className="my-1" />
-                          <div className="flex flex-row">
-                            <Input
-                              color={"#F3FAFD"}
-                              placeholder={"RN/LPN/CNA License Number"}
-                              value={people.licenseCode}
-                              setValue={setPeopleKey("licenseCode")}
-                            />
-                          </div>
+                              setValue={setPeopleKey("emergencyContactRelationship")}
+                            /> */}
+                          <DropDown
+                            placeholder={"Relationship"}
+                            value={people.emergencyContactRelationship}
+                            setValue={setPeopleKey(
+                              "emergencyContactRelationship"
+                            )}
+                            options={relationshipTypes}
+                          />
                         </div>
+                        <div className="my-1" />
+                        <div className="flex flex-col">
+                          <Input
+                            color={"#F3FAFD"}
+                            placeholder={"RN/LPN/CNA License Number"}
+                            value={people.licenseCode}
+                            setValue={setPeopleKey("licenseCode")}
+                          />
+                        </div>
+                      </div>
 
-                        <div className="mx-1" />
+                      <div className="mx-0 md:mx-1 my-1 md:my-0" />
 
-                        <div className="flex flex-col w-1/2">
-                          {/* {" "} */}
-                          <div className="flex flex-row">
-                            <Input
-                              color={"#F3FAFD"}
-                              placeholder={"Contact Person Phone"}
-                              value={people.emergencyContactNumber}
-                              setValue={setPeopleKey("emergencyContactNumber")}
-                            />
-                          </div>
-                          <div className="my-1" />
-                          <div className="flex flex-row">
-                            <Input
-                              placeholder={
-                                "How many miles are you willing to travel to work?"
-                              }
-                              value={people.milesToWork}
-                              setValue={setPeopleKey("milesToWork")}
-                              type="number"
-                            />
-                          </div>
+                      <div className="flex flex-col w-full md:w-1/2">
+                        {/* {" "} */}
+                        <div className="flex flex-col">
+                          <Input
+                            color={"#F3FAFD"}
+                            placeholder={"Contact Person Phone"}
+                            value={people.emergencyContactNumber}
+                            setValue={setPeopleKey("emergencyContactNumber")}
+                          />
+                        </div>
+                        <div className="my-1" />
+                        <div className="flex flex-col">
+                          <Input
+                            placeholder={
+                              "How many miles are you willing to travel to work?"
+                            }
+                            value={people.milesToWork}
+                            setValue={setPeopleKey("milesToWork")}
+                            type="number"
+                          />
                         </div>
                       </div>
                     </div>
@@ -1074,138 +1048,135 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
 
                   {!isEditMyProfile && (
                     <>
-                      <div className="mb-2 flex flex-row justify-around w-full items-center mt-7">
-                        <div className="flex flex-col w-full gap-2">
-                          <div className="flex mb-2">
-                            <InfoTitle text={"Employee Checklist"} />
-                          </div>
-                          <div className="flex flex-col gap-2">
-                            {people?.empCheckList?.map((item, index) => (
-                              <div className="flex w-full justify-between mb-1">
-                                <InfoSubTitle text={item.name} />
-                                <Toggle
-                                  isChecked={item.isBool}
-                                  onToggle={() => toggleEmpCheckList(index)}
-                                  // onToggle={setIsEmailNotifications}
-                                />
-                              </div>
-                            ))}
-                          </div>
+                      <div className="mb-2 flex flex-col w-full mt-7">
+                        <div className="flex mb-2">
+                          <InfoTitle text={"Employee Checklist"} />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                          {people?.empCheckList?.map((item, index) => (
+                            <div
+                              className="flex w-full justify-between mb-1"
+                              key={index}
+                            >
+                              <InfoSubTitle text={item.name} />
+                              <Toggle
+                                isChecked={item.isBool}
+                                onToggle={() => toggleEmpCheckList(index)}
+                                // onToggle={setIsEmailNotifications}
+                              />
+                            </div>
+                          ))}
                         </div>
                       </div>
 
-                      <div className="mb-2 flex flex-row justify-around w-full items-center  mt-7">
-                        <div className="flex flex-col w-full gap-2">
-                          <div className="flex mb-2">
-                            <InfoTitle text={"Immunization"} />
+                      <div className="mb-2 flex flex-col w-full mt-7">
+                        <div className="flex mb-2">
+                          <InfoTitle text={"Immunization"} />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                          <div className="flex w-full justify-between mb-1">
+                            <InfoSubTitle
+                              text={"Verify TB Test Results (Annual)"}
+                            />
+                            <Toggle
+                              isChecked={people?.immunization?.isVerifyTB}
+                              onToggle={() =>
+                                handleToggleChange(
+                                  "isVerifyTB",
+                                  !people?.immunization.isVerifyTB
+                                )
+                              }
+                            />
                           </div>
-                          <div className="flex flex-col gap-2">
-                            <div className="flex w-full justify-between mb-1">
-                              <InfoSubTitle
-                                text={"Verify TB Test Results (Annual)"}
-                              />
-                              <Toggle
-                                isChecked={people?.immunization?.isVerifyTB}
-                                onToggle={() =>
-                                  handleToggleChange(
-                                    "isVerifyTB",
-                                    !people?.immunization.isVerifyTB
-                                  )
-                                }
-                              />
-                            </div>
 
-                            <div className="flex flex-row ">
-                              <div className="flex flex-col text-left w-full gap-2">
-                                <InfoSubTitle text={"Start TB Test Date"} />
+                          <div className="flex flex-col md:flex-row ">
+                            <div className="flex flex-col text-left w-full md:w-1/2 gap-2">
+                              <InfoSubTitle text={"Start TB Test Date"} />
 
-                                <DatePicker
-                                  date={people?.immunization?.startTBDate}
-                                  onChange={(date) =>
-                                    handleDateChange("startTBDate", date)
-                                  }
-                                />
-                              </div>
-                              <div className="mx-1 my-1" />
-                              <div className="flex flex-col text-left w-full  gap-2">
-                                <InfoSubTitle text={"Last TB Test Date"} />
+                              <DatePicker
+                                date={people?.immunization?.startTBDate}
+                                onChange={(date) =>
+                                  handleDateChange("startTBDate", date)
+                                }
+                              />
+                            </div>
+                            <div className="mx-0 md:mx-1 my-1 md:my-0" />
+                            <div className="flex flex-col text-left w-full md:w-1/2 gap-2">
+                              <InfoSubTitle text={"Last TB Test Date"} />
 
-                                <DatePicker
-                                  date={people?.immunization?.lastTBDate}
-                                  onChange={(date) =>
-                                    handleDateChange("lastTBDate", date)
-                                  }
-                                />
-                              </div>
+                              <DatePicker
+                                date={people?.immunization?.lastTBDate}
+                                onChange={(date) =>
+                                  handleDateChange("lastTBDate", date)
+                                }
+                              />
                             </div>
-                            <div className="flex flex-col w-1/2 ">
-                              <div className="flex flex-col text-left  gap-2">
-                                <InfoSubTitle
-                                  text={"COVID-19 Immunization Date"}
-                                />
-                                <DatePicker
-                                  date={people?.immunization?.covidDate}
-                                  onChange={(date) =>
-                                    handleDateChange("covidDate", date)
-                                  }
-                                />
-                              </div>
+                          </div>
+                          <div className="flex flex-col w-full md:w-1/2 ">
+                            <div className="flex flex-col text-left gap-2">
+                              <InfoSubTitle
+                                text={"COVID-19 Immunization Date"}
+                              />
+                              <DatePicker
+                                date={people?.immunization?.covidDate}
+                                onChange={(date) =>
+                                  handleDateChange("covidDate", date)
+                                }
+                              />
                             </div>
+                          </div>
 
-                            <div className="flex w-full justify-between mb-1">
-                              <InfoSubTitle
-                                text={
-                                  "Employee Influenza Vaccine Consent - Declination Form"
-                                }
-                              />
-                              <Toggle
-                                isChecked={
-                                  people?.immunization?.infVaccineConsent
-                                }
-                                onToggle={() =>
-                                  handleToggleChange(
-                                    "infVaccineConsent",
-                                    !people?.immunization?.infVaccineConsent
-                                  )
-                                }
-                              />
-                            </div>
-                            <div className="flex w-full justify-between mb-1">
-                              <InfoSubTitle
-                                text={
-                                  "Religious Exemption Form - Employee Influenze"
-                                }
-                              />
-                              <Toggle
-                                isChecked={
-                                  people?.immunization?.religiousExemption
-                                }
-                                onToggle={() =>
-                                  handleToggleChange(
-                                    "religiousExemption",
-                                    !people?.immunization?.religiousExemption
-                                  )
-                                }
-                              />
-                            </div>
-                            <div className="flex w-full justify-between mb-1">
-                              <InfoSubTitle
-                                text={
-                                  "Medical Exemption Form - Employee Influenze"
-                                }
-                              />
-                              <Toggle
-                                isChecked={
-                                  people?.immunization?.medicalExemption
-                                }
-                                onToggle={() =>
-                                  handleToggleChange(
-                                    "medicalExemption",
-                                    !people?.immunization?.medicalExemption
-                                  )
-                                }
-                              />
-                            </div>
+                          <div className="flex w-full justify-between mb-1">
+                            <InfoSubTitle
+                              text={
+                                "Employee Influenza Vaccine Consent - Declination Form"
+                              }
+                            />
+                            <Toggle
+                              isChecked={
+                                people?.immunization?.infVaccineConsent
+                              }
+                              onToggle={() =>
+                                handleToggleChange(
+                                  "infVaccineConsent",
+                                  !people?.immunization?.infVaccineConsent
+                                )
+                              }
+                            />
+                          </div>
+                          <div className="flex w-full justify-between mb-1">
+                            <InfoSubTitle
+                              text={
+                                "Religious Exemption Form - Employee Influenze"
+                              }
+                            />
+                            <Toggle
+                              isChecked={
+                                people?.immunization?.religiousExemption
+                              }
+                              onToggle={() =>
+                                handleToggleChange(
+                                  "religiousExemption",
+                                  !people?.immunization?.religiousExemption
+                                )
+                              }
+                            />
+                          </div>
+                          <div className="flex w-full justify-between mb-1">
+                            <InfoSubTitle
+                              text={
+                                "Medical Exemption Form - Employee Influenze"
+                              }
+                            />
+                            <Toggle
+                              isChecked={people?.immunization?.medicalExemption}
+                              onToggle={() =>
+                                handleToggleChange(
+                                  "medicalExemption",
+                                  !people?.immunization?.medicalExemption
+                                )
+                              }
+                            />
                           </div>
                         </div>
                       </div>
@@ -1242,7 +1213,7 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
             </div>
 
             {!isFacilityMember && personalData?.id !== peopleObj?.id ? (
-              <div className="p-4" style={{ width: "45%" }}>
+              <div className="p-4 w-full md:w-5/12">
                 {/* <PermissionsTab /> */}
                 <div className="flex flex-col items-center w-full ">
                   <div className="w-full">
@@ -1253,7 +1224,7 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
                     <div className="flex flex-wrap">
                       {permissions?.access?.map((item, index) => (
                         <div
-                          className="flex justify-between mb-2 w-1/2"
+                          className="flex justify-between mb-2 w-full md:w-1/2"
                           key={index}
                         >
                           <InfoSubTitle text={item?.name} />
@@ -1276,7 +1247,7 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
                     <div className="flex flex-wrap">
                       {permissions?.permissions?.map((item, index) => (
                         <div
-                          className="flex justify-between mb-2 w-1/2"
+                          className="flex justify-between mb-2 w-full md:w-1/2"
                           key={index}
                         >
                           <InfoSubTitle text={item?.name} />
@@ -1293,30 +1264,30 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
 
                   {/* TODO: Remove as this is disabled because can't enforce this */}
                   {/* <>
-                  <div className="my-2" />
-                  <div className="w-full">
-                    <div className="flex">
-                      <InfoTitle text={"Notifications"} />
-                    </div>
                     <div className="my-2" />
-                    <div className="flex flex-wrap">
-                      {permissions?.notifications?.map((item, index) => (
-                        <div
-                          className="flex justify-between mb-2 w-1/2"
-                          key={index}
-                        >
-                          <InfoSubTitle text={item?.name} />
-                          <Toggle
-                            isChecked={item.isSelected}
-                            onToggle={() =>
-                              togglePermission("notifications", index)
-                            }
-                          />
-                        </div>
-                      ))}
+                    <div className="w-full">
+                      <div className="flex">
+                        <InfoTitle text={"Notifications"} />
+                      </div>
+                      <div className="my-2" />
+                      <div className="flex flex-wrap">
+                        {permissions?.notifications?.map((item, index) => (
+                          <div
+                            className="flex justify-between mb-2 w-1/2"
+                            key={index}
+                          >
+                            <InfoSubTitle text={item?.name} />
+                            <Toggle
+                              isChecked={item.isSelected}
+                              onToggle={() =>
+                                togglePermission("notifications", index)
+                              }
+                            />
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                </> */}
+                  </> */}
 
                   <div className="my-2" />
 
@@ -1328,10 +1299,10 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
                     <div className="flex flex-col">
                       {permissions?.other?.map((item, index) => (
                         <div
-                          className="flex justify-between mb-2 w-full"
+                          className="flex flex-col md:flex-row justify-between mb-2 w-full"
                           key={index}
                         >
-                          <div className="flex flex-row w-2/3 justify-between items-center">
+                          <div className="flex flex-row w-full md:w-2/3 justify-between items-center">
                             <div className="">
                               <InfoSubTitle text={item?.name} />
                             </div>
@@ -1345,7 +1316,7 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
                             </div>
                           </div>
                           {item.hasOwnProperty("value") && (
-                            <div className="flex-1">
+                            <div className="flex-1 mt-2 md:mt-0">
                               {/* <DropDown /> */}
                               <DropDown
                                 placeholder={"Duration"}

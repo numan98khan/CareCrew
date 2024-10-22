@@ -118,9 +118,6 @@ const InfoCard = ({
       //   onClick={onCardClick}
       // style={gradientStyle}
       className="flex flex-col justify-between rounded-lg w-full bg-white p-2"
-      //   className={`flex flex-col justify-between px-4 shadow-lg rounded-lg w-full py-2 ${
-      //     gradient ? "bg-gradient-primary" : "bg-PRIMARY_COLOR"
-      //   }`}
     >
       {isCreateReminder ? (
         <CreateReminderModal open={open} onClose={onClose} />

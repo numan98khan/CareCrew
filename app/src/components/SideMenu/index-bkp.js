@@ -24,9 +24,10 @@ const SideMenu = ({ items }) => {
 
   return (
     <div
-      className="w-48 bg-PRIMARY_COLOR"
+      className="w-48 "
       style={{
         height: "100%",
+        backgroundColor: themeStyles?.PRIMARY_COLOR,
       }}
     >
       <div className="flex flex-col justify-start items-start ">
