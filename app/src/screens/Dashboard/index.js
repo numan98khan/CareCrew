@@ -73,42 +73,42 @@ const getSummaryData = (type) => {
   const baseData = [
     {
       points: 54,
-      label: "Total Daily Shifts",
+      label: "Total Shifts",
       gradient: false,
       icon: null,
       datakey: "daily",
     },
     {
       points: 0,
-      label: "Open Shifts",
+      label: "Open",
       gradient: true,
       icon: <OpenIcon size={0.6} />,
       datakey: "open",
     },
     {
       points: 0,
-      label: "Confirmed Shifts",
+      label: "Confirmed",
       gradient: true,
       icon: <ConfirmedIcon size={0.6} />,
       datakey: "confirmed",
     },
     {
       points: 0,
-      label: "Shifts in Progress",
+      label: "In Progress",
       gradient: true,
       icon: <InprogressIcon size={0.6} />,
       datakey: "inprogress",
     },
     {
       points: 0,
-      label: "Completed Shifts",
+      label: "Completed",
       gradient: true,
       icon: <CompletedIcon size={0.6} />,
       datakey: "completed",
     },
     {
       points: 0,
-      label: "Call Off Shifts",
+      label: "Call Offs",
       gradient: true,
       icon: <CallOffIcon size={0.6} />,
       datakey: "calloffs",
@@ -630,6 +630,23 @@ const Dashboard = () => {
                   <PercentageCard title={"No-show Rate"} percent={10} />
                 </div>
               </div>
+
+              <InfoCard
+                title={"CareCrew Bulletin"}
+                setSelectedTab={setSelectedTab}
+                tabToSelect={"all_news"}
+                dataComponents={news?.map((item, index) => (
+                  <NewsCard
+                    key={index}
+                    limitText={true}
+                    index={index}
+                    headline={item.headline}
+                    news={draftRichToText(item.news)}
+                    author={item?.author}
+                    datetime={displayDatetime(item.createdAt)}
+                  />
+                ))}
+              />
 
               <InfoCard
                 navbar={

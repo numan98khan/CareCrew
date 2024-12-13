@@ -422,7 +422,103 @@ export const GaugeChart = ({ coverageEfficiency }) => {
   );
 };
 
+// import React from "react";
+// import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+
 export const PercentageCard = ({ title, percent }) => {
+  const data = [
+    { name: "Completed", value: percent },
+    { name: "Remaining", value: 100 - percent },
+  ];
+
+  const COLORS = ["#4CAF50", "#F1F1F1"]; // Customizable colors for Completed and Remaining
+
+  // Custom label component to render the percentage in the center
+  const renderCustomLabel = ({ cx, cy }) => {
+    const percentString = `${percent}`;
+    const digitCount = percentString.length;
+    let dxForPercent = 0;
+    let dxForNumber = 0;
+
+    // Adjust the position dynamically based on the number of digits
+    if (digitCount === 1) {
+      dxForPercent = +5;
+      dxForNumber = -5;
+    } else if (digitCount === 2) {
+      dxForPercent = +10;
+      dxForNumber = -6;
+    } else {
+      dxForPercent = +14;
+      dxForNumber = -6;
+    }
+
+    return (
+      <>
+        <text
+          x={cx + dxForNumber + 2}
+          y={cy}
+          textAnchor="middle"
+          dominantBaseline="central"
+          fontSize={12}
+          fill="#333"
+          fontWeight="bold"
+        >
+          {percentString}
+        </text>
+        <text
+          x={cx + dxForPercent - 2}
+          y={cy + 2}
+          textAnchor="middle"
+          dominantBaseline="central"
+          fontSize={8}
+          fill="#333"
+        >
+          %
+        </text>
+      </>
+    );
+  };
+
+  return (
+    <div className="percentage-card flex flex-row justify-between items-center shadow-lg rounded-lg w-full p-4 bg-gradient-to-r from-blue-50 via-white to-blue-50 hover:shadow-xl transition-shadow duration-300">
+      {/* Text Section */}
+      <div className="text-left flex flex-col justify-center w-2/3">
+        <label className="text-lg font-semibold text-gray-800">{title}</label>
+        <p className="text-sm text-gray-500">Progress Overview</p>
+      </div>
+
+      {/* Chart Section */}
+      <div className="w-1/3">
+        <ResponsiveContainer width="100%" height={65}>
+          <PieChart>
+            <Pie
+              data={data}
+              cx="50%"
+              cy="50%"
+              startAngle={90}
+              endAngle={-270}
+              innerRadius="60%"
+              outerRadius="80%"
+              paddingAngle={0}
+              dataKey="value"
+              label={renderCustomLabel}
+              labelLine={false}
+            >
+              {data.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+};
+
+export const PercentageCard_OLD = ({ title, percent }) => {
   const data = [
     { name: "Completed", value: percent },
     { name: "Remaining", value: 100 - percent },

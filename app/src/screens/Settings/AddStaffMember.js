@@ -336,10 +336,7 @@ function AddStaffMember({ isEdit, peopleObj, goBackHandler, refetchPeople }) {
           </div>
         </div>
       </div>
-      <div
-        className="h-full bg-white relative flex-grow mt-2 p-3 rounded-lg item-start justify-between "
-        // className="h-full bg-black relative flex-grow mt-2 p-3 rounded-lg item-start justify-between "
-      >
+      <div className="h-full bg-white relative flex-grow mt-2 p-3 rounded-lg item-start justify-between ">
         <div className="flex flex-row ">
           <div className="flex flex-col items-center" style={{ width: "55%" }}>
             <div className="flex flex-row justify-around w-full ">

@@ -179,7 +179,6 @@ export default function UpcomingShiftItem({
         index % 2 !== 0 ? "bg-white" : "bg-PRIMARY_NEUTRAL_COLOR"
       }`}
       onClick={onClick}
-      //   className="flex w-full items-center p-2 bg-black"
     >
       <div className="flex-grow flex justify-between items-center">
         <div className="flex ">

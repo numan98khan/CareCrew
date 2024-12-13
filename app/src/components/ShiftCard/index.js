@@ -174,11 +174,6 @@ const ShiftCard = ({
                 </div>
               </div>
             </div>
-
-            {/* <div className="flex h-full flex-col justify-between items-center bg-black">
-              <div className="flex h-full justify-end">
-              </div>
-            </div> */}
           </div>
 
           {/* {dataComponents} */}

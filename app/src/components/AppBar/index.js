@@ -217,134 +217,137 @@ const AppBar = ({ children, type, toggleMenu }) => {
   };
 
   return (
-    <div
-      className="flex top-0 p-2 items-center justify-between px-4 shadow-lg bg-white"
-      // className="flex top-0 p-2 items-center justify-between px-4 shadow-lg bg-white"
-      style={{ height: "5vh" }}
-    >
-      {/* {children}
-       */}
-
-      <div className="items-center w-full  justify-between flex">
-        <button className="lg:hidden mr-2" onClick={toggleMenu}>
-          <MenuIconComponent size={8} />
-        </button>
-        <CareCrewLogo size={2} className="ml-2" />
-        {/* <Logo size={5} className="ml-2" /> */}
-
-        {isDebug && (
-          <div className="text-xs font-bold text-PRIMARY_COLOR flex flex-row">
-            <div className="mr-4 flex flex-col">
-              <span>NY Time: {currentTime}</span>
-              <span>CH Time: {currentTimeCH}</span>
-            </div>
-            <div className="flex flex-col ">
-              <span>
-                Storage Used: {usedSpace} / {maxLocalStorageSpace} MB
-              </span>
-              <button
-                onClick={clearCache}
-                className={`mr-2 ${ScaleHover} bg-SECONDARY_COLOR rounded-sm`}
-              >
-                Clear Cache
-              </button>
-            </div>
-          </div>
-        )}
-
-        <div className="flex items-center">
-          <div
-            ref={notificationButtonRef}
-            className="relative rounded-full p-2 transition duration-300 ease-in-out hover:shadow-lg dark:hover:shadow-black/30"
-          >
-            <NotificationIcon
-              size={0.8}
-              onClick={openNotificationModal}
-              className="rounded-full"
-            />
-
-            {newNotifications.length > 0 && (
-              <span
-                className={`bg-SECONDARY_COLOR badge ${
-                  isBadgeAnimating ? "animate-bounce" : ""
-                }`}
-              >
-                {newNotifications.length}
-              </span>
-            )}
-          </div>
-
-          <div
-            className="hidden lg:block    rounded-full h-full items-center transition duration-300 ease-in-out hover:shadow-lg dark:hover:shadow-black/30"
-            style={{
-              // width: "30px",
-              // height: "30px",
-              padding: 1,
-              // backgroundColor: theme.PRIMARY_COLOR,
-            }}
-            onClick={openModal}
-            ref={buttonRef}
-          >
-            {/* <MenuIcon className="mr-3" />
-             */}
-            <label>{personalData?.email}</label>
-          </div>
-        </div>
-      </div>
-
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        // closeTimeoutMS={200} // add this line for fade-out animation
-        contentLabel="User Options Modal"
-        // className="Modal" // add this line to apply CSS classes
-        // overlayClassName="Overlay" // add this line to apply CSS classes
-        style={{
-          overlay: {
-            backgroundColor: "rgba(0, 0, 0, 0.0)",
-            zIndex: 1000, // this should be higher than AppBar's z-index
-          },
-          content: {
-            position: "fixed", // This positions the modal relative to the viewport
-            top: position.top,
-            right: position.right,
-            bottom: "auto",
-            left: "auto",
-            border: 10,
-            boxShadow: "0px 4px 16px 0px rgba(196, 196, 196, 0.70)",
-            display: "flex",
-            flexDirection: "column", // Add this line
-            // backgroundColor: "#000",
-            padding: 14,
-          },
-        }}
+    <div>
+      {/* <div className="h-12 bg-black"> </div> */}
+      <div
+        className="flex top-0 p-2 items-center justify-between px-4 shadow-lg bg-white"
+        // className="flex top-0 p-2 items-center justify-between px-4 shadow-lg bg-white"
+        style={{ height: "5vh" }}
       >
-        {/* <div className="flex" style={{ flexDirection: "column" }}>
-          {" "} */}
-        <NavLink to={"/myProfile"}>
-          <div className="flex items-center ">
-            <PoepleIcon color={theme.PRIMARY_COLOR} size={8} />
-            <label className="ml-1 text-sm">
-              {/* {user.challengeParam.userAttributes.email} */}
-              {user?.attributes?.email}
-            </label>
+        {/* {children}
+         */}
+
+        <div className="items-center w-full  justify-between flex">
+          <button className="lg:hidden mr-2" onClick={toggleMenu}>
+            <MenuIconComponent size={8} />
+          </button>
+          <CareCrewLogo size={9} className="ml-2 mb-[5px]" />
+          {/* <Logo size={5} className="ml-2" /> */}
+
+          {isDebug && (
+            <div className="text-xs font-bold text-PRIMARY_COLOR flex flex-row">
+              <div className="mr-4 flex flex-col">
+                <span>NY Time: {currentTime}</span>
+                <span>CH Time: {currentTimeCH}</span>
+              </div>
+              <div className="flex flex-col ">
+                <span>
+                  Storage Used: {usedSpace} / {maxLocalStorageSpace} MB
+                </span>
+                <button
+                  onClick={clearCache}
+                  className={`mr-2 ${ScaleHover} bg-SECONDARY_COLOR rounded-sm`}
+                >
+                  Clear Cache
+                </button>
+              </div>
+            </div>
+          )}
+
+          <div className="flex items-center">
+            <div
+              ref={notificationButtonRef}
+              className="relative rounded-full p-2 transition duration-300 ease-in-out hover:shadow-lg dark:hover:shadow-black/30"
+            >
+              <NotificationIcon
+                size={0.8}
+                onClick={openNotificationModal}
+                className="rounded-full"
+              />
+
+              {newNotifications.length > 0 && (
+                <span
+                  className={`bg-SECONDARY_COLOR badge ${
+                    isBadgeAnimating ? "animate-bounce" : ""
+                  }`}
+                >
+                  {newNotifications.length}
+                </span>
+              )}
+            </div>
+
+            <div
+              className="hidden lg:block    rounded-full h-full items-center transition duration-300 ease-in-out hover:shadow-lg dark:hover:shadow-black/30"
+              style={{
+                // width: "30px",
+                // height: "30px",
+                padding: 1,
+                // backgroundColor: theme.PRIMARY_COLOR,
+              }}
+              onClick={openModal}
+              ref={buttonRef}
+            >
+              {/* <MenuIcon className="mr-3" />
+               */}
+              <label>{personalData?.email}</label>
+            </div>
           </div>
-        </NavLink>
-
-        <div className="my-2" />
-        <div className="flex items-center" onClick={handleSignOut}>
-          <LogoutIcon color={theme.PRIMARY_COLOR} size={8} />
-          <label className="ml-1 text-sm">Logout</label>
         </div>
-        {/* </div> */}
-      </Modal>
 
-      <NotificationModal
-        open={notificationModalIsOpen}
-        onClose={closeNotificationModal}
-        position={notificationPosition}
-        notifications={filteredNotifications}
-      />
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          // closeTimeoutMS={200} // add this line for fade-out animation
+          contentLabel="User Options Modal"
+          // className="Modal" // add this line to apply CSS classes
+          // overlayClassName="Overlay" // add this line to apply CSS classes
+          style={{
+            overlay: {
+              backgroundColor: "rgba(0, 0, 0, 0.0)",
+              zIndex: 1000, // this should be higher than AppBar's z-index
+            },
+            content: {
+              position: "fixed", // This positions the modal relative to the viewport
+              top: position.top,
+              right: position.right,
+              bottom: "auto",
+              left: "auto",
+              border: 10,
+              boxShadow: "0px 4px 16px 0px rgba(196, 196, 196, 0.70)",
+              display: "flex",
+              flexDirection: "column", // Add this line
+              // backgroundColor: "#000",
+              padding: 14,
+            },
+          }}
+        >
+          {/* <div className="flex" style={{ flexDirection: "column" }}>
+          {" "} */}
+          <NavLink to={"/myProfile"}>
+            <div className="flex items-center ">
+              <PoepleIcon color={theme.PRIMARY_COLOR} size={8} />
+              <label className="ml-1 text-sm">
+                {/* {user.challengeParam.userAttributes.email} */}
+                {user?.attributes?.email}
+              </label>
+            </div>
+          </NavLink>
+
+          <div className="my-2" />
+          <div className="flex items-center" onClick={handleSignOut}>
+            <LogoutIcon color={theme.PRIMARY_COLOR} size={8} />
+            <label className="ml-1 text-sm">Logout</label>
+          </div>
+          {/* </div> */}
+        </Modal>
+
+        <NotificationModal
+          open={notificationModalIsOpen}
+          onClose={closeNotificationModal}
+          position={notificationPosition}
+          notifications={filteredNotifications}
+        />
+      </div>
     </div>
   );
 };

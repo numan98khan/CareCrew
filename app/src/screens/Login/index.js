@@ -334,7 +334,7 @@ const LoginLayout = ({ children }) => (
   <div className="flex flex-col justify-between w-full h-screen">
     <div className="h-full">
       <div className="flex justify-center md:justify-start items-center absolute top-5 left-0 right-0 md:left-5">
-        <Logo size={3} className="mb-14" />
+        <Logo size={12} className="mb-14" />
       </div>
       <div className="flex justify-center items-center w-full bg-gray-50 h-full">
         <div className="items-center border border-gray-200 rounded-lg shadow w-full md:w-2/3 lg:w-1/3 ">

@@ -23,7 +23,6 @@ export default function whosOn({
       className={`flex w-full items-center p-2 ${MainHover} ${
         index % 2 !== 0 ? "bg-white" : "bg-PRIMARY_NEUTRAL_COLOR"
       }`}
-      //   className="flex w-full items-center p-2 bg-black"
     >
       <div className=" flex-1 flex justify-start items-center">
         <Avatar
