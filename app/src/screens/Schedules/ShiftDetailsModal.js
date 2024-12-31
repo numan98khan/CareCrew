@@ -302,8 +302,10 @@ const UnassignModal = ({
         content: {
           position: "relative",
           borderRadius: 20,
-          width: "300px",
+          width: "90%",
+          maxWidth: "400px",
           padding: "0px",
+          margin: "auto",
         },
       }}
     >
@@ -436,29 +438,6 @@ const LateArrivalModal = ({
 
       // END.
 
-      // START: Send notification on all platforms to instacare
-
-      // INTERNAL
-      // inAppNotificationsToFacilityPeople(
-      //   selectedShift?.facilityID,
-      //   FACILITY_CANCELLATION,
-      //   "Shift was cancelled",
-      //   formedMessage,
-      //   createNotificationQuery
-      // );
-
-      // EXTERNAL
-      // externalNotificationToInstacare(formedMessage, true, true); // Instacare
-      // sendNotificationsToFacilityPeople(
-      //   facilityObj?.id,
-      //   formedMessage,
-      //   true,
-      //   selectedOption === "Facility Cancellation" ? false : true
-      // ); // Facility
-      // externalNotificationToPeople(peopleObj?.id, formedMessage, true, true); // Employee
-
-      // END.
-
       SuccessToast('Shift "Arrived Late" successfully');
     } catch (error) {
       ErrorToast('Error "Arrived Late" shift:', error);
@@ -481,8 +460,10 @@ const LateArrivalModal = ({
         content: {
           position: "relative",
           borderRadius: 20,
-          width: "300px",
+          width: "90%",
+          maxWidth: "400px",
           padding: "0px",
+          margin: "auto",
         },
       }}
     >
@@ -948,11 +929,15 @@ const ShiftDetailsModal = ({
             justifyContent: "center",
           },
           content: {
-            position: "relative",
+            // position: "relative",
             borderRadius: 20,
             // boxShadow: "0px 4px 16px 0px rgba(196, 196, 196, 0.70)",
-            width: "300px",
+            width: "80%",
+            // maxHeight: "30%",
+            // height: "auto",
+            maxWidth: "400px",
             padding: "0px", // This line will remove the padding
+            margin: "auto",
           },
         }}
       >
@@ -1126,7 +1111,7 @@ const ShiftDetailsModal = ({
           !selectedTimecard.isCallOff &&
           !isCompleted ? (
             <div className="flex flex-col gap-1 p-2 w-full">
-              <div className="flex flex-row h-full gap-1 w-full">
+              <div className="flex flex-col md:flex-row h-full gap-1 w-full">
                 {!(type === FACILITY && selectedShift.cancellationGuarantee) &&
                   !(type === FACILITY && isShiftInPast) && (
                     <Button
@@ -1165,7 +1150,7 @@ const ShiftDetailsModal = ({
           ) : !selectedTimecard &&
             type !== EMPLOYEE &&
             !(type === FACILITY && isShiftInPast) ? (
-            <div className="flex flex-row h-full p-2">
+            <div className="flex flex-row md:flex-row  h-full p-2">
               <Button
                 disabled={
                   parseInt(selectedShift.numOfPositions) === 0 ? true : false
@@ -1176,7 +1161,7 @@ const ShiftDetailsModal = ({
                   setMode(MODES.ADD_MEMBERS);
                 }}
               />
-              <div className="mx-1" />
+              <div className="mx-1 my-1 md:my-0" />
               <Button
                 children={"CLOSE"}
                 color={themeStyles.GRAY}

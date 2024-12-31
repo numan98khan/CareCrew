@@ -61,17 +61,12 @@ const ListItemCard = ({
       {/* Absolutely-positioned checkbox in top-right if onCheck is provided */}
       {typeof onCheck === "function" && (
         <div className="absolute top-3 right-3">
-          <CheckBox
-            value={isChecked}
-            onChange={(e) => {
-              e.stopPropagation(); // Prevent event from reaching parent
-              onCheck(e);
-            }}
-          />
+          <CheckBox value={isChecked} onChange={onCheck} />
         </div>
       )}
 
       {/* Avatar + Title + Subtitle */}
+
       <div className="flex items-start mb-2">
         {avatarUrl ? (
           <img

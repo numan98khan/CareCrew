@@ -4,10 +4,7 @@ return (
       <Loading />
     ) : (
       <div className="flex flex-row w-full h-screen">
-        <div
-          className="flex-1 flex justify-center items-center"
-          // className="flex-1 bg-black flex justify-center items-center"
-        >
+        <div className="flex-1 flex justify-center items-center">
           <div>
             <Logo className="mb-14" />
             {isSettingNewPassword ? (

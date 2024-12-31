@@ -1,0 +1,4 @@
+app/src/*.zip
+app/amplify/*
+app/src/assets/*
+app/src/ui-components/*
