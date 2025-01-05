@@ -42,7 +42,7 @@ const AuthNav = () => {
   // const permissions = STAFF_PERMISSIONS;
 
   const filteredMenuItems = menuItems.filter((item) => {
-    const allPermissions = [...permissions.access];
+    const allPermissions = [...permissions.access, "LLM"];
     const permission = allPermissions?.find(
       (permission) => permission.name === item.name
     );

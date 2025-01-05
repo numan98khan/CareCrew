@@ -18,6 +18,9 @@ import TimecardIcon from "../assets/icons/menuIcons/timecard";
 import SupportIcon from "../assets/icons/menuIcons/support";
 import SettingsIcon from "../assets/icons/menuIcons/settings";
 import ReportsIcon from "../assets/icons/menuIcons/reports";
+
+import LLMIcon from "../assets/icons/menuIcons/llm";
+
 import People from "../screens/People";
 import AddShift from "../screens/AddShift";
 import AddFacility from "../screens/AddFacility";
@@ -100,12 +103,12 @@ const menuItems = [
     path: "/timecard",
     element: <Timecards />,
   },
-  // {
-  //   name: "Reports",
-  //   icon: ReportsIcon,
-  //   path: "/reports",
-  //   element: <Reports />,
-  // },
+  {
+    name: "Reports",
+    icon: LLMIcon,
+    path: "/llm",
+    element: <Reports />,
+  },
   {
     name: "Total Billing",
     icon: ReportsIcon,
