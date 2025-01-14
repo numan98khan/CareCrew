@@ -53,7 +53,7 @@ function Avatar({
   } ${isSquared ? "rounded" : "rounded-full"} ${
     isBordered ? `border ${borderColor}` : ""
   } flex items-center justify-center text-white ${
-    imgUrl ? null : `bg-[${color}]`
+    imgUrl ? null : `bg-${color}`
   }`;
 
   return (
