@@ -71,7 +71,8 @@ const ShiftCard = ({
               : shift.__typename === "Timecard" &&
                 shift?.clockInTime &&
                 shift?.clockOutTime
-              ? "bg-[#7EE69B]"
+              ? // ? "bg-[#7EE69B]"
+                "bg-[#DCF6E9]"
               : shift.__typename === "Timecard"
               ? "bg-[#DCF6E9]"
               : index % 2 !== 0
