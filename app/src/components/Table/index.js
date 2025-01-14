@@ -292,7 +292,7 @@ const GridView = ({
                           />
                         </div>
                       )}
-                      {deleteAction && (
+                      {deleteAction && type == ADMIN && (
                         <div
                           className={"flex p-2 " + ScaleHover}
                           onClick={(e) => {

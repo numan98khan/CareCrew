@@ -53,9 +53,9 @@ const FacilitiesNav = () => {
     ) {
       return false;
     }
-    if (permission?.name === "People") {
-      return false;
-    }
+    // if (permission?.name === "People") {
+    //   return false;
+    // }
     return permission?.isSelected;
   });
 
