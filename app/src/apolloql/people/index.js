@@ -1,5 +1,7 @@
 import { gql, useQuery, useMutation } from "@apollo/client";
-import { listPeople, getPeople } from "../../graphql/queries";
+// import { listPeople, getPeople } from "../../graphql/queries";
+
+import { getPeople } from "../../graphql/queries";
 import {
   createPeople,
   deletePeople,
@@ -7,6 +9,72 @@ import {
 } from "../../graphql/mutations";
 
 import { ErrorToast, SuccessToast } from "../../services/micro";
+
+const listPeople = /* GraphQL */ `
+  query ListPeople(
+    $filter: ModelPeopleFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPeople(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        firstName
+        lastName
+        PeopleFacility {
+          items {
+            id
+            facilityId
+          }
+          nextToken
+        }
+        phoneNumber
+        documents {
+          name
+          key
+          __typename
+        }
+        country
+        city
+        state
+        zip
+        timezone
+        language
+        isEmailNotifications
+        isTextNotification
+        effectiveStartDate
+        driverLicenseNumber
+        driverLicenseState
+        SSN
+        uniformSize
+        isCompleteDrugScreening
+        emergencyContactName
+        emergencyContactNumber
+        emergencyContactRelationship
+        milesToWork
+        licenseCode
+        profilePicture
+        role
+        status
+        payrollCycle
+        email
+        points
+        rating
+        type
+        availability
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        __typename
+      }
+      nextToken
+      startedAt
+      __typename
+    }
+  }
+`;
 
 // createPeople mutation hook
 export const useCreatePeople = () => {
@@ -246,6 +314,13 @@ export const useListAvailablePeople = ({
           id
           firstName
           lastName
+          PeopleFacility {
+            items {
+              id
+              facilityName
+            }
+            nextToken
+          }
           phoneNumber
           documents {
             name

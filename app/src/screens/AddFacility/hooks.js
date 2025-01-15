@@ -9,7 +9,10 @@ import {
   createBulkUsers,
   deleteBulkUsers,
 } from "../../services/bulkUserCreation";
-import { FACILITY_PERMISSIONS } from "../../constants/permissions";
+import {
+  EMPLOYEE_PERMISSIONS,
+  FACILITY_PERMISSIONS,
+} from "../../constants/permissions";
 import {
   useCreateFacility,
   useUpdateFacility,
@@ -25,7 +28,7 @@ import {
   createPeopleFacility,
   deletePeopleFacility,
 } from "../../graphql/mutations";
-import { FACILITY } from "../../constants/userTypes";
+import { EMPLOYEE, FACILITY } from "../../constants/userTypes";
 import { getPeople, listPeople } from "../../graphql/queries";
 import { useDeletePeople, useUpdatePeople } from "../../apolloql/people";
 
@@ -538,5 +541,61 @@ export const useFacilityOperations = () => {
     }
   }
 
-  return { createUsers, editFacility };
+  const createAdhocUsers = async (users, facilityId) => {
+    try {
+      const userCreationPromises = [];
+
+      for (const user of users) {
+        const userObj = {
+          Username: user.email,
+          Password: "Rentto@123",
+          Email: user.email,
+        };
+
+        const userCreation = (async () => {
+          const { result, parsedBody } = await createBulkUsers(userObj);
+          if (result?.statusCode === 400) {
+            throw new Error(`${userObj?.Email}: ` + parsedBody?.error?.message);
+          }
+
+          const ID = parsedBody?.user?.User?.Attributes?.find(
+            (attribute) => attribute.Name === "sub"
+          ).Value;
+
+          const permissionsString = JSON.stringify(EMPLOYEE_PERMISSIONS);
+          const updatedPeople = {
+            email: userObj?.Email,
+            firstName: user?.firstName,
+            lastName: user?.lastName,
+            type: EMPLOYEE,
+            permissions: permissionsString,
+            id: ID,
+          };
+
+          const result_createPeople = await API.graphql(
+            graphqlOperation(createPeople, { input: updatedPeople })
+          );
+
+          await API.graphql(
+            graphqlOperation(createPeopleFacility, {
+              input: {
+                facilityId: facilityId,
+                peopleId: result_createPeople?.data?.createPeople?.id,
+              },
+            })
+          );
+        })();
+
+        userCreationPromises.push(userCreation);
+      }
+
+      await Promise.all(userCreationPromises);
+      SuccessToast("Adhoc users created successfully");
+    } catch (err) {
+      ErrorToast("Error creating adhoc users: " + err);
+      console.log(err);
+    }
+  };
+
+  return { createUsers, editFacility, createAdhocUsers };
 };

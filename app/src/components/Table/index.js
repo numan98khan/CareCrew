@@ -253,8 +253,12 @@ const GridView = ({
                 key={index}
                 avatarUrl={!disableAvatar ? item?.profilePicture : null} // Pass avatar URL
                 title={`${item.firstName} ${item.lastName}`}
-                subtitle={`ID: ${item.surrogateID} | Status: ${item.status}`}
-                secondaryText={`Role: ${item.role} | Points: ${item.points} | ${item.email}`}
+                subtitle={`ID: ${item.surrogateID} | Status: ${
+                  item.status || "Unknown"
+                }`}
+                secondaryText={`Role: ${item.role || "N/A"} | Points: ${
+                  item.points || "0"
+                } | ${item.email}`}
                 onClick={() => setSelectedPeople(item)}
                 actions={
                   !disableEdit || deleteAction || adminHoldAction ? (

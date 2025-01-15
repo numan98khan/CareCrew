@@ -32,7 +32,10 @@ const EmployeeNav = () => {
     const permission = allPermissions.find(
       (permission) => permission.name === item.name
     );
-    if (permission?.name === "My Schedule") {
+    // if (permission?.name === "My Schedule") {
+    //   return false;
+    // }
+    if (permission?.name === "Facilities") {
       return false;
     }
     return permission?.isSelected;
