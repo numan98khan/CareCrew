@@ -3,6 +3,10 @@ export const countries = [
     value: "US",
     label: "United States",
   },
+  {
+    value: "SA",
+    label: "Saudi Arabia",
+  },
 ];
 
 // export const countries = [

@@ -1,5 +1,4 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
-
 import { NavLink, useLocation } from "react-router-dom";
 import themeStyles from "../../styles/theme.styles";
 
@@ -101,7 +100,7 @@ const Messaging = () => {
   };
 
   return (
-    <div className="flex flex-col h-full w-full">
+    <div className="flex flex-col h-full w-full p-4 bg-gray-100">
       <input
         type="file"
         ref={fileInputRef}
@@ -110,7 +109,7 @@ const Messaging = () => {
       />
 
       {loading ? (
-        <div className="h-40 w-full flex justify-center items-center">
+        <div className="h-screen flex justify-center items-center">
           <PuffLoader
             color={themeStyles.PRIMARY_LIGHT_COLOR}
             loading={loading}
@@ -119,7 +118,7 @@ const Messaging = () => {
           />
         </div>
       ) : (
-        <div className="flex flex-col h-full w-full md:flex-row">
+        <div className="flex flex-col md:flex-row h-full gap-4">
           <ComposeModal
             isOpen={isComposeModalOpen}
             reqClose={() => setComposeModalOpen(false)}
@@ -129,60 +128,75 @@ const Messaging = () => {
             chatroomID={chatroom?.id}
           />
 
-          {/* Left panel - Chatrooms List */}
-          <div
-            className="w-full md:w-4/12 bg-white p-3 rounded-lg overflow-y-auto flex-grow"
-            style={{ height: "40vh", md: "85vh" }}
-          >
-            {chatrooms
-              ?.sort(
-                (a, b) =>
-                  new Date(b.latestMessageTime) - new Date(a.latestMessageTime)
-              )
-              ?.map((item, index) => {
-                const chatPeople = item.People?.items.filter(
-                  (obj) => obj.people.id !== user?.attributes?.sub
-                );
-                return (
-                  <div key={index} onClick={() => handleSelectChatroom(item)}>
-                    <MessageHead
-                      profilePicture={item?.profilePicture}
-                      people={chatPeople}
-                      latestMessage={item?.latestMessage}
-                      latestTime={item?.latestMessageTime}
-                      unreadMessages={"3"}
-                      isSelected={item?.id === chatroom?.id}
-                    />
-                  </div>
-                );
-              })}
+          <div className="flex flex-col w-full md:w-4/12 bg-white p-4 rounded-lg overflow-y-auto shadow">
+            {/* <PageHeader text="Messages" /> */}
+
+            {/* Header with Compose Button */}
+            <div className="flex items-center justify-between mb-4">
+              <PageHeader text="Messages" />
+              <div className="">
+                <IconButton
+                  color={themeStyles.SECONDARY_COLOR}
+                  text={"Compose"}
+                  onClick={() => setComposeModalOpen(true)}
+                  className="ml-2"
+                />
+              </div>
+            </div>
+
+            <div className="mt-2">
+              {chatrooms
+                ?.sort(
+                  (a, b) =>
+                    new Date(b.latestMessageTime) -
+                    new Date(a.latestMessageTime)
+                )
+                ?.map((item, index) => {
+                  const chatPeople = item.People?.items.filter(
+                    (obj) => obj.people.id !== user?.attributes?.sub
+                  );
+                  return (
+                    <div
+                      key={index}
+                      onClick={() => handleSelectChatroom(item)}
+                      // className={`p-3 rounded-lg cursor-pointer ${
+                      //   item?.id === chatroom?.id ? "bg-gray-200" : ""
+                      // }`}
+
+                      className={`rounded-lg cursor-pointer ${
+                        item?.id === chatroom?.id ? "bg-gray-200" : ""
+                      }`}
+                    >
+                      <MessageHead
+                        profilePicture={item?.profilePicture}
+                        people={chatPeople}
+                        latestMessage={item?.latestMessage}
+                        latestTime={item?.latestMessageTime}
+                        unreadMessages={"3"}
+                        isSelected={item?.id === chatroom?.id}
+                      />
+                    </div>
+                  );
+                })}
+            </div>
           </div>
 
-          <div className="mx-1" />
-
-          {/* Right panel - Chatroom Messages */}
-          <div className="flex flex-col w-full md:w-9/12 h-[40vh] md:h-[85vh] bg-white rounded-lg justify-between">
+          <div
+            // className="flex flex-col w-full md:w-8/12 bg-white rounded-lg shadow h-[60vh] md:h-[85vh]"
+            className="flex flex-col w-full md:w-8/12 bg-white rounded-lg shadow "
+          >
             {chatroom?.Messages?.items && selectedChatroom ? (
               <>
-                <div className="h-12 py-5 px-4 top-0 border-b-2 w-full flex justify-between items-center">
-                  <label className="text-lg font-semibold">{title}</label>
-                  <div className="flex">
-                    <div
-                      className={`${ScaleHover}`}
-                      onClick={() => setComposeModalOpen(true)}
-                    >
-                      <AddUserIcon size={6} />
-                    </div>
-                  </div>
+                <div className="h-12 py-3 px-4 border-b flex justify-between items-center">
+                  <span className="text-lg font-semibold">{title}</span>
                 </div>
-
-                <div className="h-full overflow-y-auto">
+                <div className="flex-grow overflow-y-auto p-4">
                   {isLoadingChat ? (
-                    <div className="flex justify-center align-middle mt-5">
+                    <div className="flex justify-center items-center h-full">
                       <BeatLoader color="#4A90E2" />
                     </div>
                   ) : (
-                    sortedMessages?.map((item, index) => (
+                    sortedMessages.map((item, index) => (
                       <Message
                         key={index}
                         textMessage={item.text}
@@ -195,14 +209,13 @@ const Messaging = () => {
                     ))
                   )}
                 </div>
-
                 {canMessage && (
-                  <div className="py-2 px-2 bottom-0 border-t-2 w-full flex justify-between items-center">
+                  <div className="py-2 px-4 border-t flex items-center gap-2">
                     <Input
-                      multiline={true}
+                      // multiline
                       rows={1}
                       disabled={!chatroom}
-                      placeholder={"Message"}
+                      placeholder="Message"
                       value={text}
                       setValue={setText}
                       onKeyPress={handleKeyPress}
@@ -241,9 +254,8 @@ const Messaging = () => {
                         />
                       </div>
                     )}
-                    <div className="mx-1" />
-                    <div
-                      className="flex bg-SECONDARY_COLOR rounded-full p-2 transition duration-300 ease-in-out hover:shadow-lg"
+                    <button
+                      className="bg-blue-500 text-white p-2 rounded-full shadow-lg"
                       onClick={() => {
                         if (text.trim().length > 0) {
                           sendMessage(
@@ -258,15 +270,15 @@ const Messaging = () => {
                       }}
                     >
                       <SendIcon size={6} />
-                    </div>
+                    </button>
                   </div>
                 )}
               </>
             ) : (
-              <div className="flex h-full justify-center items-center">
-                <label className="text-3xl text-PRIMARY_COLOR font-bold">
+              <div className="flex flex-grow justify-center items-center">
+                <span className="text-2xl font-semibold text-gray-500">
                   Select a user to chat with
-                </label>
+                </span>
               </div>
             )}
           </div>

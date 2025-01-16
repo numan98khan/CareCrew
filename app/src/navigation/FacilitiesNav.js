@@ -21,6 +21,7 @@ import MyProfile from "../screens/MyProfile";
 
 import AllNotifications from "../screens/AllNotifications";
 import { FACILITY_EMPLOYEE_TYPES } from "../constants/userTypes";
+import Reports from "../screens/Reports";
 
 const FacilitiesNav = () => {
   const { user, permissions, personalData, signIn, loadPermissions } =
@@ -33,6 +34,7 @@ const FacilitiesNav = () => {
   const filteredMenuItems = menuItems.filter((item) => {
     const allPermissions = [
       ...permissions.access,
+
       // ...permissions.permissions,
       // ...permissions.notifications,
     ];
@@ -51,9 +53,9 @@ const FacilitiesNav = () => {
     ) {
       return false;
     }
-    if (permission?.name === "People") {
-      return false;
-    }
+    // if (permission?.name === "People") {
+    //   return false;
+    // }
     return permission?.isSelected;
   });
 
@@ -86,6 +88,9 @@ const FacilitiesNav = () => {
                 path="/addShift"
                 element={<AddShift />}
               />
+
+              {/* <Route key="LLM" path="/llm" element={<Reports />} /> */}
+
               <Route
                 key="All Notifications"
                 path="/allNotifications"

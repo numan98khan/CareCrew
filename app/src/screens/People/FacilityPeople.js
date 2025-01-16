@@ -38,7 +38,6 @@ import ConfirmationModal from "../../components/ConfirmationModal";
 import { deleteBulkUsers } from "../../services/bulkUserCreation";
 import { ErrorToast, SuccessToast } from "../../services/micro";
 import { GET_PEOPLE } from "../../apolloql/queries";
-import BulkAddUsersModal from "./BulkAddPeopleModal";
 
 const TABLE_HEAD = [
   "",
@@ -55,8 +54,6 @@ const People = ({ route }) => {
   const location = useLocation();
 
   const [warningMessage, setWarningMessage] = useState("");
-
-  const [isBulkAddModalOpen, setIsBulkAddModalOpen] = useState(false);
 
   const [isDeleteConfirmModalOpen, setIsDeleteConfirmModalOpen] =
     useState(false);
@@ -148,16 +145,9 @@ const People = ({ route }) => {
       people
     );
     return people
-      .filter((person) => {
-        console.log(myFacility?.id, person?.PeopleFacility?.items);
-        return type == ADMIN
-          ? true
-          : person?.PeopleFacility?.items?.some(
-              (facility) => facility.facilityId === myFacility?.id
-            )
-          ? myFacility?.id && true
-          : false;
-      })
+      .filter((person) =>
+        person?.PeopleFacility?.id == myFacility?.id ? true : false
+      )
       .filter(
         (person) =>
           person.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -379,6 +369,13 @@ const People = ({ route }) => {
           surrogateID
           firstName
           lastName
+          PeopleFacility {
+            items {
+              id
+              facilityName
+            }
+            nextToken
+          }
           phoneNumber
           createdAt
           updatedAt
@@ -506,16 +503,6 @@ const People = ({ route }) => {
                     />
                   </div>
                 )}
-
-                {type === FACILITY && (
-                  <div className="mt-2 md:mt-0">
-                    <IconButton
-                      color={theme.SECONDARY_COLOR}
-                      text={"+ADD USERS"}
-                      onClick={() => setIsBulkAddModalOpen(true)}
-                    />
-                  </div>
-                )}
               </div>
             </div>
           </div>
@@ -582,14 +569,6 @@ const People = ({ route }) => {
               }
             }}
             onCancel={() => setIsDeleteConfirmModalOpen(false)}
-          />
-
-          {/* Bulk Add Users Modal */}
-          <BulkAddUsersModal
-            open={isBulkAddModalOpen}
-            onClose={() => setIsBulkAddModalOpen(false)}
-            refetchPeople={refetchPeople}
-            facilityId={myFacility?.id}
           />
         </div>
       ) : isEdit ? (
