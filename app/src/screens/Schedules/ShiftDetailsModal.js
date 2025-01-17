@@ -1,7 +1,25 @@
 import React, { useState } from "react";
+import { API, graphqlOperation } from "aws-amplify";
+import Modal from "react-modal";
+import moment from "moment";
+
 import themeStyles from "../../styles/theme.styles";
 
 import Button from "../../components/Button";
+import EditShiftModal from "../../components/Modals/EditShiftModal";
+import Avatar from "../../components/Avatar";
+import RadioButton from "../../components/Button/RadioButton";
+import DatePickerCustom from "../../components/DatePicker";
+import TimePickerCustom from "../../components/TimePicker";
+import ConfirmationModal from "../../components/ConfirmationModal";
+
+import KebabMenuWhite from "../../assets/icons/kebabMenuWhite";
+import OpenIndicator from "../../assets/icons/indicators/open";
+import IncentiveIndicator from "../../assets/icons/indicators/incentive";
+import GuaranteeIndicator from "../../assets/icons/indicators/guarantee";
+import UserXIndicator from "../../assets/icons/userx";
+import WatchIndicator from "../../assets/icons/watch";
+import LocationIcon from "../../assets/icons/location";
 
 import {
   reverseFormatDate,
@@ -17,58 +35,21 @@ import {
   formatDateToAWS,
 } from "../../services/micro";
 
-import OpenIndicator from "../../assets/icons/indicators/open";
-import IncentiveIndicator from "../../assets/icons/indicators/incentive";
-import GuaranteeIndicator from "../../assets/icons/indicators/guarantee";
-import UserXIndicator from "../../assets/icons/userx";
-import WatchIndicator from "../../assets/icons/watch";
-import LocationIcon from "../../assets/icons/location";
-
-import Modal from "react-modal";
-
-import KebabMenuWhite from "../../assets/icons/kebabMenuWhite";
-
+import { NotificationHub } from "../../services/notifications/hub";
 import {
   useCreateShift,
   useDeleteShift,
   useUpdateShift,
 } from "../../apolloql/schedules";
-
-import EditShiftModal from "../../components/Modals/EditShiftModal";
-import Avatar from "../../components/Avatar";
-
-import RadioButton from "../../components/Button/RadioButton";
 import {
   useCreateTimecard,
   useDeleteTimecard,
   useUpdateTimecard,
 } from "../../apolloql/timecards";
-import DatePickerCustom from "../../components/DatePicker";
-import TimePickerCustom from "../../components/TimePicker";
-import { useAuth } from "../../context";
-import { ADMIN, EMPLOYEE, FACILITY } from "../../constants/userTypes";
-import {
-  externalNotificationToInstacare,
-  externalNotificationToPeople,
-  inAppNotificationsToFacilityPeople,
-  inAppNotificationsToPeople,
-  inApplNotificationToInstacare,
-  sendNotificationsToFacilityPeople,
-} from "../../services/timecards/reporting";
-import { API, graphqlOperation } from "aws-amplify";
-import { getTimecardsForShift } from "../../services/timecards/check";
-import { convertToLocalizedDateTime } from "../../apolloql/timezone";
-import moment from "moment";
 import { useCreateNotification } from "../../apolloql/notifications";
-import {
-  EMPLOYEE_LATE,
-  FACILITY_CANCELLATION,
-  NO_CALL_NO_SHOW,
-  SHIFT_DELETED,
-} from "../../constants/notificationTypes";
-import ConfirmationModal from "../../components/ConfirmationModal";
-import { NotificationHub } from "../../services/notifications/hub";
-// import { getShifts } from "../../graphql/queries";
+import { useAuth } from "../../context";
+
+import { ADMIN, EMPLOYEE, FACILITY } from "../../constants/userTypes";
 
 export const getShifts = /* GraphQL */ `
   query GetShifts($id: ID!) {
@@ -109,7 +90,6 @@ const getPeople = /* GraphQL */ `
       firstName
       lastName
       phoneNumber
-
       _deleted
       _lastChangedAt
       __typename
@@ -122,6 +102,9 @@ const MODES = {
   ADD_MEMBERS: "addMembers",
 };
 
+/* -------------------------------------------------------------------------- */
+/*                           UnassignModal Component                          */
+/* -------------------------------------------------------------------------- */
 const UnassignModal = ({
   isUnAssignModalOpen,
   setIsUnAssignModalOpen,
@@ -131,6 +114,7 @@ const UnassignModal = ({
 }) => {
   const { type, user } = useAuth();
   const { updateShiftQuery } = useUpdateShift();
+  const { createNotificationQuery } = useCreateNotification();
 
   const [selectedOption, setSelectedOption] = useState(
     type !== ADMIN ? "Facility Cancellation" : ""
@@ -138,19 +122,10 @@ const UnassignModal = ({
 
   const removeTrailingZ = (timeStr) => {
     if (!timeStr) return null;
-    // Remove 'Z' if it's at the end
-    const cleanedTimeStr = timeStr.endsWith("Z")
-      ? timeStr.slice(0, -1)
-      : timeStr;
-
-    return cleanedTimeStr;
+    return timeStr.endsWith("Z") ? timeStr.slice(0, -1) : timeStr;
   };
 
-  const { createNotificationQuery } = useCreateNotification();
-
-  // SERVICE: UNASSIGN (Temporarily Disabled)
   const handleUpdate = async () => {
-    // // selectedOption
     const now = new Date();
     if (!selectedOption) {
       ErrorToast("Please select an option");
@@ -178,12 +153,6 @@ const UnassignModal = ({
       SuccessToast("Shift UNASSIGNED successfully");
 
       try {
-        // console.log(selectedOption);
-        console.log(
-          "🚀 ~ file: ShiftDetailsModal.js:165 ~ handleUpdate ~ selectedOption:",
-          selectedOption
-        );
-
         if (selectedOption !== "Facility Cancellation") {
           const shiftData = (
             await API.graphql(
@@ -217,64 +186,14 @@ const UnassignModal = ({
           )
         )?.data?.getPeople;
 
-        let formedMessage = `Subject: Shift Cancellation\n\nThe following shift has been cancelled by ${
-          selectedOption === "Facility Cancellation" ? "facility" : "CareCrew"
-        }\n\nFacility: ${facilityObj?.facilityName}\nShift Date: ${displayDate(
-          selectedShift?.shiftStartDT
-        )}\nShift Time: ${
-          displayTime(selectedShift?.shiftStartDT) +
-          " - " +
-          displayTime(selectedShift?.shiftEndDT)
-        }\nEmployee: ${
-          peopleObj?.firstName + " " + peopleObj?.lastName
-        }\n\nTimestamp: ${
-          displayDate(new Date()?.toISOString()) +
-          " " +
-          displayTime(new Date()?.toISOString())
-        }`; //\n\nBy User: ${user?.attributes?.email}`;
-
-        console.log(
-          "🚀 ~ file: ShiftDetailsModal.js:88 ~ handleUpdate ~ formedMessage:",
-          formedMessage
-        );
-
-        // START: Send notification on all platforms to CareCrew
-
-        const userInfo = `\nBy User: ${user?.attributes?.email}`;
-
-        // // INTERNAL
-        inAppNotificationsToPeople(
-          peopleObj?.id,
-          FACILITY_CANCELLATION,
-          "Shift was cancelled",
-          formedMessage,
-          createNotificationQuery
-        );
-        inApplNotificationToInstacare(
-          FACILITY_CANCELLATION,
-          "Shift was cancelled",
-          formedMessage + userInfo,
-          createNotificationQuery
-        );
-        inAppNotificationsToFacilityPeople(
-          selectedShift?.facilityID,
-          FACILITY_CANCELLATION,
-          "Shift was cancelled",
-          formedMessage + userInfo,
-          createNotificationQuery
-        );
-
-        // EXTERNAL
-        externalNotificationToInstacare(formedMessage + userInfo, true, true); // CareCrew
-        sendNotificationsToFacilityPeople(
-          facilityObj?.id,
-          formedMessage + userInfo,
-          true,
-          selectedOption === "Facility Cancellation" ? false : true
-        ); // Facility
-        externalNotificationToPeople(peopleObj?.id, formedMessage, true, true); // Employee
-
-        // END.
+        await NotificationHub.sendShiftCancellationNotifications({
+          selectedOption,
+          selectedShift,
+          facilityObj,
+          peopleObj,
+          user,
+          createNotificationQuery,
+        });
 
         SuccessToast("Shift UNASSIGNED successfully");
       } catch (error) {
@@ -311,9 +230,6 @@ const UnassignModal = ({
       }}
     >
       <div className="flex flex-col items-center justify-center p-4 space-y-3">
-        {/* Add your modal contents here */}
-        {/* <h2>Are you sure you want to un-assign?</h2> */}
-
         <div className="w-full flex-start space-y-1">
           {type === ADMIN ? (
             <>
@@ -331,13 +247,12 @@ const UnassignModal = ({
               >
                 Employee Call-Off
               </RadioButton>
-
               <RadioButton
-                value={"CareCrew Cancellation"}
+                value="CareCrew Cancellation"
                 onChange={(e) => setSelectedOption(e.target.value)}
                 checked={selectedOption === "CareCrew Cancellation"}
               >
-                {"CareCrew Cancellation".replace("CareCrew", "CareCrew")}
+                CareCrew Cancellation
               </RadioButton>
             </>
           ) : (
@@ -348,9 +263,8 @@ const UnassignModal = ({
         </div>
 
         <Button
-          children={"Confirm"}
+          children="Confirm"
           onClick={() => {
-            // Here you can perform the mutation or any other action.
             handleUpdate();
             setIsUnAssignModalOpen(false);
           }}
@@ -360,6 +274,9 @@ const UnassignModal = ({
   );
 };
 
+/* -------------------------------------------------------------------------- */
+/*                          LateArrivalModal Component                        */
+/* -------------------------------------------------------------------------- */
 const LateArrivalModal = ({
   isModalOpen,
   setModalOpen,
@@ -367,16 +284,9 @@ const LateArrivalModal = ({
   selectedTimecard,
   selectedShift,
 }) => {
-  console.log(
-    "🚀 ~ file: ShiftDetailsModal.js:334 ~ selectedShift:",
-    selectedShift,
-    selectedTimecard
-  );
-
   const [lateTime, setLateTime] = useState(null);
   const { createNotificationQuery } = useCreateNotification();
 
-  // SERVICE: ARRIVE LATE
   const handleArriveLate = async () => {
     const formattedLate =
       convertDateToAWSDate(new Date()) + "T" + convertTimeToAWSTime(lateTime);
@@ -389,56 +299,6 @@ const LateArrivalModal = ({
         clockInTime: formattedLate,
         _version: selectedTimecard?._version,
       });
-
-      // const formedMessage = `${selectedOption} at ${
-      //   facilityObj?.facilityName
-      // } on ${displayDate(new Date())} for ${peopleObj?.firstName} ${
-      //   peopleObj?.lastName
-      // } ${displayDate(selectedShift?.shiftStartDT)}@${displayTime(
-      //   selectedShift?.shiftStartDT
-      // )}-${displayTime(selectedShift?.shiftEndDT)}`;
-
-      // console.log(
-      //   "🚀 ~ file: ShiftDetailsModal.js:343 ~ handleArriveLate ~ formedMessage:",
-      //   selectedTimecard
-      // );
-
-      // START: Send notification on all platforms to CareCrew
-
-      // // INTERNAL
-      // inAppNotificationsToPeople(
-      //   peopleObj?.id,
-      //   FACILITY_CANCELLATION,
-      //   "Shift was cancelled",
-      //   formedMessage,
-      //   createNotificationQuery
-      // );
-      // inApplNotificationToInstacare(
-      //   FACILITY_CANCELLATION,
-      //   "Shift was cancelled",
-      //   formedMessage,
-      //   createNotificationQuery
-      // );
-      // inAppNotificationsToFacilityPeople(
-      //   selectedShift?.facilityID,
-      //   FACILITY_CANCELLATION,
-      //   "Shift was cancelled",
-      //   formedMessage,
-      //   createNotificationQuery
-      // );
-
-      // // EXTERNAL
-      // externalNotificationToInstacare(formedMessage, true, true); // Instacare
-      // sendNotificationsToFacilityPeople(
-      //   facilityObj?.id,
-      //   formedMessage,
-      //   true,
-      //   selectedOption === "Facility Cancellation" ? false : true
-      // ); // Facility
-      // externalNotificationToPeople(peopleObj?.id, formedMessage, true, true); // Employee
-
-      // END.
-
       SuccessToast('Shift "Arrived Late" successfully');
     } catch (error) {
       ErrorToast('Error "Arrived Late" shift:', error);
@@ -477,10 +337,8 @@ const LateArrivalModal = ({
         </div>
 
         <Button
-          children={"Confirm"}
+          children="Confirm"
           onClick={() => {
-            // Here you can perform the mutation or any other action.
-            // handleUpdate();
             handleArriveLate();
             setModalOpen(false);
           }}
@@ -490,6 +348,9 @@ const LateArrivalModal = ({
   );
 };
 
+/* -------------------------------------------------------------------------- */
+/*                         ShiftDetailsModal Component                        */
+/* -------------------------------------------------------------------------- */
 const ShiftDetailsModal = ({
   modalIsOpen,
   closeModal,
@@ -503,15 +364,12 @@ const ShiftDetailsModal = ({
   refetchShifts,
   openShiftEditModal,
   canDeleteShift,
-  // handleDelete,
   canPerformActions = true,
 }) => {
   const { type, myFacility, user } = useAuth();
   const [position, setPosition] = useState({ top: 0, right: 0 });
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
-  const closeEditModal = () => {
-    setEditModalIsOpen(false);
-  };
+  const closeEditModal = () => setEditModalIsOpen(false);
 
   const openEditModal = () => {
     const rect = buttonRef.current.getBoundingClientRect();
@@ -524,32 +382,29 @@ const ShiftDetailsModal = ({
 
   const [isUnAssignModalOpen, setIsUnAssignModalOpen] = useState(false);
   const [isLateModalOpen, setLateModalOpen] = useState(false);
-
   const { deleteShiftQuery } = useDeleteShift();
   const { updateShiftQuery } = useUpdateShift();
   const { updateTimecardQuery } = useUpdateTimecard();
   const { deleteTimecardQuery } = useDeleteTimecard();
-
   const { createNotificationQuery } = useCreateNotification();
 
-  // SERVICE: DELETE
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [warningMessage] = useState(null);
+
+  /* ------------------------------ Delete Logic ----------------------------- */
   const handleDelete = async () => {
     if (selectedTimecard) {
-      // return;
-      if (
-        // selectedTimecard?.clockInTime !== undefined &&
-        selectedTimecard?.clockOutTime
-      ) {
+      if (selectedTimecard?.clockOutTime) {
         ErrorToast("Cannot delete completed timecard.");
         return;
       }
       try {
-        const response = await deleteTimecardQuery({
+        await deleteTimecardQuery({
           id: selectedTimecard?.id,
           _version: selectedTimecard?._version,
         });
-
         SuccessToast("Timecard deleted successfully");
+
         if (
           !selectedTimecard?.lateReason?.includes("Facility Cancellation") &&
           !selectedTimecard?.isCallOff
@@ -571,7 +426,6 @@ const ShiftDetailsModal = ({
         console.log(error);
         ErrorToast("Error deleting timecard:", error);
       }
-
       await refetchShifts();
     } else {
       try {
@@ -579,7 +433,7 @@ const ShiftDetailsModal = ({
         try {
           latestShift = (
             await API.graphql(
-              graphqlOperation(getShifts, { id: selectedShift?.id }) // Replace with the correct query/mutation name
+              graphqlOperation(getShifts, { id: selectedShift?.id })
             )
           )?.data?.getShifts;
 
@@ -607,7 +461,6 @@ const ShiftDetailsModal = ({
         });
 
         SuccessToast("Shift deleted successfully");
-
         await refetchShifts();
       } catch (error) {
         console.error(error);
@@ -616,7 +469,7 @@ const ShiftDetailsModal = ({
     }
   };
 
-  // SERVICE: NOCALLNOSHOW (TEMP DISABLED)
+  /* ---------------------------- NoCallNoShow Logic ------------------------- */
   const handleNoCallNoShow = async () => {
     try {
       await updateTimecardQuery({
@@ -626,6 +479,7 @@ const ShiftDetailsModal = ({
         lateReason: "NO CALL NO SHOW",
         _version: selectedTimecard?._version,
       });
+
       try {
         await updateShiftQuery({
           id: selectedShift?.id,
@@ -654,31 +508,22 @@ const ShiftDetailsModal = ({
       } catch (error) {
         ErrorToast("Error unassigning shift:", error);
       }
-
       SuccessToast('Shift "NO CALL NO SHOW" successfully');
     } catch (error) {
       ErrorToast('Error "NO CALL NO SHOW" shift:', error);
     }
   };
 
-  // SERVICE: ARRIVELATE (TEMP DISABLED)
+  /* ---------------------------- ArriveLate Logic --------------------------- */
   const handleArriveLate = async () => {
     try {
       await updateTimecardQuery({
         id: selectedTimecard?.id,
-        // isLate: true,
         lateReason: `Marked late by ${
           type === FACILITY ? "facility" : "CareCrew"
         }`,
         _version: selectedTimecard?._version,
       });
-
-      // console.log(
-      //   "🚀 ~ file: ShiftDetailsModal.js:677 ~ handleArriveLate ~ selectedTimecard:",
-      //   selectedTimecard,
-      //   selectedShift,
-      //   selectedFacility
-      // );
 
       const peopleObj = (
         await API.graphql(
@@ -692,26 +537,19 @@ const ShiftDetailsModal = ({
         peopleObj,
         user,
         createNotificationQuery,
-      }); // END.
+      });
       SuccessToast('Shift "Arrived Late" successfully');
     } catch (error) {
       ErrorToast('Error "Arrived Late" shift:', error);
     }
   };
 
+  /* --------------------------- Time/Date Handling -------------------------- */
   const iconSize = 7;
-
-  // const shiftStartDateTime = new Date(
-  //   `${selectedShift?.date}T${selectedShift?.shiftStart}`
-  // );
   const shiftStartDateTime = new Date(`${selectedShift?.shiftStartDT}`);
   const shiftEndDateTime = new Date(`${selectedShift?.shiftEndDT}`);
-
   const clockInTime = new Date(selectedTimecard?.clockInTime);
-
-  // 3 important variables for modal conditional rendering
   const isLogicalLate = shiftStartDateTime < clockInTime;
-
   const isInProgress =
     selectedTimecard?.clockInTime && !selectedTimecard?.clockOutTime;
   const isCompleted =
@@ -719,43 +557,21 @@ const ShiftDetailsModal = ({
 
   const shiftTimingHeadline =
     !isInProgress && !isCompleted
-      ? reverseFormatDate(selectedShift?.shiftStart) +
-        " - " +
-        reverseFormatDate(selectedShift?.shiftEnd)
-      : reverseFormatDate(selectedTimecard?.clockInTime) +
-        " - " +
-        reverseFormatDate(selectedTimecard?.clockOutTime);
+      ? `${reverseFormatDate(selectedShift?.shiftStart)} - ${reverseFormatDate(
+          selectedShift?.shiftEnd
+        )}`
+      : `${reverseFormatDate(
+          selectedTimecard?.clockInTime
+        )} - ${reverseFormatDate(selectedTimecard?.clockOutTime)}`;
 
   const currentTime = new Date();
   const isShiftInPast = shiftStartDateTime < currentTime;
-  // console.log(
-  //   "🚀 ~ file: ShiftDetailsModal.js:517 ~ isShiftInPast:",
-  //   isShiftInPast
-  // );
-
-  // const now = new Date();
   const now = new Date(moment.utc());
-
-  // console.log(
-  //   "🚀 ~ file: ShiftDetailsModal.js:483 ~ shiftStartDateTime:",
-  //   selectedShift?.shiftStartDT,
-  //   now?.toISOString(),
-  //   selectedShift?.shiftEndDT,
-  //   selectedShift
-  // );
-
   const canNoCallNoShow =
     type === ADMIN
       ? true
       : new Date(selectedShift?.shiftStartDT) <= now &&
         now <= new Date(selectedShift?.shiftEndDT);
-  // const canNoCallNoShow = new Date(selectedShift?.shiftStartDT) < now; //&&
-  // new Date(selectedShift?.shiftEndDT) > now;
-
-  // const canNoCallNoShow = true;
-
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [warningMessage, setWarningMessage] = useState(null);
 
   return (
     <>
@@ -766,10 +582,6 @@ const ShiftDetailsModal = ({
           onClose={closeEditModal}
           onCloseParentModal={closeModal}
           handleDelete={() => setShowConfirmModal(true)}
-          // handleDelete={handleDelete}
-          // disableDelete={
-          //   type === FACILITY ? selectedShift?.cancellationGuarantee : false
-          // }
           disableDelete={
             type === FACILITY
               ? selectedTimecard
@@ -787,16 +599,12 @@ const ShiftDetailsModal = ({
       <ConfirmationModal
         modalIsOpen={showConfirmModal}
         closeModal={() => setShowConfirmModal(false)}
-        message={"Are you sure you want to delete these cards?"}
-        // warning={warningMessage}
+        message="Are you sure you want to delete these cards?"
         onConfirm={() => {
           handleDelete();
           setShowConfirmModal(false);
         }}
-        onCancel={() => {
-          // setSelectedShifts([]);
-          setShowConfirmModal(false);
-        }}
+        onCancel={() => setShowConfirmModal(false)}
       />
 
       <Modal
@@ -812,14 +620,10 @@ const ShiftDetailsModal = ({
             justifyContent: "center",
           },
           content: {
-            // position: "relative",
             borderRadius: 20,
-            // boxShadow: "0px 4px 16px 0px rgba(196, 196, 196, 0.70)",
             width: "80%",
-            // maxHeight: "30%",
-            // height: "auto",
             maxWidth: "400px",
-            padding: "0px", // This line will remove the padding
+            padding: "0px",
             margin: "auto",
           },
         }}
@@ -839,10 +643,11 @@ const ShiftDetailsModal = ({
           selectedTimecard={selectedTimecard}
           selectedShift={selectedShift}
         />
+
         <div className="flex flex-col items-center justify-center">
           <div
             style={{ backgroundColor: themeStyles?.PRIMARY_COLOR }}
-            className="flex flex-col relative  w-full justify-center items-center py-2"
+            className="flex flex-col relative w-full justify-center items-center py-2"
           >
             {type !== EMPLOYEE &&
               openEditModal &&
@@ -858,7 +663,7 @@ const ShiftDetailsModal = ({
               )}
             <label
               style={{ color: themeStyles?.PRIMARY_LIGHT_COLOR }}
-              className=" text-xxs "
+              className="text-xxs"
             >
               SHIFT DETAILS
             </label>
@@ -873,9 +678,7 @@ const ShiftDetailsModal = ({
                   ? selectedTimecard?.clockInTime
                   : selectedShift?.shiftStartDT
               )}
-              {/* {selectedShift?.date} */}
             </label>
-            {/* <label className="text-white text-xs">{selectedShift?.date}</label> */}
             <div className="my-1" />
             <label className="text-PRIMARY_LIGHT_COLOR text-xxs">
               {selectedFacility?.facilityName} - {selectedShift?.roleRequired}
@@ -891,52 +694,35 @@ const ShiftDetailsModal = ({
           </div>
 
           <div className="flex w-full justify-between p-2">
-            {selectedShift?.peopleID ? (
-              <></>
-            ) : (
-              <>
-                {!selectedTimecard ? (
+            {selectedShift?.peopleID
+              ? null
+              : !selectedTimecard && (
                   <div className="text-xs font-semibold">
                     {selectedShift.numOfPositions} Positions
                   </div>
-                ) : null}
-              </>
-            )}
-
+                )}
             <div className="flex py-1">
               <OpenIndicator
                 isOpen={selectedTimecard ? true : false}
                 size={iconSize}
                 className="mr-2"
               />
-
-              {selectedShift.isIncentive ? (
+              {selectedShift.isIncentive && (
                 <IncentiveIndicator size={iconSize} className="mr-2" />
-              ) : null}
-
-              {selectedShift.isGuarantee ? (
+              )}
+              {selectedShift.isGuarantee && (
                 <GuaranteeIndicator size={iconSize} className="mr-2" />
-              ) : null}
-
-              {(
-                selectedTimecard?.isLate
-                  ? selectedTimecard?.isLate
-                  : selectedTimecard?.isLate
-              ) ? (
-                <WatchIndicator size={iconSize} className="mr-2" />
-              ) : null}
-
-              {(
-                selectedTimecard?.isCallOff
-                  ? selectedTimecard?.isCallOff
-                  : selectedTimecard?.isCallOff
-              ) ? (
-                <UserXIndicator size={iconSize} className="mr-2" />
-              ) : null}
+              )}
+              {(selectedTimecard?.isLate
+                ? selectedTimecard?.isLate
+                : false) && <WatchIndicator size={iconSize} className="mr-2" />}
+              {(selectedTimecard?.isCallOff
+                ? selectedTimecard?.isCallOff
+                : false) && <UserXIndicator size={iconSize} className="mr-2" />}
             </div>
           </div>
 
-          {selectedTimecard ? (
+          {selectedTimecard && (
             <div
               style={{
                 borderTop: "1px solid #EDEDED",
@@ -947,20 +733,16 @@ const ShiftDetailsModal = ({
                 minHeight: "65px",
                 width: "95%",
               }}
-              className="h-14 w-full border  flex flex-row items-center justify-between"
+              className="h-14 w-full border flex flex-row items-center justify-between"
             >
-              <div
-                style={{ width: "100%" }}
-                className="h-full items-center justify-between flex pl-3 gap-3"
-              >
+              <div className="h-full flex flex-row items-center justify-between pl-3 gap-3 w-full">
                 <div className="h-full flex flex-row items-center gap-3">
                   <Avatar
                     imgSrc={assignedTo?.profilePicture}
                     isSquared={false}
                     alt={assignedTo?.firstName + assignedTo?.lastName}
                   />
-
-                  <div className="h-full/2 flex flex-col justify-between items-center">
+                  <div className="flex flex-col justify-between">
                     <p
                       style={{
                         fontSize: "12px",
@@ -985,78 +767,62 @@ const ShiftDetailsModal = ({
                 </div>
               </div>
             </div>
-          ) : null}
-
-          {/* {isLogicalLate ? "Late Logically" : ""} */}
+          )}
 
           {type !== EMPLOYEE &&
-          selectedTimecard &&
-          !selectedTimecard.isCallOff &&
-          !isCompleted ? (
-            <div className="flex flex-col gap-1 p-2 w-full">
-              <div className="flex flex-col md:flex-row h-full gap-1 w-full">
-                {!(type === FACILITY && selectedShift.cancellationGuarantee) &&
-                  !(type === FACILITY && isShiftInPast) && (
+            selectedTimecard &&
+            !selectedTimecard.isCallOff &&
+            !isCompleted && (
+              <div className="flex flex-col gap-1 p-2 w-full">
+                <div className="flex flex-col md:flex-row h-full gap-1 w-full">
+                  {!(
+                    type === FACILITY && selectedShift.cancellationGuarantee
+                  ) &&
+                    !(type === FACILITY && isShiftInPast) && (
+                      <Button
+                        children={
+                          type === FACILITY ? "CANCEL SHIFT" : "UN-ASSIGN"
+                        }
+                        onClick={() => setIsUnAssignModalOpen(true)}
+                      />
+                    )}
+                  <Button children="ARRIVE-LATE" onClick={handleArriveLate} />
+                </div>
+                {canNoCallNoShow && (
+                  <div className="flex flex-row h-full w-full p-0">
                     <Button
-                      children={
-                        type === FACILITY ? "CANCEL SHIFT" : "UN-ASSIGN"
-                      }
-                      // onClick={() => {
-                      //   closeModal();
-                      //   // setMode(MODES.ADD_MEMBERS);
-                      // }}
+                      children="NO CALL NO SHOW"
                       onClick={() => {
-                        setIsUnAssignModalOpen(true);
+                        handleNoCallNoShow();
+                        closeModal();
                       }}
                     />
-                  )}
+                  </div>
+                )}
+              </div>
+            )}
+
+          {!selectedTimecard &&
+            type !== EMPLOYEE &&
+            !(type === FACILITY && isShiftInPast) && (
+              <div className="flex flex-row h-full p-2">
                 <Button
-                  children={"ARRIVE-LATE"}
+                  disabled={parseInt(selectedShift.numOfPositions) === 0}
+                  children="ASSIGN"
+                  onClick={() => setMode(MODES.ADD_MEMBERS)}
+                />
+                <div className="mx-1 my-1 md:my-0" />
+                <Button
+                  children="CLOSE"
+                  color={themeStyles.GRAY}
                   onClick={() => {
-                    handleArriveLate();
-                    // closeModal();
+                    closeModal();
+                    setMode(MODES.SHIFT_DETAILS);
+                    setSelectedPeople([]);
                   }}
                 />
               </div>
-              {canNoCallNoShow && (
-                <div className="flex flex-row h-full w-full p-0">
-                  <Button
-                    children={"NO CALL NO SHOW"}
-                    onClick={() => {
-                      handleNoCallNoShow();
-                      closeModal();
-                    }}
-                  />
-                </div>
-              )}
-            </div>
-          ) : !selectedTimecard &&
-            type !== EMPLOYEE &&
-            !(type === FACILITY && isShiftInPast) ? (
-            <div className="flex flex-row md:flex-row  h-full p-2">
-              <Button
-                disabled={
-                  parseInt(selectedShift.numOfPositions) === 0 ? true : false
-                }
-                children={"ASSIGN"}
-                onClick={() => {
-                  // closeModal();
-                  setMode(MODES.ADD_MEMBERS);
-                }}
-              />
-              <div className="mx-1 my-1 md:my-0" />
-              <Button
-                children={"CLOSE"}
-                color={themeStyles.GRAY}
-                onClick={() => {
-                  closeModal();
-
-                  setMode(MODES.SHIFT_DETAILS);
-                  setSelectedPeople([]);
-                }}
-              />
-            </div>
-          ) : null}
+            )}
         </div>
       </Modal>
     </>

@@ -18,6 +18,7 @@ import {
 import {
   ADD_SHIFT,
   EMPLOYEE_LATE,
+  FACILITY_CANCELLATION,
   NO_CALL_NO_SHOW,
   PEOPLE_UPDATED,
   SHIFT_DELETED,
@@ -308,6 +309,75 @@ export const NotificationHub = {
     } catch (error) {
       console.error("Error sending Employee Delay notifications:", error);
       throw new Error("Failed to send notifications for Employee Delay");
+    }
+  },
+  sendShiftCancellationNotifications: async ({
+    selectedOption,
+    selectedShift,
+    facilityObj,
+    peopleObj,
+    user,
+    createNotificationQuery,
+  }) => {
+    const subject = "Shift Cancellation";
+    const cancellationBy =
+      selectedOption === "Facility Cancellation" ? "facility" : "CareCrew";
+    const formedMessage = `Subject: ${subject}\n\nThe following shift has been cancelled by ${cancellationBy}\n\nFacility: ${
+      facilityObj?.facilityName
+    }\nShift Date: ${displayDate(selectedShift?.shiftStartDT)}\nShift Time: ${
+      displayTime(selectedShift?.shiftStartDT) +
+      " - " +
+      displayTime(selectedShift?.shiftEndDT)
+    }\nEmployee: ${
+      peopleObj?.firstName + " " + peopleObj?.lastName
+    }\n\nTimestamp: ${
+      displayDate(new Date()?.toISOString()) +
+      " " +
+      displayTime(new Date()?.toISOString())
+    }`;
+
+    const userInfo = `\nBy User: ${user?.attributes?.email}`;
+
+    try {
+      // INTERNAL Notifications
+      inAppNotificationsToPeople(
+        peopleObj?.id,
+        FACILITY_CANCELLATION,
+        "Shift was cancelled",
+        formedMessage,
+        createNotificationQuery
+      );
+      inApplNotificationToInstacare(
+        FACILITY_CANCELLATION,
+        "Shift was cancelled",
+        formedMessage + userInfo,
+        createNotificationQuery
+      );
+      inAppNotificationsToFacilityPeople(
+        selectedShift?.facilityID,
+        FACILITY_CANCELLATION,
+        "Shift was cancelled",
+        formedMessage + userInfo,
+        createNotificationQuery
+      );
+
+      // EXTERNAL Notifications
+      externalNotificationToInstacare(formedMessage + userInfo, true, true); // CareCrew
+      sendNotificationsToFacilityPeople(
+        facilityObj?.id,
+        formedMessage + userInfo,
+        true,
+        selectedOption === "Facility Cancellation" ? false : true
+      ); // Facility
+      externalNotificationToPeople(
+        peopleObj?.id,
+        formedMessage,
+        true,
+        true // Employee
+      );
+    } catch (error) {
+      console.error("Error sending Shift Cancellation notifications:", error);
+      throw new Error("Failed to send notifications for Shift Cancellation");
     }
   },
   // Other notification methods...
