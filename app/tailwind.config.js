@@ -51,6 +51,8 @@ module.exports = {
         TEXT_FIELD_BACKGROUND: themeVariables.PRIMARY_VERY_LIGHT,
         RADIO_LABEL_COLOR: "#02050A80",
 
+        WHITE: "#FFFFFF",
+
         SECONDARY_COLOR: "#FFAF32",
       },
       fontSize: {
