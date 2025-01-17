@@ -586,26 +586,31 @@ const ShiftDetailsModal = ({
           _version: selectedShift?._version,
         });
 
+        // Fetch the latest shift details before proceeding
+        const latestShift = await refetchShifts().then((response) => {
+          return response?.data?.listShifts?.items?.find(
+            (shift) => shift.id === selectedShift?.id
+          );
+        });
+
         const formedMessage_OLD = `Shift deleted by ${
           myFacility?.facilityName ? selectedFacility?.facilityName : "CareCrew"
         } at ${
           selectedFacility?.facilityName
         } on ${new Date()} for ${displayDate(
-          selectedShift?.shiftStartDT
-        )}@${displayTime(selectedShift?.shiftStartDT)}-${displayTime(
-          selectedShift?.shiftEndDT
+          latestShift?.shiftStartDT
+        )}@${displayTime(latestShift?.shiftStartDT)}-${displayTime(
+          latestShift?.shiftEndDT
         )}`;
 
-        let formedMessage = `Subject: Open Shift Deletion\n\nThe following shft has been cancelled by ${
+        let formedMessage = `Subject: Open Shift Deletion\n\nThe following shift has been cancelled by ${
           myFacility?.facilityName ? "Facility" : "CareCrew"
         }\n\nFacility: ${
           selectedFacility?.facilityName
-        }\nShift Date: ${displayDate(
-          selectedShift?.shiftStartDT
-        )}\nShift Time: ${
-          displayTime(selectedShift?.shiftStartDT) +
+        }\nShift Date: ${displayDate(latestShift?.shiftStartDT)}\nShift Time: ${
+          displayTime(latestShift?.shiftStartDT) +
           " - " +
-          displayTime(selectedShift?.shiftEndDT)
+          displayTime(latestShift?.shiftEndDT)
         }\n\nTimestamp: ${
           displayDate(new Date()?.toISOString()) +
           " " +
@@ -614,7 +619,7 @@ const ShiftDetailsModal = ({
 
         // START: Send notification on all platforms to CareCrew
 
-        // // INTERNAL
+        // INTERNAL
         inApplNotificationToInstacare(
           SHIFT_DELETED,
           "Shift Deleted",
@@ -622,14 +627,14 @@ const ShiftDetailsModal = ({
           createNotificationQuery
         );
         inAppNotificationsToFacilityPeople(
-          selectedShift?.facilityID,
+          latestShift?.facilityID,
           SHIFT_DELETED,
           "Shift Deleted",
           formedMessage,
           createNotificationQuery
         );
 
-        // // EXTERNAL
+        // EXTERNAL
         externalNotificationToInstacare(formedMessage, true, false); // CareCrew
         sendNotificationsToFacilityPeople(
           selectedFacility?.id,

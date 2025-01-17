@@ -60,6 +60,8 @@ import {
   SHIFT_ASSIGNMENT,
   SHIFT_EDIT,
 } from "../../constants/notificationTypes";
+import { getShifts } from "../../graphql/queries";
+import { API, graphqlOperation } from "aws-amplify";
 
 const ShiftEditModal = ({
   modalIsOpen,
@@ -204,31 +206,49 @@ const ShiftEditModal = ({
   };
   // Function to detect changes in the shift object and update the shift
   const updateShift = async () => {
-    // shift_
-
+    // Validate shift input
     const validationErrors = validateShiftInput(shift);
-
     if (validationErrors.length > 0) {
       ErrorToast(validationErrors.join("\n"));
       return;
     }
 
+    // Fetch the latest shift from the server
+    let latestShift;
+    try {
+      latestShift = (
+        await API.graphql(
+          graphqlOperation(getShifts, { id: shift?.id }) // Replace with the correct query/mutation name
+        )
+      )?.data?.getShifts;
+
+      if (!latestShift) {
+        ErrorToast("Failed to fetch the latest shift details.");
+        return;
+      }
+    } catch (error) {
+      console.error("Error fetching the latest shift:", error);
+      ErrorToast("Failed to fetch the latest shift. Please try again.");
+      return;
+    }
+
+    // Compare the latest shift with the current shift to identify updated fields
     const updatedFields = {};
-    // Compare each field in the original and modified shift object
     for (const [key, value] of Object.entries(shift)) {
-      if (shift_[key] !== value) {
+      if (latestShift[key] !== value) {
         updatedFields[key] = value;
       }
     }
 
-    // Generate a string from the updatedFields
+    // Generate a string from the updated fields
     const updatedFieldsString = generateUpdatedFieldsString(updatedFields);
 
-    updatedFields.id = shift?.id;
-    updatedFields._version = shift?._version;
-    updatedFields.shiftStart = shift?.shiftStart;
-    updatedFields.shiftEnd = shift?.shiftEnd;
-    updatedFields.date = shift?.date;
+    // Ensure necessary fields are included
+    updatedFields.id = latestShift.id;
+    updatedFields._version = latestShift._version;
+    updatedFields.shiftStart = latestShift.shiftStart;
+    updatedFields.shiftEnd = latestShift.shiftEnd;
+    updatedFields.date = latestShift.date;
 
     if (Object.keys(updatedFields).length === 0) {
       // No changes detected
@@ -238,28 +258,28 @@ const ShiftEditModal = ({
     }
 
     try {
-      // Assume updateShiftQuery takes an object with updated fields
+      // Update the shift with the latest fields
       await updateShiftQuery(updatedFields, isSuperAdmin ? true : false);
-      // await updateShiftQuery(updatedShiftObj);
 
       console.log(
         "🚀 ~ file: ShiftEditModal.js:196 ~ updateShift ~ updatedFields:",
-        shift
-      );
-      const facilityData = facilities?.find(
-        (obj) => obj?.id === shift?.facilityID
+        updatedFields
       );
 
-      let formedMessage = `Subject: Open Shift Edited\n\nThe following shft has been edited by ${
+      const facilityData = facilities?.find(
+        (obj) => obj?.id === latestShift?.facilityID
+      );
+
+      let formedMessage = `Subject: Open Shift Edited\n\nThe following shift has been edited by ${
         myFacility ? "Facility" : "CareCrew"
       }\n\nFacility: ${facilityData?.facilityName}\nShift Date: ${displayDate(
-        shift?.shiftStartDT
+        latestShift?.shiftStartDT
       )}\nShift Time: ${
-        displayTime(shift?.shiftStartDT) +
+        displayTime(latestShift?.shiftStartDT) +
         " - " +
-        displayTime(shift?.shiftEndDT)
-      }\nPosition: ${shift?.roleRequired}\nRate: ${
-        shift?.rate
+        displayTime(latestShift?.shiftEndDT)
+      }\nPosition: ${latestShift?.roleRequired}\nRate: ${
+        latestShift?.rate
       }\n\nUpdated Fields: ${updatedFieldsString}\n\nTimestamp: ${
         displayDate(new Date()?.toISOString()) +
         " " +
@@ -270,9 +290,7 @@ const ShiftEditModal = ({
         formedMessage
       );
 
-      // START: Send notification on all platforms to CareCrew
-      // INTERNAL
-
+      // Send notifications
       inApplNotificationToInstacare(
         SHIFT_EDIT,
         "Shift was edited",
@@ -280,13 +298,12 @@ const ShiftEditModal = ({
         createNotificationQuery
       );
       inAppNotificationsToFacilityPeople(
-        shift?.facilityID,
+        latestShift?.facilityID,
         SHIFT_EDIT,
         "Shift was edited",
         formedMessage,
         createNotificationQuery
       );
-      // EXTERNAL
       externalNotificationToInstacare(formedMessage, true, false); // CareCrew
       sendNotificationsToFacilityPeople(
         facilityData?.id,
@@ -294,16 +311,14 @@ const ShiftEditModal = ({
         true,
         false
       ); // Facility
-      // END.
 
       // Show success message
       SuccessToast("Shift updated successfully");
-
       closeModal();
     } catch (error) {
-      // Show error message
+      // Handle errors during update
       console.error("Error updating shift:", error);
-      ErrorToast("Failed to update shift: " + error);
+      ErrorToast("Failed to update shift: " + error.message);
     }
   };
 

@@ -37,6 +37,8 @@ import { useListPeople } from "../../apolloql/people";
 import { useDeleteShift, useUpdateShift } from "../../apolloql/schedules";
 
 import { Auth, API, graphqlOperation } from "aws-amplify";
+// import { GraphQLSubscription } from "@aws-amplify/api";
+// import { generateClient } from "aws-amplify/data";
 
 import {
   ErrorToast,
@@ -179,90 +181,48 @@ const Schedules = () => {
   );
   const { createTimecardQuery } = useCreateTimecard();
 
-  /* WATCHERS START */
+  // Subscribe to update of Shifts
   useEffect(() => {
-    const subscriptions = [];
-
-    // Subscriptions for Shifts
-    const onCreateShiftSubscription = API.graphql(
+    // Subscribe to Create
+    const createSubscription = API.graphql(
       graphqlOperation(onCreateShifts)
     ).subscribe({
-      next: ({
-        value: {
-          data: { onCreateShifts },
-        },
-      }) => {
-        if (refetchShifts) {
-          refetchShifts();
-        }
+      next: ({ value }) => {
+        console.log("Shift Created: ", value.data.onCreateShifts);
+        refetchShifts(); // Refetch shifts or optimistically update state
       },
-      error: (error) => {
-        console.error("Error with onCreateShift subscription: ", error);
-      },
+      error: (error) => console.warn("Error on Create Subscription: ", error),
     });
-    subscriptions.push(onCreateShiftSubscription);
 
-    const onUpdateShiftSubscription = API.graphql(
+    // Subscribe to Update
+    const updateSubscription = API.graphql(
       graphqlOperation(onUpdateShifts)
     ).subscribe({
-      next: ({
-        value: {
-          data: { onUpdateShifts },
-        },
-      }) => {
-        if (refetchShifts) {
-          refetchShifts();
-        }
+      next: ({ value }) => {
+        console.log("Shift Updated: ", value.data.onUpdateShifts);
+        refetchShifts(); // Refetch shifts or optimistically update state
       },
-      error: (error) => {
-        console.error("Error with onUpdateShift subscription: ", error);
-      },
+      error: (error) => console.warn("Error on Update Subscription: ", error),
     });
-    subscriptions.push(onUpdateShiftSubscription);
 
-    const onDeleteShiftSubscription = API.graphql(
+    // Subscribe to Delete
+    const deleteSubscription = API.graphql(
       graphqlOperation(onDeleteShifts)
     ).subscribe({
-      next: ({
-        value: {
-          data: { onDeleteShifts },
-        },
-      }) => {
-        if (refetchShifts) {
-          refetchShifts();
-        }
+      next: ({ value }) => {
+        console.log("Shift Deleted: ", value.data.onDeleteShifts);
+        refetchShifts(); // Refetch shifts or optimistically update state
       },
-      error: (error) => {
-        console.error("Error with onDeleteShift subscription: ", error);
-      },
+      error: (error) => console.warn("Error on Delete Subscription: ", error),
     });
-    subscriptions.push(onDeleteShiftSubscription);
 
-    // Subscriptions for Timecards
-    const onCreateTimecardSubscription = API.graphql(
-      graphqlOperation(onCreateTimecard)
-    ).subscribe({
-      next: ({
-        value: {
-          data: { onCreateTimecard },
-        },
-      }) => {
-        if (refetchTimecards) {
-          refetchTimecards();
-        }
-      },
-      error: (error) => {
-        console.error("Error with onCreateTimecard subscription: ", error);
-      },
-    });
-    subscriptions.push(onCreateTimecardSubscription);
-
-    // Cleanup Subscriptions on Component Unmount
+    // Cleanup on component unmount
     return () => {
-      subscriptions.forEach((sub) => sub.unsubscribe());
+      createSubscription.unsubscribe();
+      updateSubscription.unsubscribe();
+      deleteSubscription.unsubscribe();
     };
   }, [refetchShifts]);
-  /* WATCHERS END */
 
   const [selectedPeopleRole, setSelectedPeopleRole] = useState(undefined);
   const [peopleSearchTerm, setPeopleSearchTerm] = useState("");

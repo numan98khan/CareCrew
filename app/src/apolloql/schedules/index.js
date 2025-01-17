@@ -1,19 +1,26 @@
-// import { gql, useQuery, useMutation } from "@apollo/client";
+/*****************************************************************************************
+ * Imports & Constants
+ *****************************************************************************************/
 import { useState, useEffect } from "react";
+import { API, graphqlOperation } from "aws-amplify";
+import moment from "moment";
+import { gql, useQuery, useMutation, useApolloClient } from "@apollo/client";
+import { format } from "date-fns";
+
 import { listShifts, getShifts, getFacility } from "../../graphql/queries";
 import {
   createShifts,
   updateShifts,
   deleteShifts,
 } from "../../graphql/mutations";
-
-import { gql, useQuery, useMutation, useApolloClient } from "@apollo/client";
-import { format } from "date-fns";
-import moment from "moment";
 import {
-  // convertAWSDateTimeToLocal,
+  onCreateShifts,
+  onUpdateShifts,
+  onDeleteShifts,
+} from "../../graphql/subscriptions";
+
+import {
   convertAWSDateToLocalDate,
-  // convertAWSTimeToLocalTime,
   convertDateTimeToAWSDateTime,
   convertDateToAWSDate,
   convertTimeToAWSTime,
@@ -26,8 +33,100 @@ import {
   convertAWSTimeToLocalTime,
   convertToLocalizedDateTime,
 } from "../timezone";
-import { API, graphqlOperation } from "aws-amplify";
 
+/*****************************************************************************************
+ * Reusable Subscription Helpers
+ *****************************************************************************************/
+const SHIFT_SUBSCRIPTIONS = {
+  onCreate: gql(onCreateShifts),
+  onUpdate: gql(onUpdateShifts),
+  onDelete: gql(onDeleteShifts),
+};
+
+/**
+ * Attach GraphQL subscriptions for real-time updates.
+ * NOTE: updateQuery merges subscription data into the Apollo Cache.
+ */
+const useShiftSubscriptions = (subscribeToMore) => {
+  useEffect(() => {
+    if (!subscribeToMore) return;
+
+    // 1. On Create
+    const unsubCreate = subscribeToMore({
+      document: SHIFT_SUBSCRIPTIONS.onCreate,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+
+        const newItem = subscriptionData.data.onCreateShifts;
+        if (prev.listShifts.items.find((shift) => shift.id === newItem.id)) {
+          // Already in the list
+          return prev;
+        }
+
+        return {
+          ...prev,
+          listShifts: {
+            ...prev.listShifts,
+            items: [newItem, ...prev.listShifts.items],
+          },
+        };
+      },
+    });
+
+    // 2. On Update
+    const unsubUpdate = subscribeToMore({
+      document: SHIFT_SUBSCRIPTIONS.onUpdate,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const updatedItem = subscriptionData.data.onUpdateShifts;
+
+        const updatedItems = prev.listShifts.items.map((item) =>
+          item.id === updatedItem.id ? updatedItem : item
+        );
+
+        return {
+          ...prev,
+          listShifts: {
+            ...prev.listShifts,
+            items: updatedItems,
+          },
+        };
+      },
+    });
+
+    // 3. On Delete
+    const unsubDelete = subscribeToMore({
+      document: SHIFT_SUBSCRIPTIONS.onDelete,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const deletedItem = subscriptionData.data.onDeleteShifts;
+
+        const filteredItems = prev.listShifts.items.filter(
+          (item) => item.id !== deletedItem.id
+        );
+
+        return {
+          ...prev,
+          listShifts: {
+            ...prev.listShifts,
+            items: filteredItems,
+          },
+        };
+      },
+    });
+
+    // Cleanup on unmount
+    return () => {
+      unsubCreate();
+      unsubUpdate();
+      unsubDelete();
+    };
+  }, [subscribeToMore]);
+};
+
+/*****************************************************************************************
+ * Custom List Query: listShiftsCustom
+ *****************************************************************************************/
 const listShiftsCustom = /* GraphQL */ `
   query ListShifts(
     $filter: ModelShiftsFilterInput
@@ -66,18 +165,22 @@ const listShiftsCustom = /* GraphQL */ `
   }
 `;
 
+/*****************************************************************************************
+ * 1) useSubtractPosition Hook
+ *****************************************************************************************/
 export const useSubtractPosition = () => {
   const [subtractPosition] = useMutation(updateShifts);
   const {
     loading: queryLoading,
     error: queryError,
     data,
-  } = useQuery(getShifts, { skip: true });
+  } = useQuery(getShifts, {
+    skip: true,
+  });
 
   const subtractPositionFunc = async (shiftId, ErrorToast, SuccessToast) => {
-    if (!queryLoading && !queryError) {
+    if (!queryLoading && !queryError && data?.getShifts) {
       const currentNumOfPositions = Number(data.getShifts.numOfPositions);
-
       const newNumOfPositions = String(currentNumOfPositions - 1);
 
       try {
@@ -109,31 +212,18 @@ export const useSubtractPosition = () => {
   };
 };
 
+/*****************************************************************************************
+ * 2) useCreateShift Hook
+ *****************************************************************************************/
 export const useCreateShift = () => {
   const [createShiftMutation, { data, loading, error }] = useMutation(
     gql(createShifts)
   );
 
-  // const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
   const validateShiftInput = (input) => {
     const errors = [];
-
-    if (!input?.facilityID) {
-      errors.push("Facility not selected.");
-      return errors;
-    }
-    if (!input?.roleRequired) {
-      errors.push("Role not selected.");
-      return errors;
-    }
-    // if (
-    //   !Number.isInteger(Number(input.numOfPositions)) ||
-    //   Number(input.numOfPositions) <= 0
-    // ) {
-    //   errors.push("Select numer of positions.");
-    //   return errors;
-    // }
+    if (!input?.facilityID) errors.push("Facility not selected.");
+    if (!input?.roleRequired) errors.push("Role not selected.");
 
     if (
       !Number.isInteger(Number(input.numOfPositions)) ||
@@ -141,54 +231,38 @@ export const useCreateShift = () => {
       /^0/.test(String(input.numOfPositions))
     ) {
       errors.push("Select number of positions.");
-      return errors;
     }
-
     if (!moment(input.shiftStart, "HH:mm:ss.SSS[Z]", true).isValid()) {
       errors.push("Shift start time is not valid.");
-      return errors;
     }
-
     if (!moment(input.shiftEnd, "HH:mm:ss.SSS[Z]", true).isValid()) {
       errors.push("Shift end time is not valid.");
-      return errors;
     }
-
     if (!moment(input.date, "YYYY-MM-DD", true).isValid()) {
       errors.push("Date is not valid.");
-      return errors;
     }
-
     if (!moment(input.shiftStartDT).isValid()) {
       errors.push("Shift start datetime is not valid.");
-      return errors;
     }
-
     if (!moment(input.shiftEndDT).isValid()) {
       errors.push("Shift end datetime is not valid.");
-      return errors;
     }
 
     if (input?.isIncentive) {
       if (!input?.incentives?.incentiveBy) {
         errors.push("Incentive by can't be empty.");
-        return errors;
       }
-
       if (!input?.incentives?.incentiveType) {
         errors.push("Please select an incentive type.");
-        return errors;
       }
       if (!input?.incentives?.incentiveAmount) {
         errors.push("Incentive amount can't be empty.");
-        return errors;
       }
     }
 
-    // ... Add more checks for other fields ...
-
     return errors;
   };
+
   const createShiftQuery = async (input, disablePastShiftValidation) => {
     try {
       const validationErrors = validateShiftInput(input);
@@ -196,15 +270,13 @@ export const useCreateShift = () => {
         throw new Error(validationErrors.join("\n"));
       }
 
-      // Check if endTime is before startTime
+      // Check if endTime is before startTime (indicates overnight shift)
       const isNextDay = input.shiftEnd < input.shiftStart;
-
-      // If it's the next day, add one day to the date
       const endDate = isNextDay
         ? moment(input.date).add(1, "days").format("YYYY-MM-DD")
         : input.date;
 
-      // Generate the moment object without converting to string
+      // Build UTC versions of start and end times
       const utcStartDatetimeObj = moment
         .tz(
           `${input.date}T${
@@ -216,15 +288,13 @@ export const useCreateShift = () => {
         )
         .utc();
 
-      const currentDate = moment.utc(); // Current UTC datetime
-
       if (!disablePastShiftValidation) {
-        if (utcStartDatetimeObj.isBefore(currentDate)) {
+        const nowUTC = moment.utc();
+        if (utcStartDatetimeObj.isBefore(nowUTC)) {
           throw new Error("You cannot create a shift that starts in the past.");
         }
       }
 
-      // Now, convert utcStartDatetimeObj to string format if needed
       const utcStartDatetime = utcStartDatetimeObj.format(
         "YYYY-MM-DDTHH:mm:ss.SSS[Z]"
       );
@@ -241,41 +311,24 @@ export const useCreateShift = () => {
         .utc()
         .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
-      // const {data} = await createShiftMutation({
-      //   variables: {input: input},
-      // });
       const convertedInput = {
         ...input,
         shiftStart: convertTimeToAWSTime(input.shiftStart, userTimezone),
         shiftEnd: convertTimeToAWSTime(input.shiftEnd, userTimezone),
         date: convertDateTimeToAWSDateTime(
-          input.date + "T" + input.shiftStart,
+          `${input.date}T${input.shiftStart}`,
           userTimezone
         ).split("T")[0],
-
         shiftStartDT: utcStartDatetime,
         shiftEndDT: utcEndDatetime,
       };
 
-      // console.log(
-      //   "🚀 ~ file: index.js:88 ~ convertedInput:",
-      //   // convertedInput,
-      //   input.shiftStart,
-      //   input.shiftEnd,
-      //   // input.date,
-      //   utcStartDatetime,
-      //   utcEndDatetime
-      // );
-
+      // Use Amplify API for creation to match original behavior
       const data = await API.graphql(
-        graphqlOperation(createShifts, {
-          input: convertedInput,
-        })
+        graphqlOperation(createShifts, { input: convertedInput })
       );
 
-      // console.log("🚀 ~ file: index.js:32 ~ createShiftQuery ~ data:", data);
-      // return data;
-      return convertedInput;
+      return convertedInput; // or return data if you want the response
     } catch (error) {
       throw error;
     }
@@ -284,7 +337,9 @@ export const useCreateShift = () => {
   return { createShiftQuery, data, loading, error };
 };
 
-// DELETE_SHIFT mutation hook
+/*****************************************************************************************
+ * 3) useDeleteShift Hook
+ *****************************************************************************************/
 export const useDeleteShift = () => {
   const [deleteShiftMutation, { data, loading, error }] = useMutation(
     gql(deleteShifts)
@@ -292,19 +347,19 @@ export const useDeleteShift = () => {
 
   const deleteShiftQuery = async (input) => {
     try {
-      const { data } = await deleteShiftMutation({
-        variables: { input: input },
-      });
+      const { data } = await deleteShiftMutation({ variables: { input } });
       return data;
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw err;
     }
   };
 
   return { deleteShiftQuery, data, loading, error };
 };
 
-// updateShift mutation hook
+/*****************************************************************************************
+ * 4) useUpdateShift Hook
+ *****************************************************************************************/
 export const useUpdateShift = () => {
   const [updateShiftMutation, { data, loading, error }] = useMutation(
     gql(updateShifts)
@@ -314,11 +369,11 @@ export const useUpdateShift = () => {
     input,
     disablePastShiftValidation = false
   ) => {
-    console.log("🚀 ~ file: index.js:237 ~ useUpdateShift ~ input:", input);
+    console.log("Updating shift with input:", input);
     try {
-      let convertedInput = null;
+      let convertedInput;
+
       if (input.shiftStart && input.shiftEnd && input.date) {
-        // Generate the moment object without converting to string
         const utcStartDatetimeObj = moment
           .tz(
             `${input.date}T${
@@ -330,17 +385,15 @@ export const useUpdateShift = () => {
           )
           .utc();
 
-        const currentDate = moment.utc(); // Current UTC datetime
-
         if (!disablePastShiftValidation) {
-          if (utcStartDatetimeObj.isBefore(currentDate)) {
+          const nowUTC = moment.utc();
+          if (utcStartDatetimeObj.isBefore(nowUTC)) {
             throw new Error(
               "You cannot create a shift that starts in the past."
             );
           }
         }
 
-        // Now, convert utcStartDatetimeObj to string format if needed
         const utcStartDatetime = utcStartDatetimeObj.format(
           "YYYY-MM-DDTHH:mm:ss.SSS[Z]"
         );
@@ -357,38 +410,29 @@ export const useUpdateShift = () => {
           .utc()
           .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
-        // const {data} = await createShiftMutation({
-        //   variables: {input: input},
-        // });
         convertedInput = {
           ...input,
           shiftStart: convertTimeToAWSTime(input.shiftStart, userTimezone),
           shiftEnd: convertTimeToAWSTime(input.shiftEnd, userTimezone),
           date: convertDateTimeToAWSDateTime(
-            input.date + "T" + input.shiftStart,
+            `${input.date}T${input.shiftStart}`,
             userTimezone
           ).split("T")[0],
-
           shiftStartDT: utcStartDatetime,
           shiftEndDT: utcEndDatetime,
         };
       } else {
-        convertedInput = {
-          ...input,
-        };
+        // If user is not changing shiftStart/shiftEnd/date, just pass the original input
+        convertedInput = { ...input };
       }
 
-      const sanitizedInput = JSON.parse(JSON.stringify(convertedInput)); // Deep copy
-
+      // Remove any stray __typename from nested objects
+      const sanitizedInput = JSON.parse(JSON.stringify(convertedInput));
       if (sanitizedInput?.incentives) {
         delete sanitizedInput.incentives.__typename;
       }
 
-      // convertedInput
-      console.log(
-        "🚀 ~ file: index.js:292 ~ useUpdateShift ~ convertedInput:",
-        sanitizedInput
-      );
+      console.log("Final sanitized input:", sanitizedInput);
 
       const { data } = await updateShiftMutation({
         variables: { input: sanitizedInput },
@@ -402,11 +446,9 @@ export const useUpdateShift = () => {
   return { updateShiftQuery, data, loading, error };
 };
 
-const convertToAWSDate = (dateStr) => {
-  const awsDateFormat = "YYYY-MM-DD";
-  return moment(dateStr, "dddd, M/D/YYYY").format(awsDateFormat);
-};
-
+/*****************************************************************************************
+ * 5) useListShifts Hook (Real-Time)
+ *****************************************************************************************/
 export const useListShifts = (
   facilityID,
   role,
@@ -419,12 +461,14 @@ export const useListShifts = (
   isGuarantee,
   isIncentive
 ) => {
+  const convertToAWSDate = (dateStr) =>
+    moment(dateStr, "dddd, M/D/YYYY").format("YYYY-MM-DD");
+
+  // Build Filter
   const filter = {
     _deleted: { ne: true },
-    // isArchive: { ne: true },
     ...(facilityID && { facilityID: { eq: facilityID } }),
     ...(role && { roleRequired: { eq: role } }),
-    // ...(date && { date: { eq: date } }),
     ...(!date &&
       startDate &&
       endDate && {
@@ -435,215 +479,185 @@ export const useListShifts = (
           ],
         },
       }),
-
     ...(isGuarantee && { cancellationGuarantee: { eq: isGuarantee } }),
     ...(isIncentive && { isIncentive: { eq: isIncentive } }),
   };
 
-  // const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  // Run Query
+  const { data, loading, error, refetch, subscribeToMore } = useQuery(
+    gql(listShiftsCustom),
+    {
+      variables: { filter },
+    }
+  );
 
-  // console.log("🚀 ~ file: index.js:208 ~ filter:", filter);
-  const { data, loading, error, refetch } = useQuery(gql(listShiftsCustom), {
-    variables: {
-      filter: filter,
-    },
-    pollInterval: 5000,
-  });
+  // Attach real-time subscriptions
+  useShiftSubscriptions(subscribeToMore);
 
-  if (loading) {
-    console.log("Loading...");
-    return { loading, error, shifts: [] };
-  }
-
-  if (error) {
-    console.error("Error!", error);
-    return { loading, error, shifts: [] };
-  }
-
-  const formatDate = (date) => {
-    const year = date.getFullYear();
-    // getMonth returns month index starting from 0 (January) to 11 (December)
-    // so we add 1 to get the correct month number
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
+  // Once data arrives, format each shift with local times
+  const formatDate = (aDate) => {
+    const year = aDate.getFullYear();
+    const month = String(aDate.getMonth() + 1).padStart(2, "0");
+    const day = String(aDate.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
 
-  // console.log("listShifts Data received!", data);
-
-  // const shifts = data ? data?.listShifts?.items : [];
-  const shifts = data
-    ? data?.listShifts?.items
+  const shifts = data?.listShifts?.items
+    ? data.listShifts.items
         .map((shift) => {
-          // console.log("== > BEFORE", shift, userTimezone);
+          const temp = { ...shift };
 
-          const temp = {
-            ...shift,
-          };
-
+          // Convert to local time
           const localizedStartDT = moment
-            .tz(temp?.shiftStartDT, "UTC")
+            .tz(temp.shiftStartDT, "UTC")
             .tz(userTimezone)
             .format("YYYY-MM-DDTHH:mm:ss.SSS");
 
           const localizedEndDT = moment
-            .tz(temp?.shiftEndDT, "UTC")
+            .tz(temp.shiftEndDT, "UTC")
             .tz(userTimezone)
             .format("YYYY-MM-DDTHH:mm:ss.SSS");
 
-          // // // FIXME: Investigate why removing this fixes my issues
           temp.date = localizedStartDT.split("T")[0];
-          // console.log("🚀 ~ file: index.js:438 temp.date:", temp.date, date);
-
-          temp.shiftStart = localizedStartDT?.split("T")[1];
-          temp.shiftEnd = localizedEndDT?.split("T")[1];
-
-          // console.log("== > AFTER", temp?.date, temp?.shiftStart, temp?.shiftEnd);
-          // console.log("== > AFTERHOURS", localizedStartDT, localizedEndDT);
+          temp.shiftStart = localizedStartDT.split("T")[1];
+          temp.shiftEnd = localizedEndDT.split("T")[1];
 
           return temp;
         })
-        .filter((obj) => (date ? obj.date === formatDate(date) : true))
+        .filter((obj) => {
+          if (date) return obj.date === formatDate(date);
+          return true;
+        })
     : [];
 
   return { shifts, loading, error, refetch };
 };
 
-// import { gql, useApolloClient, useQuery } from "@apollo/client";
-
+/*****************************************************************************************
+ * 6) useListMarketplace Hook (Real-Time)
+ *****************************************************************************************/
 export const useListMarketplace = (facilityID, role, date) => {
-  // Calculate the cutoff date (2 days before the current date)
+  const [shifts, setShifts] = useState([]);
+  const client = useApolloClient();
+
+  // The “cutoff” is 2 days ago if no specific date is given
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 2);
   const cutoffDate = currentDate.toISOString().split("T")[0];
 
   const filter = {
     _deleted: { ne: true },
-    // date: date ? { eq: date } : { gte: cutoffDate },
-    ...(date && { date: { eq: date } }),
     numOfPositions: { ne: "0" },
+    ...(date && { date: { eq: date } }),
+    ...(!date && { date: { gte: cutoffDate } }),
     ...(facilityID && { facilityID: { eq: facilityID } }),
     ...(role && { roleRequired: { eq: role } }),
   };
 
-  const { data, loading, error, refetch } = useQuery(gql(listShiftsCustom), {
-    variables: {
-      filter,
-    },
-    pollInterval: 5000,
-  });
-
-  const client = useApolloClient();
-
-  const [shifts, setShifts] = useState([]);
+  // Query & Subscribe
+  const { data, loading, error, refetch, subscribeToMore } = useQuery(
+    gql(listShiftsCustom),
+    { variables: { filter } }
+  );
+  useShiftSubscriptions(subscribeToMore);
 
   useEffect(() => {
     const fetchShiftsAndFacilities = async () => {
-      if (data) {
-        const shiftsData = data.listShifts.items.filter(
-          (element) => element._deleted !== true
-        );
+      if (!data) return;
 
-        const fetchFacilitiesPromises = shiftsData.map((shift) =>
+      // Filter out any deleted
+      const shiftsData = data.listShifts.items.filter(
+        (element) => element._deleted !== true
+      );
+
+      // Fetch facility for each shift
+      const facilitiesData = await Promise.all(
+        shiftsData.map((shift) =>
           client.query({
             query: gql(getFacility),
             variables: { id: shift.facilityID },
-            // fetchPolicy: "cache-first",
           })
-        );
+        )
+      );
 
-        const facilitiesData = await Promise.all(fetchFacilitiesPromises);
+      // Attach facility info to each shift
+      const enrichedShifts = shiftsData.map((shift, idx) => ({
+        ...shift,
+        facility: facilitiesData[idx]?.data?.getFacility,
+      }));
 
-        const enrichedShifts = shiftsData.map((shift, index) => ({
+      // Convert each shift to local times
+      const localizedShifts = enrichedShifts.map((shift) => {
+        const localizedStartDT = moment
+          .tz(shift.shiftStartDT, "UTC")
+          .tz(userTimezone)
+          .format("YYYY-MM-DDTHH:mm:ss.SSS");
+
+        const localizedEndDT = moment
+          .tz(shift.shiftEndDT, "UTC")
+          .tz(userTimezone)
+          .format("YYYY-MM-DDTHH:mm:ss.SSS");
+
+        return {
           ...shift,
-          facility: facilitiesData[index]?.data?.getFacility,
-        }));
+          date: localizedStartDT.split("T")[0],
+          shiftStart: localizedStartDT.split("T")[1],
+          shiftEnd: localizedEndDT.split("T")[1],
+          shiftStartDT: localizedStartDT,
+          shiftEndDT: localizedEndDT,
+        };
+      });
 
-        const shifts = enrichedShifts
-          ? enrichedShifts?.map((shift) => {
-              // console.log('== > BEFORE', shift, userTimezone);
-              const localizedStartDT = moment
-                .tz(shift?.shiftStartDT, "UTC")
-                .tz(userTimezone)
-                .format("YYYY-MM-DDTHH:mm:ss.SSS");
-
-              const localizedEndDT = moment
-                .tz(shift?.shiftEndDT, "UTC")
-                .tz(userTimezone)
-                .format("YYYY-MM-DDTHH:mm:ss.SSS");
-
-              // Convert AWS times and dates to local
-              const temp = { ...shift };
-
-              temp.date = localizedStartDT.split("T")[0];
-
-              temp.shiftStart = localizedStartDT?.split("T")[1];
-              temp.shiftEnd = localizedEndDT?.split("T")[1];
-
-              temp.shiftStartDT = localizedStartDT;
-              temp.shiftEndDT = localizedEndDT;
-
-              return temp;
-            })
-          : [];
-
-        setShifts(shifts);
-        // setShifts(enrichedShifts);
-      }
+      setShifts(localizedShifts);
     };
 
     fetchShiftsAndFacilities();
-  }, [data]);
+  }, [data, client]);
 
   if (loading) {
-    console.log("Loading...");
+    console.log("Loading Marketplace...");
     return { loading, error, shifts: [] };
   }
-
   if (error) {
-    console.error("Error!", error);
+    console.error("Error in useListMarketplace!", error);
     return { loading, error, shifts: [] };
   }
 
   return { shifts, loading, error, refetch };
 };
 
+/*****************************************************************************************
+ * 7) useListMarketplaceCount Hook (Real-Time)
+ *****************************************************************************************/
 export const useListMarketplaceCount = () => {
-  const { data, loading, error, refetch } = useQuery(gql(listShifts), {
-    variables: {
-      filter: {
-        _deleted: { ne: true },
-      },
-      // sortDirection: "DESC",
-      // sort: "createdAt",
-    },
-  });
-
   const [shifts, setShifts] = useState([]);
-  const [shiftsCount, setShiftsCount] = useState(0); // Add this line to keep track of the count
+  const [shiftsCount, setShiftsCount] = useState(0);
 
-  const fetchShiftsAndFacilities = async (triggerRefetch) => {
-    if (data) {
+  // Query & Subscribe
+  const { data, loading, error, refetch, subscribeToMore } = useQuery(
+    gql(listShifts),
+    {
+      variables: { filter: { _deleted: { ne: true } } },
+    }
+  );
+  useShiftSubscriptions(subscribeToMore);
+
+  useEffect(() => {
+    if (data?.listShifts?.items) {
       const shiftsData = data.listShifts.items.filter(
         (element) => element._deleted !== true
       );
       setShifts(shiftsData);
-      setShiftsCount(shiftsData.length); // Update the count here
+      setShiftsCount(shiftsData.length);
     }
-  };
-
-  useEffect(() => {
-    fetchShiftsAndFacilities();
   }, [data]);
 
   if (loading) {
-    // console.log('Loading...');
-    return { loading, error, shifts: [], shiftsCount: 0 }; // Include shiftsCount here
+    return { loading, error, shifts: [], shiftsCount: 0 };
   }
-
   if (error) {
-    console.error("Error!", error);
-    return { loading, error, shifts: [], shiftsCount: 0 }; // Include shiftsCount here
+    console.error("Error in useListMarketplaceCount!", error);
+    return { loading, error, shifts: [], shiftsCount: 0 };
   }
 
   return {
@@ -652,6 +666,5 @@ export const useListMarketplaceCount = () => {
     loading,
     error,
     refetch,
-    fetchShiftsAndFacilities,
-  }; // Include shiftsCount here
+  };
 };
