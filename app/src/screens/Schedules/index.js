@@ -292,30 +292,8 @@ const Schedules = () => {
   }, [fetchedShifts, timecards, selectedShiftTimings]);
 
   const filteredPeople = useMemo(() => {
-    console.log(
-      "selectedShift",
-      selectedShift,
-      people.filter((person) => {
-        return person?.PeopleFacility?.items?.some(
-          (facility) => facility.facilityId
-        );
-      })
-    );
     return people
       .filter((person) => {
-        console.log(
-          type == ADMIN
-            ? person?.PeopleFacility?.items?.some(
-                (facility) => facility.facilityId === selectedShift?.facilityID
-              )
-              ? true
-              : false
-            : person?.PeopleFacility?.items?.some(
-                (facility) => facility.facilityId === myFacility?.id
-              )
-            ? myFacility?.id && true
-            : false
-        );
         return type == ADMIN
           ? person?.PeopleFacility?.items?.some(
               (facility) => facility.facilityId === selectedShift?.facilityID

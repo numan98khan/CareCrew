@@ -144,7 +144,7 @@ const Messaging = () => {
               </div>
             </div>
 
-            <div className="mt-2">
+            <div className="mt-2 space-y-2">
               {chatrooms
                 ?.sort(
                   (a, b) =>
@@ -163,7 +163,7 @@ const Messaging = () => {
                       //   item?.id === chatroom?.id ? "bg-gray-200" : ""
                       // }`}
 
-                      className={`rounded-lg cursor-pointer ${
+                      className={`rounded-lg cursor-pointer  ${
                         item?.id === chatroom?.id ? "bg-gray-200" : ""
                       }`}
                     >
