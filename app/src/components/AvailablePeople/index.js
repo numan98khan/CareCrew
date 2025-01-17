@@ -19,7 +19,6 @@ export default function AvailableEmployee({
   useEffect(() => {
     const getImage = async () => {
       const image = await Storage.get(employee.profilePicture);
-      console.log("employee.profilePicture", employee.profilePicture);
       setImgUrl(image);
     };
 

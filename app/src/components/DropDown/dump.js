@@ -38,7 +38,6 @@ const DropDown = ({ placeholder, value, setValue, options, labels, label }) => {
   //   setIsOpen(false);
   //   closeOpenModal();
 
-  //   console.log("Selecting and closing", isOpen, item, label);
   // };
 
   useEffect(() => {

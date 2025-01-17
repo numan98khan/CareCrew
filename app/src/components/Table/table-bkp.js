@@ -118,8 +118,6 @@ const TableComponent = ({
 
   // // const [isOpenInvoiceModal, setIsOpenInvoiceModal] = useState(false);
 
-  // console.log("SELECTED INVOICE: ", selectedInvoice);
-
   // function openInvoiceModal() {
   //   setIsOpenInvoiceModal(true);
   // }
@@ -135,8 +133,6 @@ const TableComponent = ({
   const onClose = () => {
     setOpen(false);
   };
-
-  // console.log(`TABLE DATA (${config})`, data);
 
   return (
     <div

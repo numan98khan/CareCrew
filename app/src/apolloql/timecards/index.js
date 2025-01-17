@@ -147,10 +147,7 @@ export const useCreateTimecard = () => {
 
       return newTimecardData;
     } catch (error) {
-      console.log(
-        "🚀 ~ file: index.js:182 ~ createTimecardQuery ~ error:",
-        error
-      );
+      console.error("createTimecardQuery ~ error:", error);
 
       throw error;
     }
@@ -184,11 +181,7 @@ export const useCreateTimecard_V1 = () => {
       _deleted: { ne: true },
       peopleID: { eq: peopleID },
     };
-    console.log(
-      "🚀 ~ file: index.js:73 ~ createTimecardQuery ~ input FILTERS:",
-      filters,
-      input
-    );
+
     try {
       // Query existing timecards using Apollo client
       const { data: existingTimecardsData } = await client.query({
@@ -198,19 +191,6 @@ export const useCreateTimecard_V1 = () => {
         },
         fetchPolicy: "network-only",
       });
-      // console.log(
-      //   "🚀 ~ file: index.js:82 ~ createTimecardQuery ~ existingTimecardsData:",
-      //   existingTimecardsData
-      // );
-
-      // // return 0;
-      // console.log(
-      //   "Existing timecards",
-      //   peopleID,
-      //   existingTimecardsData?.listTimecards?.items?.filter(
-      //     (obj) => obj.shiftsID === input.shiftsID && !obj.isCallOff
-      //   )?.length
-      // );
 
       if (
         existingTimecardsData?.listTimecards?.items?.filter(
@@ -240,10 +220,7 @@ export const useCreateTimecard_V1 = () => {
         return newTimecardData;
       }
     } catch (error) {
-      console.log(
-        "🚀 ~ file: index.js:182 ~ createTimecardQuery ~ error:",
-        error
-      );
+      console.error("createTimecardQuery ~ error:", error);
 
       throw error;
     }
@@ -264,11 +241,6 @@ export const useListTimecards = (peopleID) => {
     filterObject.filter.peopleID = { eq: peopleID };
   }
 
-  // console.log(
-  //   "🚀 ~ file: index.js:177 ~ useListTimecards ~ filterObject:",
-  //   filterObject
-  // );
-
   // const { data, loading, error, refetch } = useQuery(gql(listTimecards));
   const { data, loading, error, refetch } = useQuery(gql(listTimecards), {
     variables: filterObject,
@@ -276,7 +248,6 @@ export const useListTimecards = (peopleID) => {
   });
 
   if (loading) {
-    console.log("Loading...");
     return { loading, error, timecards: [] };
   }
 
@@ -284,8 +255,6 @@ export const useListTimecards = (peopleID) => {
     console.error("Error!", error);
     return { loading, error, timecards: [] };
   }
-
-  // console.log("listTimecards Data received!", data);
 
   // const timecards = data
   //   ? data.listTimecards.items.filter((element) => element._deleted !== true)
@@ -373,8 +342,6 @@ export const useListUpcomingTimecards = (
       between: [dateRange?.previous, dateRange?.next],
     };
   }
-
-  // console.log("🚀 ~ file: index.js:368 ~ filterObject:", filterObject);
 
   const client = useApolloClient(); // Use Apollo client
 
@@ -659,10 +626,6 @@ export const useListUpcomingTimecards = (
       JSON.stringify(data?.listTimecards?.items) !==
         JSON.stringify(existingData)
     ) {
-      console.log(
-        "🚀 ~ file: index.js:641 ~ fetchShiftsAndFacilities ~ data?.listTimecards?.items:",
-        data?.listTimecards?.items?.map((obj) => obj?.id)
-      );
       setExistingData(data?.listTimecards?.items);
       const timecardsData = data.listTimecards.items;
       const { peopleData, facilitiesData, shiftsDataParsed } =
@@ -672,12 +635,6 @@ export const useListUpcomingTimecards = (
       const enrichedTimecards = timecardsData
         .map((timecard, index) => {
           const shift = findShift(timecard, shiftsDataParsed);
-          // console.log(
-          //   '🚀 ~ file: index.js:668 ~ .map ~ shift:',
-          //   shift?.id,
-          //   shift?.shiftStartDT,
-          //   isShiftAfterCurrentDate(shift),
-          // );
 
           if (
             shift &&
@@ -736,23 +693,19 @@ export const useListUpcomingTimecards = (
 
   useEffect(() => {
     if (createdData) {
-      console.log("TIMECARD CREATED");
       refetch();
     }
 
     if (deletedData) {
-      console.log("TIMECARD DELETED");
       refetch();
     }
 
     if (updatedData) {
-      console.log("TIMECARD UPDATED");
       refetch();
     }
   }, [data, createdData, deletedData, updatedData]);
 
   if (loading) {
-    console.log("Loading...");
     return { loading, error, timecards: [] };
   }
 
@@ -779,7 +732,6 @@ export const useListUpcomingTimecards_V2 = (
   filterObject.filter._deleted = { ne: true };
 
   if (date) {
-    // console.log("🚀 ~ file: index.js:256 ~ date:", date);
     // const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     // const serverDate = date
     //   ? convertDateToAWSDate(date, userTimezone)
@@ -787,7 +739,6 @@ export const useListUpcomingTimecards_V2 = (
     // filterObject.filter.date = { eq: serverDate };
 
     const dateRange = extractDateRange(date);
-    // console.log(dateRange); // { previous: '2023-01-02', current: '2023-01-03', next: '2023-01-04' }
 
     filterObject.filter.date = {
       between: [dateRange?.previous, dateRange?.next],
@@ -849,11 +800,6 @@ export const useListUpcomingTimecards_V2 = (
         const timecardsData = data.listTimecards.items.filter(
           (element) => element._deleted !== true
         );
-        // console.log(
-        //   "🚀 ~ file: index.js:132 ~ fetchShiftsAndFacilities ~ timecardsData:",
-        //   timecardsData,
-        //   data
-        // );
 
         const fetchShiftsPromises = timecardsData.map((timecard) =>
           client.query({
@@ -881,10 +827,6 @@ export const useListUpcomingTimecards_V2 = (
         const shiftsData = await Promise.all(fetchShiftsPromises);
         const fetchFacilitiesPromises = shiftsData.map((shiftResponse) => {
           const shift = shiftResponse.data.getShifts;
-          // console.log(
-          //   "🚀 ~ file: index.js:261 ~ fetchFacilitiesPromises ~ shift:",
-          //   shift
-          // );
 
           return client.query({
             // Use Apollo client query
@@ -897,10 +839,6 @@ export const useListUpcomingTimecards_V2 = (
         const facilitiesData = await Promise.all(fetchFacilitiesPromises);
 
         const shiftsDataParsed = shiftsData.map((obj) => obj?.data?.getShifts);
-        // console.log(
-        //   "🚀 ~ file: index.js:413 ~ fetchShiftsAndFacilities ~ shiftsDataParsed:",
-        //   shiftsDataParsed
-        // );
 
         const enrichedTimecards = timecardsData
           .map((timecard, index) => {
@@ -908,21 +846,6 @@ export const useListUpcomingTimecards_V2 = (
             const shift = shiftsDataParsed?.find(
               (obj) => obj?.id === timecard?.shiftsID
             );
-
-            // console.log(
-            //   "🚀 ~ file: index.js:406 ~ enrichedTimecards ~ shift:",
-            //   shift,
-            //   timecard?.shiftsID,
-            //   shiftsDataParsed,
-            //   shiftsDataParsed.map((obj) => obj?.id)
-            // );
-
-            // console.log(
-            //   "🚀 ~ file: index.js:332 ~ enrichedTimecards ~ timecard.clockInTime:",
-            //   timecard.clockInTime
-            //     ? convertAWSDateTimeToLocal(timecard.clockInTime, userTimezone)
-            //     : null
-            // );
 
             if (shift) {
               return {
@@ -994,7 +917,6 @@ export const useListUpcomingTimecards_V2 = (
   }, [data]);
 
   if (loading) {
-    console.log("Loading...");
     return { loading, error, timecards: [] };
   }
 
@@ -1059,7 +981,6 @@ export const useUpdateTimecard = () => {
 //   });
 
 //   if (loading) {
-//     console.log("Loading...");
 //     return { loading, error, timecards: [] };
 //   }
 
@@ -1067,8 +988,6 @@ export const useUpdateTimecard = () => {
 //     console.error("Error!", error);
 //     return { loading, error, timecards: [] };
 //   }
-
-//   // console.log("listTimecards Data received!", data);
 
 //   const timecards = data
 //     ? data.listTimecards.items.filter((element) => element._deleted !== true)

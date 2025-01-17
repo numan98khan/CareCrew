@@ -221,12 +221,10 @@ export const useGetFacility = (id) => {
   });
 
   if (loading) {
-    console.log("Loading Facility...");
     return { loading, error, facility: null };
   }
 
   if (error) {
-    console.error("Error!", error);
     return { loading, error, facility: null };
   }
 
@@ -310,7 +308,6 @@ export const useListFacilities = () => {
   // const { data, loading, error, refetch } = useQuery(gql(listFac));
 
   if (loading) {
-    console.log("Loading Facilities...");
     return { loading, error, people: [] };
   }
 
@@ -318,8 +315,6 @@ export const useListFacilities = () => {
     console.error("Error!", error);
     return { loading, error, people: [] };
   }
-
-  // console.log("listFacilities Data received!", data);
 
   const facilities = data
     ? data.listFacilities.items.filter((element) => element._deleted !== true)

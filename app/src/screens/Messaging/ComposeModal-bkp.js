@@ -55,7 +55,6 @@ const MessageModal = ({
   const [facility, setFacility] = useState(null);
   const [receiver, setReceiver] = useState(ReceiverType[2]);
   const handleReceiverChange = (e) => {
-    // console.log("handleReceiverChange", e);
     // if (e === ReceiverType[1]) {
     //   // setReceiver(e);
     //   setFacilityModalOpen(true);

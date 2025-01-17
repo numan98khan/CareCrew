@@ -189,7 +189,6 @@ export const useListNotifications = ({
   }, [refetch]);
 
   if (loading) {
-    console.log("Loading Notifications...");
     return { loading, error, notifications: [] };
   }
 

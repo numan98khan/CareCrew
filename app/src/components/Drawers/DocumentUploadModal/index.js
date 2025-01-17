@@ -65,10 +65,6 @@ function DocumentUploadModal({
           key: response.key,
           expiration: expDate,
         };
-        console.log(
-          "🚀 ~ file: index.js:68 ~ submitDocument ~ newDocument:",
-          newDocument
-        );
 
         // return;
         // Update the People type to include the new document
@@ -83,15 +79,6 @@ function DocumentUploadModal({
 
           _version: people._version,
         };
-        console.log(
-          "🚀 ~ file: index.js:86 ~ submitDocument ~ updatedPeople.updatedDocuments:",
-          updatedPeople.updatedDocuments
-        );
-
-        console.log(
-          "🚀 ~ file: index.js:75 ~ submitDocument ~ updatedPeople:",
-          updatedPeople
-        );
 
         try {
           await updatePeopleQuery(updatedPeople);
@@ -102,7 +89,7 @@ function DocumentUploadModal({
             handleChecklistUpdate(docName);
           }
         } catch (error) {
-          console.log("Error updating people: ", error);
+          console.error("Error updating people: ", error);
           ErrorToast("Error updating the document: " + error); // Notify user of the error
         }
       } else {

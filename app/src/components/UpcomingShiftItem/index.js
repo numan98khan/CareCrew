@@ -25,7 +25,6 @@ export default function UpcomingShiftItem({
   onClick,
 }) {
   const isActiveClock = shiftType === "Clocked-In" ? true : false;
-  // console.log("isActiveClock", isActiveClock);
 
   // // const shiftStartDateTime = moment(
   // //   `${timecard?.shift?.date}T${timecard?.shift?.shiftStart}`
@@ -144,7 +143,6 @@ export default function UpcomingShiftItem({
 
   // Get day of the month number
   const dayOfMonth = dateobj.getDate();
-  // console.log(dayOfMonth); // Outputs: 17
 
   // Get name of the month
   const monthNames = [

@@ -97,10 +97,6 @@ const InfoCard = ({
         // datetime: new Date(),
         peopleID: user?.attributes?.sub,
       };
-      console.log(
-        "🚀 ~ file: News.js:113 ~ handleAddOrUpdate ~ baseInput:",
-        baseInput
-      );
 
       await createNews(baseInput);
       SuccessToast("News created successfully");

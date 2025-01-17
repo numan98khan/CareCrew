@@ -68,7 +68,6 @@ function Reports() {
             graphqlOperation(getPeopleMinimal, { id: user.attributes.sub })
           )
         )?.data?.getPeople;
-        // console.log(userData); // Log the user data (or do something else with it)
         setPayrollCycle(userData?.payrollCycle);
         setLatestPeopleData(userData);
       } catch (error) {

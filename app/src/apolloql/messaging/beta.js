@@ -140,10 +140,7 @@ export const useChatting = (user, personalData, setLoadingChat) => {
     const result = await API.graphql(
       graphqlOperation(getChatRoom, { id: cr.id })
     );
-    console.log(
-      "🚀 ~ file: beta.js:99 ~ fetchMessagesForChatRoom ~ result:",
-      result
-    );
+
     const messages = result.data?.getChatRoom.Messages.items?.sort(
       (a, b) => a._lastChangedAt - b._lastChangedAt
     );
@@ -176,10 +173,6 @@ export const useChatting = (user, personalData, setLoadingChat) => {
       graphqlOperation(createChatRoom, { input: {} })
     );
     const newChatRoom = newChatRoomData.data?.createChatRoom;
-    // console.log(
-    //   "🚀 ~ file: beta.js:96 ~ createNewChatRoom ~ newChatRoom:",
-    //   newChatRoom
-    // );
 
     await API.graphql(
       graphqlOperation(createChatRoomPeople, {
@@ -243,11 +236,6 @@ export const useChatting = (user, personalData, setLoadingChat) => {
   };
 
   const handleSelectUser = async (selectedUser) => {
-    // console.log(
-    //   "🚀 ~ file: beta.js:152 ~ handleSelectUser ~ selectedUser:",
-    //   selectedUser
-    // );
-
     if (chatroom) {
       unsubscribeChatroom(chatroom.id); // Unsubscribe from previous chatroom
       // setChatroom(null); // Set chatroom to null
@@ -292,7 +280,6 @@ export const useChatting = (user, personalData, setLoadingChat) => {
   ) => {
     if (!message) return;
     let documentKey = null;
-    console.log("🚀 ~ file: beta.js:249 ~ useChatting ~ document:", document);
 
     if (document) {
       try {
@@ -318,10 +305,6 @@ export const useChatting = (user, personalData, setLoadingChat) => {
       platform: platform,
       document: documentKey,
     };
-    console.log(
-      "🚀 ~ file: beta.js:272 ~ useChatting ~ messageObj:",
-      messageObj
-    );
 
     // return;
     try {
@@ -364,11 +347,6 @@ export const useChatting = (user, personalData, setLoadingChat) => {
         const receiverPeople = chatroom_.People.items
           .map((obj) => obj.peopleId)
           .filter((obj) => obj !== user?.attributes?.sub);
-        // console.log(
-        //   '🚀 ~ file: beta.js:296 ~ sendMessage ~ receiverPeople:',
-        //   receiverPeople,
-        //   chatroom,
-        // );
 
         // FIXME: Need to create a system where we can differentiate between specifc people notfications and broader audience notifications
         const notificationResponse = await createNotificationQuery(
@@ -381,11 +359,6 @@ export const useChatting = (user, personalData, setLoadingChat) => {
         // const notificationResponse = await createNotificationQuery(
         //   notificationInputForPerson
         //   // receiverPersonId // Pass the individual receiverPersonId
-        // );
-
-        // console.log(
-        //   `Notification sent to ${receiverPersonId}: `,
-        //   notificationResponse
         // );
       }
 
@@ -412,17 +385,12 @@ export const useChatting = (user, personalData, setLoadingChat) => {
 
     // Loop through each user ID and send the message
     for (const userObj of users) {
-      // console.log("User in sendBulkMessages:", userObj);
       //TODO fix first craete chatroom behaviour
       // await chatRoomFetch(userObj);
       let chatRoom = await getCommonChatRoomWithUser(userObj.id);
 
       if (!chatRoom) {
         chatRoom = await createNewChatRoom(userObj);
-        console.log(
-          "🚀 ~ file: beta.js:330 ~ sendBulkMessages ~ chatRoom:",
-          chatRoom
-        );
       }
 
       if (chatRoom) {
@@ -445,17 +413,12 @@ export const useChatting = (user, personalData, setLoadingChat) => {
 
   const addPersonToChatRoom = async (chatRoomId, personId) => {
     try {
-      console.log("addPersonToChatRoom", chatRoomId, personId);
       await API.graphql(
         graphqlOperation(createChatRoomPeople, {
           input: { chatRoomId: chatRoomId, peopleId: personId },
         })
       );
-      console.log(
-        `Added person with ID: ${personId} to chat room with ID: ${chatRoomId}`
-      );
     } catch (e) {
-      console.log(e);
       console.error(`Failed to add person to chat room: ${e}`);
     }
   };

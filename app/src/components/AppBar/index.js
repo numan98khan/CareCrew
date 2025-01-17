@@ -34,7 +34,6 @@ import MenuIconComponent from "../../assets/icons/menuIcons/menu";
 
 export async function signOut(navigate) {
   try {
-    console.log("Signing out.");
     await Auth.signOut();
 
     // Clear the local storage cache
@@ -42,7 +41,7 @@ export async function signOut(navigate) {
 
     navigate("/");
   } catch (error) {
-    console.log("error signing out: ", error);
+    console.error("error signing out: ", error);
   }
 }
 
@@ -168,12 +167,6 @@ const AppBar = ({ children, type, toggleMenu }) => {
     });
     setNotificationModalIsOpen(true);
 
-    // Reset the notifications counter
-    console.log(
-      "🚀 ~ file: index.js:172 ~ openNotificationModal ~ personalData:",
-      personalData
-    );
-
     resetLastNotificationsActivity(personalData?.id);
   };
 
@@ -194,8 +187,6 @@ const AppBar = ({ children, type, toggleMenu }) => {
   }, [notifications, personalData?.lastActivityNotifications]);
 
   const filteredNotifications = useMemo(() => {
-    // console.log("🚀 ~ file: index.js:168 ~ notifications:", notifications);
-
     return notifications.sort(function (a, b) {
       return b._lastChangedAt - a._lastChangedAt;
     });

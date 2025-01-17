@@ -104,7 +104,6 @@ export const useSubtractPosition = () => {
         });
 
         SuccessToast("Updated Shift (new positions): " + newNumOfPositions);
-        console.log("Updated Shift:", updatedData.updateShifts);
       } catch (error) {
         ErrorToast("Error updating shift: " + error.message);
         console.error("Error updating shift:", error.message);
@@ -269,23 +268,12 @@ export const useCreateShift = () => {
         shiftEndDT: utcEndDatetime,
       };
 
-      // console.log(
-      //   "🚀 ~ file: index.js:88 ~ convertedInput:",
-      //   // convertedInput,
-      //   input.shiftStart,
-      //   input.shiftEnd,
-      //   // input.date,
-      //   utcStartDatetime,
-      //   utcEndDatetime
-      // );
-
       const data = await API.graphql(
         graphqlOperation(createShifts, {
           input: convertedInput,
         })
       );
 
-      // console.log("🚀 ~ file: index.js:32 ~ createShiftQuery ~ data:", data);
       // return data;
       return convertedInput;
     } catch (error) {
@@ -326,7 +314,6 @@ export const useUpdateShift = () => {
     input,
     disablePastShiftValidation = false
   ) => {
-    console.log("🚀 ~ file: index.js:237 ~ useUpdateShift ~ input:", input);
     try {
       let convertedInput = null;
       if (input.shiftStart && input.shiftEnd && input.date) {
@@ -396,12 +383,6 @@ export const useUpdateShift = () => {
         delete sanitizedInput.incentives.__typename;
       }
 
-      // convertedInput
-      console.log(
-        "🚀 ~ file: index.js:292 ~ useUpdateShift ~ convertedInput:",
-        sanitizedInput
-      );
-
       const { data } = await updateShiftMutation({
         variables: { input: sanitizedInput },
       });
@@ -454,7 +435,6 @@ export const useListShifts = (
 
   // const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-  // console.log("🚀 ~ file: index.js:208 ~ filter:", filter);
   const { data, loading, error, refetch } = useQuery(gql(listShiftsCustom), {
     variables: {
       filter: filter,
@@ -463,7 +443,6 @@ export const useListShifts = (
   });
 
   if (loading) {
-    console.log("Loading...");
     return { loading, error, shifts: [] };
   }
 
@@ -481,14 +460,10 @@ export const useListShifts = (
     return `${year}-${month}-${day}`;
   };
 
-  // console.log("listShifts Data received!", data);
-
   // const shifts = data ? data?.listShifts?.items : [];
   const shifts = data
     ? data?.listShifts?.items
         .map((shift) => {
-          // console.log("== > BEFORE", shift, userTimezone);
-
           const temp = {
             ...shift,
           };
@@ -505,13 +480,9 @@ export const useListShifts = (
 
           // // // FIXME: Investigate why removing this fixes my issues
           temp.date = localizedStartDT.split("T")[0];
-          // console.log("🚀 ~ file: index.js:438 temp.date:", temp.date, date);
 
           temp.shiftStart = localizedStartDT?.split("T")[1];
           temp.shiftEnd = localizedEndDT?.split("T")[1];
-
-          // console.log("== > AFTER", temp?.date, temp?.shiftStart, temp?.shiftEnd);
-          // console.log("== > AFTERHOURS", localizedStartDT, localizedEndDT);
 
           return temp;
         })
@@ -573,7 +544,6 @@ export const useListMarketplace = (facilityID, role, date) => {
 
         const shifts = enrichedShifts
           ? enrichedShifts?.map((shift) => {
-              // console.log('== > BEFORE', shift, userTimezone);
               const localizedStartDT = moment
                 .tz(shift?.shiftStartDT, "UTC")
                 .tz(userTimezone)
@@ -608,7 +578,6 @@ export const useListMarketplace = (facilityID, role, date) => {
   }, [data]);
 
   if (loading) {
-    console.log("Loading...");
     return { loading, error, shifts: [] };
   }
 
@@ -649,7 +618,6 @@ export const useListMarketplaceCount = () => {
   }, [data]);
 
   if (loading) {
-    // console.log('Loading...');
     return { loading, error, shifts: [], shiftsCount: 0 }; // Include shiftsCount here
   }
 

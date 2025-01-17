@@ -48,7 +48,6 @@ export const useListPoints = () => {
   const { data, loading, error } = useQuery(gql(listPoints));
 
   if (loading) {
-    console.log("Loading Points...");
     return { loading, error, points: [] };
   }
 
@@ -56,8 +55,6 @@ export const useListPoints = () => {
     console.error("Error!", error);
     return { loading, error, points: [] };
   }
-
-  // console.log("listPoints Data received!", data);
 
   const points = data
     ? data.listPoints.items.filter((element) => element._deleted !== true)

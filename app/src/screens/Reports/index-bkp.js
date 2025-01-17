@@ -228,8 +228,6 @@ function Reports() {
 
     const data = await fetchApiData(payload);
 
-    console.log("🚀 ~ runReport ~ data.parsedBody:", data.parsedBody);
-
     setTableData(data.parsedBody);
 
     setLoading(false);

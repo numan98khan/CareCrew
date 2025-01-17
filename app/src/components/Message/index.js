@@ -22,7 +22,6 @@ const Message = ({
   status,
   document: docObj,
 }) => {
-  // console.log("🚀 ~ file: index.js:23 ~ document:", docObj);
   const iconSize = 8;
   // Inside your component...
   const [animationProps, setAnimationProps] = useSpring(() => ({
@@ -65,10 +64,7 @@ const Message = ({
   const docPreviewComponent = () => {
     // docObj
     if (docObj) {
-      console.log(
-        "🚀 ~ file: index.js:65 ~ docPreviewComponent ~ docObj:",
-        docObj
-      );
+      console.error("🚀 ~ docPreviewComponent ~ docObj:", docObj);
     }
     return (
       <>

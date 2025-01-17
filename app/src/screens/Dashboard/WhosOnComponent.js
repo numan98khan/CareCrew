@@ -72,11 +72,6 @@ const WhosOnComponent = ({ shifts }) => {
         : 0) > desiredClockOutDecimal
         ? nowDecimal
         : desiredClockOutDecimal) - desiredClockInDecimal;
-    console.log(
-      "🚀 ~ processShift ~ idealShiftWidth:",
-      desiredClockInDecimal,
-      desiredClockOutDecimal
-    );
 
     const idealShiftWidth = hourlyWidth * idealDuration;
 
@@ -121,16 +116,6 @@ const WhosOnComponent = ({ shifts }) => {
 
       const shiftClockInPosition = (clockInDecimal + 0.5) * hourlyWidth;
 
-      // console.log(
-      //   "🚀 ~ processShift ~ idealShiftWidth:",
-      //   desiredClockInDecimal,
-      //   desiredClockOutDecimal,
-      //   idealShiftWidth,
-      //   shiftWidth,
-      //   shift.clockOutTime == null,
-      //   shift
-      // );
-
       return {
         ...shiftData,
         clockInDecimal,
@@ -164,7 +149,6 @@ const WhosOnComponent = ({ shifts }) => {
       desiredClockOutTime,
       idealShiftWidth,
     } = shiftData;
-    // console.log("🚀 ~ renderClockedInShift ~ shiftData:", shiftData);
 
     const shiftStyle = {
       width: `${shiftWidth}px`,
@@ -232,12 +216,6 @@ const WhosOnComponent = ({ shifts }) => {
       desiredClockOutTime,
     } = shiftData;
     const now = new Date();
-
-    // console.log(
-    //   "🚀 ~ renderScheduledShift ~ desiredClockInTime:",
-    //   new Date(desiredClockInTime),
-    //   now
-    // );
 
     const shiftStyle = {
       left: `${shiftStartPosition}px`,

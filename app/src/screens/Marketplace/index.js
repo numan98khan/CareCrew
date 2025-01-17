@@ -137,7 +137,6 @@ const Marketplace = () => {
   const [marketplaceItem, setMarketplaceItem] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const closeModal = () => {
-    // console.log(selectedPeople);
     setModalIsOpen(false);
   };
 
@@ -172,21 +171,11 @@ const Marketplace = () => {
     const currentDateTime = new Date();
 
     const shiftPool = upcomingShifts.map((shift) => shift?.shiftsID);
-    console.log(
-      "🚀 ~ file: index.js:173 ~ marketplaceItems ~ upcomingShifts:",
-      upcomingShifts,
-      upcomingShiftsLoading
-    );
 
     return shifts?.length
       ? shifts
           .filter((shift) => {
             const shiftEndDateTime = new Date(shift?.shiftStartDT);
-            // console.log(
-            //   "🚀 ~ file: index.js:185 ~ .filter ~ shiftEndDateTime:",
-            //   shiftEndDateTime.toISOString(),
-            //   currentDateTime.toISOString()
-            // );
 
             // LOGIC START: Accept a shift only if the shifts aren't overlapping any times
             const hasOverlappingTimecard = upcomingShifts.some((timecard) => {
@@ -221,11 +210,7 @@ const Marketplace = () => {
             //   new Date().toISOString() >
             //   new Date(shift?.shiftStartDT).toISOString()
             // ) {
-            //   console.log(
-            //     "🚀 ~ file: index.js:193 ~ .filter ~ new Date(shift?.shiftStartDT):",
-            //     new Date().toISOString(),
-            //     shift?.shiftStartDT
-            //   );
+
             //   return false;
             // }
 
@@ -289,12 +274,6 @@ const Marketplace = () => {
               const shiftDay = days[shiftDate.getDay()];
 
               const dayAvailability = availability.availability[shiftDay];
-              // console.log(
-              //   "🚀 ~ file: index.js:118 ~ .filter ~ dayAvailability:",
-              //   shiftDay,
-              //   dayAvailability,
-              //   availability
-              // );
 
               if (dayAvailability?.available) {
                 const shiftStartTime = new Date(
@@ -307,15 +286,6 @@ const Marketplace = () => {
                 const availableEndTime = new Date(
                   `1970-01-01T${dayAvailability.endTime}:00.000`
                 );
-
-                // console.log(
-                //   "🚀 ~ file: index.js:165 ~ marketplaceItems ~ dayAvailability:",
-                //   shiftEndTime,
-                //   availableEndTime,
-                //   shiftStartTime >= availableStartTime &&
-                //     shiftEndTime <= availableEndTime,
-                //   facilityMatches
-                // );
 
                 const timeMatches =
                   shiftStartTime >= availableStartTime &&
@@ -340,7 +310,6 @@ const Marketplace = () => {
               shift?.facility?.lat,
               shift?.facility?.lng
             );
-            // console.log("🚀 ~ file: index.js:283 ~ .map ~ calcDist:", calcDist);
 
             return {
               ...shift,
@@ -519,7 +488,6 @@ const Marketplace = () => {
         // className="flex flex-wrap mb-3 bg-white h-full"
       >
         {marketplaceItems?.map((item, index) => {
-          // console.log("item", item);
           return (
             <div className="w-1/3 flex py-1 px-2">
               <MarketplaceItem

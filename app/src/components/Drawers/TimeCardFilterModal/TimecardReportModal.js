@@ -35,10 +35,6 @@ import { emailTimecardReportToInstacare } from "../../../services/timecards/repo
 // import { createNotifications } from "../../../graphql/mutations";
 
 function TimecardReportModal({ open, onClose, timecardDetails }) {
-  // console.log(
-  //   "🚀 ~ file: TimecardReportModal.js:33 ~ TimecardReportModal ~ timecardDetails:",
-  //   timecardDetails
-  // );
   // const navigate = useNavigate();
   const { personalData, type, myFacility } = useAuth();
 

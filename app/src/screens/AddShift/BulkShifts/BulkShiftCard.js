@@ -57,7 +57,6 @@ function BulkShiftCard({
 }) {
   const { type } = useAuth();
   // facilityID
-  // console.log("🚀 IN COMP:", facilityID);
   const [isMenuOpen, setIsMenuOpen] = useState(false); // State to track hover menu
   const [isIncentiveModalOpen, setIsIncentiveModalOpen] = useState(false);
   const [isGuaranteeModalOpen, setIsGuaranteeModalOpen] = useState(false);
@@ -209,10 +208,6 @@ function BulkShiftCard({
                       : "Select Timing"
                   }
                   setValue={(value) => {
-                    console.log(
-                      "🚀 ~ file: BulkShiftCard.js:276 ~ value:",
-                      value
-                    );
                     const [shiftStart, shiftEnd] = value.split("-");
 
                     // handleInputChange(inputIndex, "shiftStart", shiftStart);
@@ -466,7 +461,6 @@ function BulkShiftCard({
                     true,
                     index?.day
                   );
-                  // console.log("cancellationGuarantee being TRUED");
                   // setShiftKey("cancellationGuarantee")(true);
                 }}
               />

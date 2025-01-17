@@ -56,12 +56,6 @@ const SummaryCard = ({
 
     let totalPositions = positions.reduce((acc, curr) => acc + curr, 0);
     if (datakey === "daily") {
-      console.log(
-        "🚀 ~ file: index.js:56 ~ count ~ data:",
-        totalPositions,
-        data
-      );
-
       const positions = data?.open?.map((obj) => {
         const numOfPositions = obj?.numOfPositions || "1";
         return typeof numOfPositions === "string"
@@ -78,8 +72,6 @@ const SummaryCard = ({
       totalPositions += data?.cancelled?.length || 0;
     }
 
-    // console.log("🚀 ~ file: index.js:48 ~ count ~ positions:", positions);
-    // console.log("🚀 ~ file: index.js:49 ~ totalPositions:", totalPositions);
     return totalPositions;
   }, [shifts]);
 

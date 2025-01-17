@@ -59,7 +59,6 @@ import { NotificationHub } from "../../services/notifications/hub";
 const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
   const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
-  // console.log("location received params", location);
   const { createPeopleQuery } = useCreatePeople();
 
   const { personalData, type, myFacility, user } = useAuth();
@@ -176,11 +175,6 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
         })
       );
     }
-    // console.log(
-    //   "🚀 ~ file: index.js:140 ~ incrementUserID ~ idCounterData:",
-    //   idCounterData,
-    //   res
-    // );
 
     return res?.data?.updateIDCounter?.people;
   }
@@ -194,7 +188,6 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
     // more users
     try {
       const { result, parsedBody } = await createBulkUsers(users);
-      console.log("🚀 ~ file: index.js:126 ~ createUsers ~ result:", result);
 
       // FIXME: Undo this logic
       // let result = 1;
@@ -205,7 +198,6 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
           parsedBody?.error?.message || "Failed to create bulk users."
         );
       } else {
-        console.log(result, parsedBody);
         const ID = parsedBody.user.User.Attributes.find(
           (attribute) => attribute.Name === "sub"
         ).Value;
@@ -218,10 +210,8 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
         if (imageRef) {
           // trigger upload
           const response = await uploadFile(imageRef);
-          // console.log(imageUrl, response);
 
           if (response.key) {
-            // console.log("setting image", response, imageUrl);
             setPeople((prevPeople) => ({
               ...prevPeople,
               profilePicture: response.key, // This is the image url after successful upload
@@ -243,8 +233,6 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
           adminHold: false,
           // profilePicture: response.key,
         };
-
-        console.log("updatedPeople", updatedPeople);
 
         try {
           const result = await API.graphql(
@@ -272,7 +260,6 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
           }
 
           // const result = await createPeopleQuery(updatePeople);
-          console.log(result);
 
           SuccessToast("User added successfully");
           return 1;
@@ -281,8 +268,6 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
 
           ErrorToast("Error uploading user");
         }
-
-        // console.log("Publish People", people);
       }
     } catch (err) {
       console.error("Error publishing people", err);
@@ -374,7 +359,6 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
   const publishPeople = async () => {
     // await createUsers();
     // return;
-    // console.log("Publish People", people);
     const result = validatePeople(people);
     if (result) {
       ErrorToast(result);
@@ -550,7 +534,6 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
     // const userData = (
     //   await API.graphql(graphqlOperation(GET_PEOPLE_MINIMAL, { id: people.id }))
     // )?.data?.getPeople;
-    // console.log("🚀 ~ file: index.js:442 ~ updatePerson ~ userData:", userData);
 
     // return;
     const updatedPeople = {
@@ -567,8 +550,6 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
 
     // Generate a string from the updatedFields
     const updatedFieldsString = generateUpdatedFieldsString(updatedFields);
-
-    // console.log("updatedPeople", updatedFieldsString, updatedPeople);
 
     try {
       await updatePeopleQuery(updatedPeople);
@@ -596,7 +577,6 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
 
   const editPeople = async () => {
     // people
-    console.log("🚀 ~ file: index.js:417 ~ editPeople ~ people:", people);
     const result = validatePeople(people);
     if (result) {
       ErrorToast(result);

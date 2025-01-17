@@ -26,10 +26,6 @@ import Reports from "../screens/Reports";
 const FacilitiesNav = () => {
   const { user, permissions, personalData, signIn, loadPermissions } =
     useAuth();
-  // console.log(
-  //   "🚀 ~ file: FacilitiesNav.js:26 ~ FacilitiesNav ~ permissions:",
-  //   permissions
-  // );
 
   const filteredMenuItems = menuItems.filter((item) => {
     const allPermissions = [
@@ -41,11 +37,6 @@ const FacilitiesNav = () => {
     const permission = allPermissions.find(
       (permission) => permission.name === item.name
     );
-
-    // console.log(
-    //   "🚀 ~ file: FacilitiesNav.js:47 ~ filteredMenuItems ~ personalData?.position:",
-    //   personalData?.position
-    // );
 
     if (
       permission?.name === "Total Billing" &&

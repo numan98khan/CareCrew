@@ -12,10 +12,6 @@ export const useCreateSupport = () => {
   const { createNotificationQuery } = useCreateNotification();
 
   const createTicket = async (templateInput, personName, organization) => {
-    console.log(
-      "🚀 ~ file: index.js:15 ~ createTicket ~ templateInput:",
-      templateInput
-    );
     try {
       const { data } = await createSupportMutation({
         variables: { input: templateInput },
@@ -31,10 +27,6 @@ export const useCreateSupport = () => {
       };
       const receiverPeople = [];
       await createNotificationQuery(notificationInput, receiverPeople);
-      console.log(
-        "🚀 ~ file: index.js:32 ~ createTicket ~ notificationInput:",
-        notificationInput
-      );
 
       return data;
     } catch (error) {

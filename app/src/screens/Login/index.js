@@ -58,15 +58,13 @@ const Login = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(`Email: ${email}, Password: ${password}`);
   };
 
   async function rememberDevice() {
     try {
       const result = await Auth.rememberDevice();
-      console.log("remembered device", result);
     } catch (error) {
-      console.log("Error remembering device", error);
+      console.error("Error remembering device", error);
     }
   }
 
@@ -134,10 +132,7 @@ const Login = () => {
       // await delay(1000);
       // Select no-mfa
 
-      console.log("ATTEMPT LOGIN");
-
       const local_user = await Auth.signIn(email, password);
-      console.log(local_user);
 
       setLocalUser(local_user);
       loadType(null);
@@ -146,8 +141,6 @@ const Login = () => {
         // Required attributes are OPTIONAL, but if they were configured
         // you need to get these in addition to new password from UI inputs
         const { requiredAttributes } = local_user.challengeParam;
-
-        console.log("NEED NEW PASSWORD");
 
         // handleResetPassword();
         setIsFirstLogin(true);
@@ -160,7 +153,7 @@ const Login = () => {
       setLoading(false);
       // navigate("/");
     } catch (error_) {
-      console.log("error signing in", error_);
+      console.error("error signing in", error_);
       ErrorToast(error_.message || "An error occurred");
 
       setLocalUser(null);
@@ -181,7 +174,7 @@ const Login = () => {
       setIsSettingNewPassword(true);
       // setLoading(false);
     } catch (error) {
-      console.log("Error resetting password", error);
+      console.error("Error resetting password", error);
       ErrorToast(
         error?.message || "User either does't exist or isn't verified"
       );
@@ -221,7 +214,7 @@ const Login = () => {
       setIsSettingNewPassword(false);
       setLoading(false);
     } catch (error) {
-      console.log("Error setting new password", error);
+      console.error("Error setting new password", error);
       ErrorToast(error.message || "Error setting new password");
       setLoading(false);
     }
@@ -245,8 +238,8 @@ const Login = () => {
       setLoading(false);
     } catch (error) {
       ErrorToast(error.message);
-      // console.log(error.message);
-      // console.log("Error setting new password", error);
+
+      console.error("Error setting new password", error);
       setLoading(false);
     }
   };

@@ -192,7 +192,6 @@ export const useFacilityOperations = () => {
       try {
         billingObj = await createBillingQuery(billing);
         // SuccessToast("Billing created successfully");
-        console.log("Billing created successfully");
       } catch (error) {
         ErrorToast("Error in creating billing.");
         return;
@@ -233,10 +232,6 @@ export const useFacilityOperations = () => {
       }
 
       for (const person of createdMembers) {
-        // console.log(
-        //   "🚀 ~ file: hooks.js:209 ~ useFacilityOperations ~ person:",
-        //   person
-        // );
         try {
           const resultFP = await API.graphql(
             graphqlOperation(createPeopleFacility, {
@@ -254,7 +249,7 @@ export const useFacilityOperations = () => {
       return finalResponse;
     } catch (err) {
       ErrorToast("Error creating facility: " + err);
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -417,10 +412,6 @@ export const useFacilityOperations = () => {
           documents: documentsWithoutTypename,
         });
       }
-      console.log(
-        "🚀 ~ file: hooks.js:407 ~ useFacilityOperations ~ updatedFacility:",
-        updatedFacility
-      );
 
       const result = await updateFacilityQuery(updatedFacility);
       SuccessToast("Facility updated successfully");
@@ -593,7 +584,7 @@ export const useFacilityOperations = () => {
       SuccessToast("Adhoc users created successfully");
     } catch (err) {
       ErrorToast("Error creating adhoc users: " + err);
-      console.log(err);
+      console.error(err);
     }
   };
 

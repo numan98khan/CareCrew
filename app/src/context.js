@@ -68,7 +68,6 @@ function AuthProvider({ children }) {
   };
 
   const loadPermissions = (permissions) => {
-    // console.log("$ Context  ~ permissions:", permissions);
     // Sign in set user
     // localStorage.setItem("user", JSON.stringify(userInformation));
     setPermissions(permissions);

@@ -29,7 +29,7 @@ function Invoices({ onBackClick }) {
   const [searchMaxAmount, setSearchMaxAmount] = useState(null);
   const [searchMinAmount, setSearchMinAmount] = useState(null);
   const [startDate, setStartDate] = useState("");
-  console.log("🚀 ~ file: index.js:31 ~ Invoices ~ startDate:", startDate);
+
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -70,7 +70,6 @@ function Invoices({ onBackClick }) {
     openInvoiceModal();
 
     setTimeout(async () => {
-      console.log(modalContentRef.current);
       const pdf = new jsPDF("portrait", "pt", "a4");
       const canvas = await html2canvas(modalContentRef.current);
       const img = canvas.toDataURL("image/png");

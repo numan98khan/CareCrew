@@ -25,7 +25,6 @@ export async function subtractPosition(shiftId, errorMessage, success) {
       graphqlOperation(updateShifts, { input: updateShiftsInput })
     );
     SuccessToast("Updated Shift (new positions):" + newNumOfPositions);
-    // console.log("Updated Shift:", updateShiftsResponse);
   } catch (error) {
     ErrorToast("Error updating shift:" + error);
     // console.error("Error updating shift:", error);

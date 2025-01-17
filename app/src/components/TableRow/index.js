@@ -27,7 +27,6 @@ export default function TableRow({
   checkDisabled,
   disableAvatar = false,
 }) {
-  //   console.log(key);
   const rowClasses = `my-row-class ${
     highlightColor
       ? highlightColor

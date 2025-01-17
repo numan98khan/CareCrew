@@ -21,7 +21,6 @@ export default function MinimalPeopleRow({
   initChecked = false,
   onClick,
 }) {
-  //   console.log(key);
   const rowClasses = `my-row-class ${
     index % 2 !== 0 ? "bg-PRIMARY_NEUTRAL_COLOR" : "bg-white"
   } ${classes}`;

@@ -99,7 +99,6 @@ export const BasicInformationForm = ({
     const file = event.target.files[0];
     setFileRef(file);
     if (file) {
-      console.log("🚀 ~ file: forms.js:90 ~ handleFileChange ~ file:", file);
       const reader = new FileReader();
       reader.onloadend = function () {
         setFilePlaceholder(file.name);

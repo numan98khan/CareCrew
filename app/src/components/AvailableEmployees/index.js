@@ -72,7 +72,6 @@ function AvailableEmployees({ onBackClick }) {
   };
 
   const onBackClickHandler = () => {
-    // console.log("Going back on facility");
     setSelectedPeople(null);
   };
 
@@ -228,8 +227,6 @@ function AvailableEmployees({ onBackClick }) {
   }
 
   const renderPeopleDetails = () => {
-    // console.log("PEOPLE DETAIL!!!");
-
     return (
       <div className="flex flex-col min-h-full px-3 pb-3">
         <div className="flex flex-col">

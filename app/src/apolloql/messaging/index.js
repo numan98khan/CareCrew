@@ -226,11 +226,6 @@ export const useChatting = (user, setLoadingChat) => {
               input: messageObj,
             })
           );
-          console.log(
-            `Message sent to: ${
-              userObj.firstName + " " + userObj.lastName
-            } + (${userObj.id})`
-          );
         } catch (e) {
           console.error(e);
         }
@@ -253,11 +248,7 @@ export const useChatting = (user, setLoadingChat) => {
           input: { chatRoomId: chatRoomId, peopleId: personId },
         })
       );
-      console.log(
-        `Added person with ID: ${personId} to chat room with ID: ${chatRoomId}`
-      );
     } catch (e) {
-      console.log(e);
       console.error(`Failed to add person to chat room: ${e}`);
     }
   };

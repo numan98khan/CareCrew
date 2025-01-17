@@ -47,7 +47,6 @@ const BulkAddUsersModal = ({ open, onClose, refetchPeople, facilityId }) => {
   };
 
   const validateBulkUsers = () => {
-    console.log("bulkUsers", bulkUsers);
     const newErrors = {};
     bulkUsers.forEach((user, index) => {
       if (!user.firstName || !user.lastName || !user.email) {

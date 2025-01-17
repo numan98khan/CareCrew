@@ -36,7 +36,6 @@ const DropDown = ({
 
   const handleSelectItem = (event, index) => {
     event.stopPropagation(); // Add this line
-    console.log("Item selected:", index); // Add this line
     const selectedItem = options[index];
     setValue(selectedItem);
     setIsOpen(false);

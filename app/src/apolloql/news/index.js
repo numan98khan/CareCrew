@@ -107,8 +107,6 @@ export const useListNews = ({ date, receiver, isAdmin } = {}) => {
     ...(!isAdmin && { status: { ne: "UNACTIVE" } }),
   };
 
-  console.log("🚀 ~ file: index.js:112 ~ useListNews ~ isAdmin:", isAdmin);
-
   // if (isAdmin) {
   //   filter.status = { ne: "UNACTIVE" };
   // }
@@ -121,7 +119,6 @@ export const useListNews = ({ date, receiver, isAdmin } = {}) => {
   // const { data, loading, error } = useQuery(LIST_NEWS);
 
   if (loading) {
-    console.log("Loading News...");
     return { loading, error, news: [] };
   }
 
@@ -129,27 +126,6 @@ export const useListNews = ({ date, receiver, isAdmin } = {}) => {
     console.error("Error!", error);
     return { loading, error, news: [] };
   }
-
-  // FIXME: conclusion is that displayDate is displaying UTC times as localtimes
-  // console.log(
-  //   "LIST_NEWS Data received!",
-  //   data,
-  //   displayDate(serverDate),
-  //   receiver,
-  //   data.listNews.items.filter((element) => {
-  //     console.log(
-  //       "🚀 ~ file: index.js:109 ~ data.listNews.items.filter ~ element:",
-  //       displayDate(element.createdAt) === displayDate(date),
-  //       displayDate(element.createdAt),
-  //       displayDate(serverDate)
-  //     );
-
-  //     return (
-  //       (displayDate(element.createdAt) === displayDate(serverDate) || !date) &&
-  //       (element.receivers === receiver || "ALL" === element.receivers)
-  //     );
-  //   })
-  // );
 
   const news = data
     ? receiver

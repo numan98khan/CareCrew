@@ -105,7 +105,6 @@ const MyAvailability = () => {
   //     weeks.push(`${startOfWeek} - ${endOfWeek}`);
   //   }
 
-  //   // console.log(weeks);
   //   setWeekOptions(weeks);
   // }, []);
 
@@ -124,7 +123,6 @@ const MyAvailability = () => {
       weeks.push(`${startOfWeek} - ${endOfWeek}`);
     }
 
-    // console.log(weeks);
     setWeekOptions(weeks);
   }, []);
 
@@ -146,7 +144,6 @@ const MyAvailability = () => {
   };
 
   const handleCheckChange = (day) => {
-    console.log("availability before:", availability);
     const updatedAvailability = {
       ...availability,
       [day]: {
@@ -154,7 +151,7 @@ const MyAvailability = () => {
         available: !availability?.[day]?.available,
       },
     };
-    console.log("availability after:", updatedAvailability);
+
     setAvailability(updatedAvailability);
   };
 
@@ -173,7 +170,6 @@ const MyAvailability = () => {
         _version: person._version,
       };
 
-      console.log(updatedPerson);
       await updatePeopleQuery(updatedPerson, person._version);
 
       // Optionally, you can add a success toast or message here

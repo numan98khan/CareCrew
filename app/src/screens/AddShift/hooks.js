@@ -14,10 +14,7 @@ export function useBulkShiftUploader() {
       payload = JSON.parse(file);
     } else {
       const response = await uploadFile(file);
-      console.log(
-        "🚀 ~ file: hooks.js:17 ~ handleBulkShiftUpload ~ response:",
-        response
-      );
+
       const s3Link = response.key; // Adjust as per actual returned data
 
       payload = {
@@ -25,10 +22,6 @@ export function useBulkShiftUploader() {
         bucketName: "CareCrew-storage-373c65a0164444-staging", // Adjust if this is dynamic
         fileKey: "public/" + s3Link, // Or however you get the path
       };
-      console.log(
-        "🚀 ~ file: hooks.js:20 ~ handleBulkShiftUpload ~ payload:",
-        payload
-      );
 
       // payload = {
       //   fileType: "csv",

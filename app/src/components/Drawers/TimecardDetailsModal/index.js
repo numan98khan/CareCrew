@@ -37,7 +37,6 @@ function TimecardDetailsModal({
   selectedTimecardNotes,
   setSelectedTimecardNotes,
 }) {
-  // // console.log("🚀 ~ file: index.js:27 ~ selectedTimecard:", selectedTimecard);
   // const [selectedTimecardNotes, setSelectedTimecardNotes] = useState(null);
 
   const { isSuperAdmin, type } = useAuth();

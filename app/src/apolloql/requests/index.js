@@ -48,7 +48,6 @@ export const useListReasons = () => {
   const { data, loading, error } = useQuery(gql(listReasons));
 
   if (loading) {
-    console.log("Loading...");
     return { loading, error, reasons: [] };
   }
 
@@ -56,8 +55,6 @@ export const useListReasons = () => {
     console.error("Error!", error);
     return { loading, error, reasons: [] };
   }
-
-  // console.log("listReasons Data received!", data);
 
   const reasons = data
     ? data.listReasons.items.filter((element) => element._deleted !== true)

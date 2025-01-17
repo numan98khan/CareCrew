@@ -244,7 +244,6 @@ export const useListManualTimecards = (
   }, [data]);
 
   if (loading) {
-    console.log("Loading ManualTimecards...");
     return { loading, error, manualTimecards: [] };
   }
 

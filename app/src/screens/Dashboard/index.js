@@ -222,8 +222,6 @@ const Dashboard = () => {
   };
 
   const filteredTimecards = useMemo(() => {
-    console.log("🚀 ~ filteredTimecards ~ timecards:", timecards);
-
     if (timecards && employee) {
       const formattedDate = formatDate(currentViewDate);
 

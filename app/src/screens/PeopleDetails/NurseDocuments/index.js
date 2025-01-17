@@ -62,7 +62,6 @@ function DisplayImage({ documentKey, documentName }) {
 }
 
 const NurseDocuments = ({ people }) => {
-  console.log("🚀 ~ file: index.js:64 ~ NurseDocuments ~ people:", people);
   const [open, setOpen] = useState(false);
   const onOpen = () => {
     setOpen(true);

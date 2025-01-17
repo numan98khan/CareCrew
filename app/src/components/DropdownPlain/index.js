@@ -65,7 +65,6 @@ const DropDownPlain = ({
   //   setIsOpen(false);
   //   closeOpenModal();
 
-  //   console.log("Selecting and closing", isOpen, item, label);
   // };
 
   useEffect(() => {
@@ -100,8 +99,13 @@ const DropDownPlain = ({
 
       ref={buttonRef}
       onClick={openOpenModal}
-      style={{ border: border ? border : "initial", border: '1px solid #EDEDED', borderRadius: '5px', width: width ? width : 'initial'}}
-      backgroundColor={bg ? bg : 'white'}
+      style={{
+        border: border ? border : "initial",
+        border: "1px solid #EDEDED",
+        borderRadius: "5px",
+        width: width ? width : "initial",
+      }}
+      backgroundColor={bg ? bg : "white"}
     >
       {label ? (
         <label

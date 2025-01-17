@@ -5,12 +5,6 @@ import { PEOPLE_STATUS, PEOPLE_STATUS_COLORS } from "../../../constants/status";
 import { ErrorToast, SuccessToast } from "../../../services/micro";
 
 function StatusModal({ open, onClose, styles, position, people, refetch }) {
-  // PEOPLE_STATUS_COLORS
-  console.log(
-    "🚀 ~ file: index.js:9 ~ StatusModal ~ PEOPLE_STATUS_COLORS:",
-    PEOPLE_STATUS_COLORS
-  );
-
   const [selectedStatus, setSelectedStatus] = useState(null);
   const { updatePeopleQuery } = useUpdatePeople();
 
@@ -61,7 +55,6 @@ function StatusModal({ open, onClose, styles, position, people, refetch }) {
         <div className="px-2 py-3 pr-8">
           <div className="flex flex-col gap-2 justify-between w-4/5 h-2/3">
             {PEOPLE_STATUS?.map((singleStatus, idx) => {
-              console.log(PEOPLE_STATUS_COLORS[singleStatus]);
               return (
                 <div
                   key={idx}

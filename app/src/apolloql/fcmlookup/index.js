@@ -8,7 +8,6 @@ export const useGetFCMLookup = (id) => {
   });
 
   if (loading) {
-    // console.log("Loading...");
     return { loading, error, token: null };
   }
 

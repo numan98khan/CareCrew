@@ -40,10 +40,6 @@ const PeopleSelect = ({
   }, []);
 
   const filteredPeople = useMemo(() => {
-    // console.log(
-    //   "🚀 ~ file: index.js:43 ~ filteredPeople ~ setSelectedPeopleRole:",
-    //   selectedPeopleRole
-    // );
     return people?.filter((obj) => obj?.role === selectedPeopleRole);
   }, [people, setSelectedPeople]);
   return (

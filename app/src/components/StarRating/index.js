@@ -6,7 +6,6 @@ function StarRating({ rating, setRating, minimal = false }) {
   // const [rating, setRating] = useState(0);
 
   const handleStarClick = (index) => {
-    // console.log("🚀 ~ file: index.js:9 ~ handleStarClick ~ index:", index);
     if (setRating) setRating(index + 1); // +1 because index starts from 0
   };
 

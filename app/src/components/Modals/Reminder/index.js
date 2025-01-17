@@ -74,7 +74,6 @@ function CreateReminderModal({ open, onClose, afterOpenModal }) {
 
   useEffect(() => {
     // staffType
-    // console.log("🚀 ~ file: RELOADING FOR staffType:", staffType, people);
     // if (people?.length > 0 && shouldUpdatePeopleDropdown) {
     if (people?.length > 0 && shouldUpdatePeopleDropdown) {
       const peopleDropdown = people.map((people) => ({
@@ -85,7 +84,6 @@ function CreateReminderModal({ open, onClose, afterOpenModal }) {
         //     ? people?.email
         //     : people?.firstName + " " + people.lastName,
       }));
-      // console.log("PEOPLE DROP DOWN: ", peopleDropdown);
 
       setPeopleDropDownOption(peopleDropdown);
       setShouldUpdatePeopleDropdown(false); // Reset the flag
@@ -111,8 +109,6 @@ function CreateReminderModal({ open, onClose, afterOpenModal }) {
       };
     });
   }, [peopleTypes]);
-
-  // console.log("PEOPLE DROP DOWN: ", peopleDropDownOption);
 
   const handleStaffTypeChange = (value) => {
     setPeopleDropDownOption([]);
@@ -146,12 +142,8 @@ function CreateReminderModal({ open, onClose, afterOpenModal }) {
         // If you want to add 'read' or 'message', do so here
       };
 
-      // console.log("Reminder Input:", input, employeeId);
-
       const employeeReceivers = employeeId ? [employeeId] : [];
       const response = await createReminderQuery(input, employeeReceivers);
-
-      // console.log("Reminder created:", response);
 
       // Create the input object for the notification
       const notificationInput = {
@@ -183,8 +175,6 @@ function CreateReminderModal({ open, onClose, afterOpenModal }) {
         notificationInput,
         employeeReceivers
       );
-
-      // console.log("Notification created:", notificationResponse);
     } catch (error) {
       console.error("Failed to create reminder:", error);
       ErrorToast("Failed to create reminder");
@@ -259,11 +249,6 @@ function CreateReminderModal({ open, onClose, afterOpenModal }) {
           <Button
             children={"CREATE"}
             onClick={() => {
-              // console.log(time)
-              // console.log(
-              //   "🚀 ~ file: index.js:208 ~ CreateReminderModal ~ time:",
-              //   time
-              // );
               handleCreateReminder();
             }}
           />

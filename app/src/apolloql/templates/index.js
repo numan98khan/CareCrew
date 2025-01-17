@@ -38,9 +38,7 @@ export const useListTemplates = (isAdmin) => {
     // pollInterval: 5000,
   });
 
-  // console.log("LIST_TEMPLATES", data);
   if (loading) {
-    console.log("Loading...");
     return { loading, error, templates: [] };
   }
 
@@ -48,8 +46,6 @@ export const useListTemplates = (isAdmin) => {
     console.error("Error!", error);
     return { loading, error, templates: [] };
   }
-
-  // console.log("LIST_TEMPLATES Data received!", data);
 
   const templates = data
     ? data.listTemplates.items.filter((element) => element._deleted !== true)

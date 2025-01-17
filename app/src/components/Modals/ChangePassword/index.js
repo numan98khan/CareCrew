@@ -36,7 +36,7 @@ function ChangePasswordModal({ open, onClose, afterOpenModal }) {
 
       SuccessToast("Password changed successfully");
     } catch (error) {
-      console.log("Error changing password: ", error);
+      console.error("Error changing password: ", error);
       ErrorToast(error.message);
     }
   };

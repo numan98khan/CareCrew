@@ -47,10 +47,6 @@ const InputLabeled = ({
         type={type}
         value={value || ""} // Convert null to an empty string
         onChange={(e) => {
-          console.log(
-            "🚀 ~ file: index.js:22 ~ InputLabeled ~ e:",
-            e.target.value
-          );
           // handleUpdateItem(e);
           handleUpdateItem(index, fieldKey, e.target.value);
         }}
@@ -155,11 +151,6 @@ function CreateInvoiceModal({ open, onClose }) {
         })
       );
     }
-    // console.log(
-    //   "🚀 ~ file: index.js:140 ~ incrementUserID ~ idCounterData:",
-    //   idCounterData,
-    //   res
-    // );
 
     return res?.data?.updateIDCounter?.invoice;
   }
@@ -202,10 +193,6 @@ function CreateInvoiceModal({ open, onClose }) {
         receiver: FACILITY, // Assuming facility is the receiver name
         receiverID: facility, // Replace with the actual receiver ID
       };
-      // console.log(
-      //   "🚀 ~ file: index.js:156 ~ publishInvoice ~ baseInput:",
-      //   baseInput
-      // );
 
       const newChatRoomData = await API.graphql(
         graphqlOperation(createInvoice, { input: baseInput })

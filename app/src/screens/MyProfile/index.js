@@ -33,7 +33,7 @@ function MyProfile({ personDetails, onBackClickHandler, isEditOpen = false }) {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.log("Error", error);
+      console.error("Error", error);
     }
   };
 

@@ -35,7 +35,6 @@ export const useGetBillingByID = (billingID) => {
   });
 
   if (loading) {
-    console.log("Loading Billing...");
     return { loading, error, billing: null };
   }
 

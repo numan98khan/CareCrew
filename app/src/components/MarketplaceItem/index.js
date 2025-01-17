@@ -28,7 +28,6 @@ const MarketplaceItem = ({ index, shift, shiftTiming, onClick, disabled }) => {
 
   // Get day of the month number
   const dayOfMonth = dateobj.getDate();
-  // console.log(dayOfMonth); // Outputs: 17
 
   // Get name of the month
   const monthNames = [
@@ -46,7 +45,6 @@ const MarketplaceItem = ({ index, shift, shiftTiming, onClick, disabled }) => {
     "December",
   ];
   const monthName = monthNames[dateobj.getMonth()];
-  // console.log(monthName); //
 
   return (
     <>

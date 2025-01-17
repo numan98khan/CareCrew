@@ -34,11 +34,6 @@ const AuthNav = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false); // Added state for menu
 
-  // console.log(
-  //   "🚀 ~ file: AdminNav.js:32 ~ AuthNav ~ permissions:",
-  //   permissions
-  // );
-
   // const permissions = STAFF_PERMISSIONS;
 
   const filteredMenuItems = menuItems.filter((item) => {
@@ -49,7 +44,6 @@ const AuthNav = () => {
     return permission?.isSelected;
   });
 
-  // console.log("Admin Permissions");
   return (
     <Router>
       <div

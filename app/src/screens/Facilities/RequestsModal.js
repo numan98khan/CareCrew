@@ -91,10 +91,6 @@ const RequestsModal = ({ facility, focalPerson, modalIsOpen, closeModal }) => {
         subject: "Shift Request",
         body: body,
       };
-      // console.log(
-      //   "🚀 ~ file: RequestsModal.js:100 ~ handleAddOrUpdate ~ notificationInput:",
-      //   notificationInput
-      // );
 
       await createNotificationQuery(notificationInput, []);
       SuccessToast("Shift request updated successfully!");

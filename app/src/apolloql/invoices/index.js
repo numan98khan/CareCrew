@@ -96,7 +96,6 @@ export const useListInvoices = (
   });
 
   if (loading) {
-    console.log("Loading Invoices...");
     return { loading, error, reviews: [] };
   }
 

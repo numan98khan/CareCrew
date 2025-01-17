@@ -195,7 +195,6 @@ export const useSubtractPosition = () => {
         });
 
         SuccessToast("Updated Shift (new positions): " + newNumOfPositions);
-        console.log("Updated Shift:", updatedData.updateShifts);
       } catch (error) {
         ErrorToast("Error updating shift: " + error.message);
         console.error("Error updating shift:", error.message);
@@ -369,7 +368,6 @@ export const useUpdateShift = () => {
     input,
     disablePastShiftValidation = false
   ) => {
-    console.log("Updating shift with input:", input);
     try {
       let convertedInput;
 
@@ -431,8 +429,6 @@ export const useUpdateShift = () => {
       if (sanitizedInput?.incentives) {
         delete sanitizedInput.incentives.__typename;
       }
-
-      console.log("Final sanitized input:", sanitizedInput);
 
       const { data } = await updateShiftMutation({
         variables: { input: sanitizedInput },
@@ -615,7 +611,6 @@ export const useListMarketplace = (facilityID, role, date) => {
   }, [data, client]);
 
   if (loading) {
-    console.log("Loading Marketplace...");
     return { loading, error, shifts: [] };
   }
   if (error) {

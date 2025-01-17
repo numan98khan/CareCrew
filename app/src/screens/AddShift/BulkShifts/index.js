@@ -119,7 +119,6 @@ function BulkShifts({
     const lastDay = new Date(year, month + 1, 0).getDate();
     for (let i = 1; i <= lastDay; i++) {
       dates.push(new Date(year, month, i));
-      console.log("🚀 ~ file: index.js:111 ~ getDatesOfMonth ~ year:", year);
     }
     return dates;
   };
@@ -137,10 +136,7 @@ function BulkShifts({
   useEffect(() => {
     // Re-compute the days based on currentMonth and currentYear
     const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
-    console.log(
-      "🚀 ~ file: index.js:114 ~ useEffect ~ currentYear:",
-      currentYear
-    );
+
     const firstDayIndex = firstDayOfMonth.getDay();
     const updatedDays = [
       ...shortDayNames.slice(firstDayIndex),
@@ -205,7 +201,6 @@ function BulkShifts({
 
   const nextMonth = () => {
     // prevYear;
-    console.log("🚀 ~ file: index.js:196 ~ nextMonth ~ prevYear:", currentYear);
 
     setCurrentMonth((prevMonth) => (prevMonth === 11 ? 0 : prevMonth + 1));
     setCurrentYear((prevYear) =>
@@ -380,20 +375,9 @@ function BulkShifts({
 
     setFacilityID(null);
 
-    // console.log(
-    //   "🚀 ~ file: index.js:158 ~ handleUpload ~ flattenedShifts:",
-    //   flattenedShifts
-    // );
-
     // return;
 
-    // console.log("To Publish Shifts", payload, flattenedShifts, facilityID);
-
     const apiResponse = await createBulkShifts(payload);
-    console.log(
-      "🚀 ~ file: index.js:163 ~ handleUpload ~ apiResponse:",
-      apiResponse
-    );
 
     // alert(apiResponse?.result?.body);
 
@@ -465,16 +449,9 @@ function BulkShifts({
   };
 
   function handleInputChange(index, pathOrUpdates, value, dayIndex) {
-    console.log(
-      `Setting [${pathOrUpdates}] of item at index [${index}] to [${value}]`
-    );
-
     setShiftsArray((prevShiftsArray) => {
       const currentShift = prevShiftsArray[dayIndex][index];
-      // console.log(
-      //   "🚀 ~ file: index.js:269 ~ setShiftsArray ~ currentShift:",
-      //   currentShift
-      // );
+
       let updatedShift;
 
       if (typeof pathOrUpdates === "object") {
@@ -518,11 +495,6 @@ function BulkShifts({
 
   const isDateInPast = (dateToCheck) => {
     if (dateToCheck) {
-      // console.log(
-      //   "🚀 ~ file: index.js:264 ~ isDateInPast ~ dateToCheck:",
-      //   dateToCheck
-      // );
-
       const currentDate = new Date();
       const currentDay = currentDate.getDate();
       const currentMonth = currentDate.getMonth();
@@ -664,7 +636,7 @@ function BulkShifts({
         }}
         onCancel={() => {
           // Optionally clear selected shifts or other relevant state
-          // console.log("Cancellation action");
+
           setShowConfirmModal(false);
         }}
       />

@@ -38,7 +38,6 @@ export const useListReviews = (peopleID) => {
   });
 
   if (loading) {
-    console.log("Loading...");
     return { loading, error, reviews: [] };
   }
 
@@ -59,7 +58,6 @@ export const useListReviews = (peopleID) => {
 //   const { data, loading, error } = useQuery(gql(listReviews)); // Assuming listReviews is the query for listing reviews
 
 //   if (loading) {
-//     console.log("Loading...");
 //     return { loading, error, reviews: [] };
 //   }
 

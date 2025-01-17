@@ -144,12 +144,6 @@ function RecurringShift({
           ? bobj?.hourlyRateRN
           : bobj?.hourlyRateLPN;
 
-      console.log(
-        "🚀 ~ file: index.js:85 ~ useMemo ~ bobj:",
-        bobj,
-        selectedRate
-      );
-
       if (shift?.isHoliday) {
         setShiftKey("rate")(selectedRate * 1.5);
       } else {
@@ -239,7 +233,7 @@ function RecurringShift({
 
   const handleUpload = async () => {
     setIsPublishDisabled(true);
-    console.log(shift);
+
     const flattenedArray = [];
     const validationErrors = [];
 
@@ -317,10 +311,7 @@ function RecurringShift({
 
       if (dayObject && dayObject.checked) {
         const awsDate = formatDateToAWS(date);
-        // console.log(
-        //   "🚀 ~ file: index.js:302 ~ handleUpload ~ awsDate:",
-        //   awsDate
-        // );
+
         // Check if endTime is before startTime
         const isNextDay = shift.shiftEnd < shift.shiftStart;
 
@@ -359,15 +350,6 @@ function RecurringShift({
           )
           .utc()
           .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
-        // console.log(
-        //   "🚀 ~ file: index.js:339 ~ handleUpload ~ utcEndDatetime:",
-        //   utcEndDatetime,
-        //   `${awsDate}T${
-        //     shift.shiftStart.endsWith("Z")
-        //       ? shift.shiftStart.slice(0, -1)
-        //       : shift.shiftStart
-        //   }`
-        // );
 
         // const {data} = await createShiftMutation({
         //   variables: {input: input},
@@ -384,11 +366,6 @@ function RecurringShift({
           shiftStartDT: utcStartDatetime,
           shiftEndDT: utcEndDatetime,
         };
-
-        // console.log(
-        //   "🚀 ~ file: index.js:344 ~ handleUpload ~ shiftForDate:",
-        //   shiftForDate
-        // );
 
         const validation = isValidShift(shiftForDate, userTimezone);
 
@@ -440,11 +417,6 @@ function RecurringShift({
         }
       }
     }
-
-    // console.log(
-    //   "🚀 ~ file: index.js:302 ~ handleUpload ~ flattenedArray:",
-    //   flattenedArray
-    // );
 
     if (validationErrors.length > 0) {
       ErrorToast(validationErrors.join("\n"));
@@ -624,10 +596,7 @@ function RecurringShift({
           <div className="flex flex-row py-4">
             {days.map((dayObj, i) => {
               const dayDate = getDateForDay(dayObj.day, new Date(shift?.date));
-              console.log(
-                "🚀 ~ file: index.js:507 ~ {days.map ~ dayDate:",
-                dayDate
-              );
+
               const formattedDate = `${dayDate.getFullYear()}-${String(
                 dayDate.getMonth() + 1
               ).padStart(2, "0")}-${String(dayDate.getDate()).padStart(
@@ -925,7 +894,7 @@ function RecurringShift({
         }}
         onCancel={() => {
           // Optionally clear selected shifts or other relevant state
-          // console.log("Cancellation action");
+
           setShowConfirmModal(false);
         }}
       />

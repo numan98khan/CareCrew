@@ -135,7 +135,6 @@ function App() {
               ) {
                 // Call your context setters here
 
-                console.log("Facility Permissions Reloaded");
                 const jsonPermissions = JSON.parse(
                   onUpdateFacility.permissions
                 );
@@ -147,10 +146,6 @@ function App() {
             },
           });
         }
-        console.log(
-          "🚀 ~ .then ~ userData?.data?.getPeople:",
-          userData?.data?.getPeople
-        );
 
         // // // Handle subscription for updating facility data
         // subscriptionPeople = API.graphql(
@@ -170,11 +165,6 @@ function App() {
 
         //       const jsonPermissions = JSON.parse(onUpdatePeople.permissions);
 
-        //       // console.log(
-        //       //   "Employee Permissions Reloaded",
-        //       //   jsonPermissions.access
-        //       // );
-
         //       if (onUpdatePeople?.type !== FACILITY) {
         //         loadPermissions(jsonPermissions);
         //       }
@@ -188,7 +178,6 @@ function App() {
         // });
       })
       .catch((error) => {
-        console.log("Error", error);
         signIn(null);
         setLoading(false); // Set loading to false after all data is fetched and state is updated
       });

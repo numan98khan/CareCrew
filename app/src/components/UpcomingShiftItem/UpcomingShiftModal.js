@@ -55,11 +55,6 @@ const UpcomingShiftModal = ({
   // cancelShiftFunction,
   // ... any other props you may need ...
 }) => {
-  // console.log(
-  //   "🚀 ~ file: UpcomingShiftModal.js:38 ~ upcomingShiftDetails:",
-  //   upcomingShiftDetails
-  // );
-
   const { personalData, myFacility, type, user } = useAuth();
   const { createNotificationQwuery } = useCreateNotification();
 
@@ -139,29 +134,15 @@ const UpcomingShiftModal = ({
   }, [upcomingShiftDetails?.facility?.imgSrc]); // I assume you might want to refetch when imgSrc changes
 
   const clockInFunction = async () => {
-    console.log("🚀clockInFunction ~ clockInFunction:");
-
     const inProgress = upcomingShiftDetails?.clockInTime ? true : false;
     // Assuming you have the date from the upcomingShiftDetails
     const clockInDate = upcomingShiftDetails?.shift?.date;
-
-    console.log(
-      "🚀 ~ file: UpcomingShiftModal.js:98 ~ clockInFunction ~ upcomingShiftDetails:",
-      upcomingShiftDetails
-    );
 
     // Combine AWSDate and AWSTime to form AWSDatetime
     // const clockInDatetime = `${clockInDate}T${clockInTime}`;
 
     const clockInDatetime = new Date().toISOString(); //`${clockInDate}T${clockInTime}`;
     const clockInTime = clockInDatetime.split("T")[1];
-
-    // clockInTime;
-    console.log(
-      "🚀 ~ file: UpcomingShiftModal.js:65 ~ clockInFunction ~ clockInTime:",
-      clockInDatetime,
-      clockInTime
-    );
 
     // return 0;
     try {
@@ -173,15 +154,8 @@ const UpcomingShiftModal = ({
         clockOutTime: inProgress ? clockInDatetime : null,
         _version: upcomingShiftDetails._version,
       };
-      // console.log(
-      //   "🚀 ~ file: UpcomingShiftModal.js:113 ~ clockInFunction ~ updatedTimecard:",
-      //   updatedTimecard
-      // );
+
       const response = await updateTimecardQuery(updatedTimecard);
-      // console.log(
-      //   "🚀 ~ file: UpcomingShiftModal.js:112 ~ clockInFunction ~ response:",
-      //   response
-      // );
 
       if (inProgress) {
         const notificationInput = {
@@ -272,10 +246,6 @@ const UpcomingShiftModal = ({
   const iconSize = 7;
 
   const ClockInModal = ({ closeModal }) => {
-    // console.log(
-    //   "🚀 ~ file: UpcomingShiftModal.js:131 ~ closeModal:",
-    //   closeModal
-    // );
     const inProgress = upcomingShiftDetails?.clockInTime ? true : false;
     return (
       <>
@@ -316,7 +286,6 @@ const UpcomingShiftModal = ({
   };
 
   const CancelShiftModal = ({ closeModal }) => {
-    // console.log("🚀 ~ file: UpcomingShiftModal.js:217 ~ closeModal:", closeModal)
     const [cancelReason, setCancelReason] = useState(null);
     return (
       <>
@@ -370,10 +339,6 @@ const UpcomingShiftModal = ({
   };
 
   const ArriveLateModal = ({ closeModal }) => {
-    // console.log(
-    //   "🚀 ~ file: UpcomingShiftModal.js:265 ~ closeModal:",
-    //   closeModal
-    // );
     const arriveLateFunction = async () => {
       // Assuming lateBy is a string like "90 mins"
       const lateByMinutes = parseInt(lateBy.split(" ")[0]); // Extracts the number of minutes from the string
@@ -579,10 +544,6 @@ const UpcomingShiftModal = ({
     upcomingShiftDetails?.clockInTime !== null &&
     upcomingShiftDetails?.clockOutTime !== null;
   const isInProgress = upcomingShiftDetails?.clockInTime !== null;
-  // console.log(
-  //   "🚀 ~ file: UpcomingShiftModal.js:452 ~ isCompletedShift:",
-  //   isCompletedShift
-  // );
 
   const getFacilityRepMessage = async () => {
     const getFacilityPeople = /* GraphQL */ `
@@ -801,10 +762,7 @@ const UpcomingShiftModal = ({
                   className={`${ScaleHover}`}
                   onClick={
                     () => getFacilityRepMessage()
-                    //   console.log(
-                    //     "🚀 ~ file: UpcomingShiftModal.js:662 ~ upcomingShiftDetails?.facility?.FacilityPeople?:",
-                    //     upcomingShiftDetails?.facility?.FacilityPeople
-                    //   )
+
                     // navigate("/messaging", {
                     //   state:
                     //     upcomingShiftDetails?.facility?.FacilityPeople?.items[0]

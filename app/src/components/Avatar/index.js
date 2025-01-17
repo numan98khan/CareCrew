@@ -17,10 +17,6 @@ function Avatar({
   const updateImageUrl = async () => {
     try {
       const imageUrl = await retrieveImage(imgSrc);
-      console.log(
-        "🚀 ~ file: index.js:16 ~ updateImageUrl ~ imageUrl:",
-        imageUrl
-      );
 
       // Refresh image URL every 14 minutes
       setTimeout(updateImageUrl, 14 * 60 * 1000);

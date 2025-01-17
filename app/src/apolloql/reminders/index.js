@@ -73,10 +73,6 @@ export const listReminders = /* GraphQL */ `
 
 //   const createReminderQuery = async (input, receiverPeople) => {
 //     try {
-//       console.log("Reminder Input:", input, receiverPeople);
-//       const response = await createReminderMutation({
-//         variables: { input: input },
-//       });
 
 //       // Retrieve the newly created reminder's ID
 //       const remindersId = response.data.createReminders.id;
@@ -159,11 +155,6 @@ export const useCreateReminder = () => {
         input.time = convertTimeToAWSTime(input.time, userTimezone);
       }
 
-      console.log(
-        "🚀 ~ file: index.js:138 ~ createReminderQuery ~ input:",
-        input
-      );
-
       // return;
       const response = await createReminderMutation({
         variables: { input: input },
@@ -194,7 +185,6 @@ export const useCreateReminder = () => {
 };
 
 export const useListReminders = ({ type, peopleID, date } = {}) => {
-  // console.log("🚀 ~ file: index.js:114 ~ useListReminders ~ date:", date);
   // const { data, loading, error } = useQuery(gql(listReminders));
   // const userTimezone = userTimezone;
 
@@ -218,7 +208,6 @@ export const useListReminders = ({ type, peopleID, date } = {}) => {
 
   // ...similar to the above
   if (loading) {
-    console.log("Loading Reminders...");
     return { loading, error, reasons: [] };
   }
 
@@ -226,8 +215,6 @@ export const useListReminders = ({ type, peopleID, date } = {}) => {
     console.error("Error!", error);
     return { loading, error, reasons: [] };
   }
-
-  // console.log("listReminders Data received!", data);
 
   const reminders = data
     ? data.listReminders.items

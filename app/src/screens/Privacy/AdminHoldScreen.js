@@ -7,13 +7,12 @@ import themeStyles from "../../styles/theme.styles";
 
 async function signOut() {
   try {
-    console.log("Signing out.");
     await Auth.signOut();
 
     // Clear the local storage cache
     localStorage.clear();
   } catch (error) {
-    console.log("error signing out: ", error);
+    console.error("error signing out: ", error);
   }
 }
 

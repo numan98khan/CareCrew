@@ -143,13 +143,8 @@ const People = ({ route }) => {
   });
 
   const filteredEmployees = useMemo(() => {
-    console.log(
-      "🚀 ~ file: index.js:182 ~ filteredEmployees ~ people:",
-      people
-    );
     return people
       .filter((person) => {
-        console.log(myFacility?.id, person?.PeopleFacility?.items);
         return type == ADMIN
           ? true
           : person?.PeopleFacility?.items?.some(
@@ -193,7 +188,6 @@ const People = ({ route }) => {
   const [checked, setChecked] = useState(false);
 
   const onBackClickHandler = () => {
-    // console.log("Going back on facility");
     setSelectedPeople(null);
   };
 
@@ -248,7 +242,7 @@ const People = ({ route }) => {
               graphqlOperation(GET_PEOPLE, { id: selectedPeople?.id })
             )
           )?.data?.getPeople;
-          // console.log("🚀 ~ file: index.js:256 ~ fetchData ~ result:", result);
+
           setUserData(result); // Update state with fetched data
         } catch (error) {
           console.error("Error fetching user data:", error);
@@ -367,10 +361,6 @@ const People = ({ route }) => {
     // const fetchedPeopleObj = removingContactPeople.find(
     //   (obj) => obj?.email === toRemoveContact?.email
     // );
-    // console.log(
-    //   "🚀 ~ file: hooks.js:368 ~ useFacilityOperations ~ fetchedPeopleObj:",
-    //   fetchedPeopleObj
-    // );
 
     const getPeople = /* GraphQL */ `
       query GetPeople($id: ID!) {
@@ -448,8 +438,6 @@ const People = ({ route }) => {
         adminHold: peopleData?.adminHold ? false : true,
         _version: peopleData._version,
       };
-
-      console.log("updatedPeople", updatedPeople);
 
       try {
         await updatePeopleQuery(updatedPeople);

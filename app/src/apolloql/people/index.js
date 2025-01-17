@@ -170,7 +170,6 @@ export const useGetPeople = (id) => {
   });
 
   if (loading) {
-    console.log("Loading People...");
     return { loading, error, people: [] };
   }
 
@@ -246,7 +245,6 @@ export const useListPeople = ({
     //   lastActivity: { ge: lastActiveDate },
     // }), // Adding last active minutes filter
   };
-  // console.log("🚀 ~ file: index.js:142 ~ filter:", filter);
 
   const { data, loading, error, refetch } = useQuery(gql(listPeople), {
     variables: {
@@ -255,7 +253,6 @@ export const useListPeople = ({
   });
 
   if (loading) {
-    console.log("Loading People List...");
     return { loading, error, people: [] };
   }
 
@@ -266,11 +263,6 @@ export const useListPeople = ({
 
   const people = data
     ? data.listPeople.items.filter((obj) => {
-        // console.log(
-        //   "🚀 ~ file: index.js:200 ~ ?data.listPeople.items.filter ~ obj?.lastActivity:",
-        //   obj?.lastActivity,
-        //   lastActiveDate
-        // );
         return lastActiveMinutes ? obj?.lastActivity > lastActiveDate : true;
       })
     : [];
@@ -286,7 +278,6 @@ export const useListAvailablePeople = ({
   activity,
   type,
 } = {}) => {
-  console.log("🚀 ~ file: index.js:177 ~ activity:", activity);
   let activityDate;
   if (activity) {
     const currentDate = new Date(); // This is in local time
@@ -376,7 +367,6 @@ export const useListAvailablePeople = ({
   });
 
   if (loading) {
-    console.log("Loading...");
     return { loading, error, people: [] };
   }
 
@@ -398,7 +388,6 @@ export const useListPeopleByType = (TYPE) => {
   });
 
   if (loading) {
-    console.log("Loading Available People...");
     return { loading, error, people: [] };
   }
 

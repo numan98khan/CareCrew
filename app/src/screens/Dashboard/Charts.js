@@ -297,8 +297,6 @@ const Charts = () => {
 // };
 
 export const ShiftFullfilmentVisualization = ({ data }) => {
-  console.log("🚀 ~ ShiftFullfilmentVisualization ~ data:", data);
-
   const data_filtered = data?.slice(24, 36);
 
   // const data_filtered = data;

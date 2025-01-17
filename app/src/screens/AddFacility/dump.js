@@ -168,7 +168,6 @@ const AddFacility = ({ isEdit, selectedObj }) => {
           (attribute) => attribute.Name === "sub"
         ).Value;
 
-        console.log("setup user ID", ID);
 
         // setFacilityKey("id")(ID);
 
