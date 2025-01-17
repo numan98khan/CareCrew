@@ -45,12 +45,18 @@ const listShiftsCustom = /* GraphQL */ `
         date
         roleRequired
         rate
+        floorNumber
+        supervisor
         cancellationGuarantee
         isAssigned
         isIncentive
         isGuarantee
+        isLate
+        isCallOff
+        isSelected
         isArchive
         isHoliday
+        recurringSchedule
         facilityID
         hide
         incentives {
@@ -58,6 +64,12 @@ const listShiftsCustom = /* GraphQL */ `
           incentiveAmount
           incentiveType
         }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        __typename
       }
       nextToken
       startedAt

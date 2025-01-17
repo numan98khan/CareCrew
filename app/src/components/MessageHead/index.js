@@ -62,6 +62,7 @@ const formatDateTime = (datetime) => {
  * @param {boolean} [props.isSelected] - Whether this chat item is currently selected
  * @param {boolean} [props.isOnline] - Whether the user is online (for potential future usage)
  * @param {number} [props.unreadMessages] - Number of unread messages (for potential future usage)
+ * @param {boolean} [props.darkMode] - Whether dark mode is enabled
  */
 const MessageHeader = ({
   people = [],
@@ -70,6 +71,8 @@ const MessageHeader = ({
   isSelected,
   isOnline,
   unreadMessages,
+  darkMode,
+  avatarDisabled,
 }) => {
   // Animation setup
   const [animationProps, setAnimationProps] = useSpring(() => ({
@@ -106,55 +109,69 @@ const MessageHeader = ({
       style={{
         transform: animationProps.scale.to((scale) => `scale(${scale})`),
       }}
-      className={`${MainHover} flex flex-col p-2 justify-between rounded-lg w-full 
-        ${isSelected ? "bg-PRIMARY_LIGHT_DARKER" : "bg-white"} 
-        border-PRIMARY_NEUTRAL_COLOR`}
+      className={`${MainHover} flex flex-col p-2 justify-between rounded-lg w-full border-2
+        ${
+          isSelected
+            ? darkMode
+              ? "bg-DARK_SELECTED"
+              : "bg-PRIMARY_LIGHT_DARKER"
+            : darkMode
+            ? "bg-DARK_BACKGROUND"
+            : "bg-white"
+        }
+        border ${
+          darkMode ? "border-DARK_BORDER" : "border-PRIMARY_NEUTRAL_COLOR"
+        }`}
     >
       <div className="flex items-center px-3 pt-2 py-1 ">
         <div className="flex w-full ">
           {/* Avatar section */}
-          <div className={`relative inline-block `}>
-            <Avatar
-              color={"PRIMARY_COLOR"}
-              imgSrc={headerPerson?.profilePicture}
-              alt={`${headerPerson?.firstName || ""} ${
-                headerPerson?.lastName || ""
-              }`}
-            />
-            {/* 
-              If you'd like to show an online status indicator, uncomment below:
-              <div
-                className={`absolute w-2 h-2 rounded-full border-white border  ${
-                  isOnline ? "bg-green" : "bg-SECONDARY_COLOR"
+          {avatarDisabled ? null : (
+            <div className={`relative inline-block `}>
+              <Avatar
+                color={darkMode ? "DARK_AVATAR_COLOR" : "PRIMARY_COLOR"}
+                imgSrc={headerPerson?.profilePicture}
+                alt={`${headerPerson?.firstName || ""} ${
+                  headerPerson?.lastName || ""
                 }`}
-                style={{ bottom: "2%", right: "2%" }}
               />
-            */}
-          </div>
+            </div>
+          )}
 
           <div className="m-1" />
 
           {/* Info section (Name + Time + Latest Message) */}
           <div className="flex flex-col w-full justify-start items-start">
             <div className="flex flex-row w-full justify-between ">
-              <label className="text-xs font-bold text-left">{title}</label>
-              <label className="text-xxs font-bold text-PRIMARY_COLOR">
+              <label
+                className={`text-xs font-bold text-left ${
+                  darkMode ? "text-WHITE" : "text-black"
+                }`}
+              >
+                {title}
+              </label>
+              <label
+                className={`text-xxs font-bold ${
+                  darkMode ? "text-WHITE" : "text-PRIMARY_COLOR"
+                }`}
+              >
                 {formatDateTime(latestTime)}
               </label>
             </div>
             <div className="flex">
               <label
-                className={`text-xxs text-left text-grey ${
-                  latestMessage ? "" : "italic text-slate-400"
+                className={`text-xxs text-left ${
+                  latestMessage
+                    ? darkMode
+                      ? "text-WHITE"
+                      : "text-grey"
+                    : darkMode
+                    ? "italic text-DARK_TEXT_DISABLED"
+                    : "italic text-slate-400"
                 }`}
               >
                 {latestMessage || "Chat is empty"}
               </label>
-
-              {/* 
-                If you want to display unread messages:
-                <PageNav text={unreadMessages} color="bg-SECONDARY_COLOR" />
-              */}
             </div>
           </div>
         </div>
