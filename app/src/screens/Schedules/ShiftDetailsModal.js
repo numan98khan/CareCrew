@@ -622,9 +622,14 @@ const ShiftDetailsModal = ({
           content: {
             borderRadius: 20,
             width: "80%",
+            // height: "auto",
             maxWidth: "400px",
             padding: "0px",
             margin: "auto",
+
+            height: "fit-content", // Use fit-content for dynamic height
+
+            maxHeight: "50vh", // Optional: Limit the height to avoid overflow
           },
         }}
       >
@@ -778,7 +783,8 @@ const ShiftDetailsModal = ({
                   {!(
                     type === FACILITY && selectedShift.cancellationGuarantee
                   ) &&
-                    !(type === FACILITY && isShiftInPast) && (
+                    !(type === FACILITY && 0) && (
+                      // !(type === FACILITY && isShiftInPast) && (
                       <Button
                         children={
                           type === FACILITY ? "CANCEL SHIFT" : "UN-ASSIGN"
@@ -802,27 +808,28 @@ const ShiftDetailsModal = ({
               </div>
             )}
 
-          {!selectedTimecard &&
-            type !== EMPLOYEE &&
-            !(type === FACILITY && isShiftInPast) && (
-              <div className="flex flex-row h-full p-2">
-                <Button
-                  disabled={parseInt(selectedShift.numOfPositions) === 0}
-                  children="ASSIGN"
-                  onClick={() => setMode(MODES.ADD_MEMBERS)}
-                />
-                <div className="mx-1 my-1 md:my-0" />
-                <Button
-                  children="CLOSE"
-                  color={themeStyles.GRAY}
-                  onClick={() => {
-                    closeModal();
-                    setMode(MODES.SHIFT_DETAILS);
-                    setSelectedPeople([]);
-                  }}
-                />
-              </div>
-            )}
+          {!selectedTimecard && type !== EMPLOYEE && (
+            <div className="flex flex-row h-full p-2">
+              <Button
+                disabled={
+                  parseInt(selectedShift.numOfPositions) === 0 ||
+                  (type === FACILITY && isShiftInPast)
+                }
+                children="ASSIGN"
+                onClick={() => setMode(MODES.ADD_MEMBERS)}
+              />
+              <div className="mx-1 my-1 md:my-0" />
+              <Button
+                children="CLOSE"
+                color={themeStyles.GRAY}
+                onClick={() => {
+                  closeModal();
+                  setMode(MODES.SHIFT_DETAILS);
+                  setSelectedPeople([]);
+                }}
+              />
+            </div>
+          )}
         </div>
       </Modal>
     </>

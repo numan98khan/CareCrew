@@ -380,5 +380,56 @@ export const NotificationHub = {
       throw new Error("Failed to send notifications for Shift Cancellation");
     }
   },
+  sendShiftDeletionNotifications_V2: async ({
+    myFacility,
+    selectedShift,
+    tempFetchedFacility,
+    selectedFacility,
+    createNotificationQuery,
+  }) => {
+    const subject = "Open Shift Deletion";
+    const formedMessage = `Subject: ${subject}\nThe following shift has been cancelled by ${
+      myFacility?.facilityName ? "Facility" : "CareCrew"
+    }:\nFacility: ${
+      tempFetchedFacility?.facilityName
+    }\nShift Date: ${displayDate(selectedShift?.shiftStartDT)}\nShift Time: ${
+      displayTime(selectedShift?.shiftStartDT) +
+      " - " +
+      displayTime(selectedShift?.shiftEndDT)
+    }\nTimestamp: ${
+      displayDate(new Date()?.toISOString()) +
+      " " +
+      displayTime(new Date()?.toISOString())
+    }`;
+
+    try {
+      // INTERNAL Notifications
+      inApplNotificationToInstacare(
+        SHIFT_DELETED,
+        "Shift Deleted",
+        formedMessage,
+        createNotificationQuery
+      );
+      inAppNotificationsToFacilityPeople(
+        selectedShift?.facilityID,
+        SHIFT_DELETED,
+        "Shift Deleted",
+        formedMessage,
+        createNotificationQuery
+      );
+
+      // EXTERNAL Notifications
+      externalNotificationToInstacare(formedMessage, true, false); // CareCrew
+      sendNotificationsToFacilityPeople(
+        selectedFacility?.id,
+        formedMessage,
+        true,
+        false // Test disabled
+      ); // Facility
+    } catch (error) {
+      console.error("Error sending Shift Deletion notifications:", error);
+      throw new Error("Failed to send notifications for Shift Deletion");
+    }
+  },
   // Other notification methods...
 };

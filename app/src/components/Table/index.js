@@ -176,9 +176,10 @@ const GridView = ({
       {!disableHeader && (
         <div className="flex justify-between mb-4 items-center">
           <div className="text-sm flex text-left">
-            Showing <div className="mx-1" />
-            <strong>{data.length}</strong> out of <strong>{data.length}</strong>{" "}
-            {config}
+            Showing <div className="mr-1" />
+            <strong className="mr-1">{data.length}</strong>{" "}
+            <span className="mr-1">out of</span>
+            <strong className="mr-1">{data.length}</strong> {config}
           </div>
 
           <div className="flex justify-between gap-1">

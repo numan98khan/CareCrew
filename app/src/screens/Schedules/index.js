@@ -78,6 +78,7 @@ import {
   sendNotificationsToFacilityPeople,
 } from "../../services/timecards/reporting";
 import { SHIFT_DELETED } from "../../constants/notificationTypes";
+import { NotificationHub } from "../../services/notifications/hub";
 
 // Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
 Modal.setAppElement("#root");
@@ -499,45 +500,13 @@ const Schedules = () => {
           (obj) => obj?.id === selectedShift?.facilityID
         );
 
-        let formedMessage = `Subject: Open Shift Deletion\nThe following shift has been cancelled by ${
-          myFacility?.facilityName ? "Facility" : "CareCrew"
-        }:\nFacility: ${
-          tempFetchedFacility?.facilityName
-        }\nShift Date: ${displayDate(
-          selectedShift?.shiftStartDT
-        )}\nShift Time: ${
-          displayTime(selectedShift?.shiftStartDT) +
-          " - " +
-          displayTime(selectedShift?.shiftEndDT)
-        }\nTimestamp: ${
-          displayDate(new Date()?.toISOString()) +
-          " " +
-          displayTime(new Date()?.toISOString())
-        }`;
-
-        // INTERNAL
-        inApplNotificationToInstacare(
-          SHIFT_DELETED,
-          "Shift Deleted",
-          formedMessage,
-          createNotificationQuery
-        );
-        inAppNotificationsToFacilityPeople(
-          selectedShift?.facilityID,
-          SHIFT_DELETED,
-          "Shift Deleted",
-          formedMessage,
-          createNotificationQuery
-        );
-
-        // EXTERNAL
-        externalNotificationToInstacare(formedMessage, true, false); // CareCrew
-        sendNotificationsToFacilityPeople(
-          selectedFacility?.id,
-          formedMessage,
-          true,
-          false // test disabled
-        ); // Facility
+        await NotificationHub.sendShiftDeletionNotifications_V2({
+          myFacility,
+          selectedShift,
+          tempFetchedFacility,
+          selectedFacility,
+          createNotificationQuery,
+        });
 
         SuccessToast("Shift deleted successfully");
 
