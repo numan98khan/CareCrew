@@ -560,6 +560,7 @@ export const useFacilityOperations = () => {
             lastName: user?.lastName,
             type: EMPLOYEE,
             permissions: permissionsString,
+            role: user?.role,
             id: ID,
           };
 
