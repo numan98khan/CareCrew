@@ -48,7 +48,7 @@ import {
   hasPermission,
 } from "../../services/micro";
 
-import { EMPLOYEE, FACILITY } from "../../constants/userTypes";
+import { ADMIN, EMPLOYEE, FACILITY } from "../../constants/userTypes";
 import { useListShifts } from "../../apolloql/schedules";
 
 import { FACILITY_PERMISSIONS, SUPER_ADMIN } from "../../constants/permissions";
@@ -292,18 +292,54 @@ const Schedules = () => {
   }, [fetchedShifts, timecards, selectedShiftTimings]);
 
   const filteredPeople = useMemo(() => {
-    return people.filter(
-      (person) =>
-        person.firstName
-          .toLowerCase()
-          .includes(peopleSearchTerm.toLowerCase()) ||
-        person.lastName
-          .toLowerCase()
-          .includes(peopleSearchTerm.toLowerCase()) ||
-        (person.firstName + " " + person.lastName)
-          .toLowerCase()
-          .includes(peopleSearchTerm.toLowerCase())
+    console.log(
+      "selectedShift",
+      selectedShift,
+      people.filter((person) => {
+        return person?.PeopleFacility?.items?.some(
+          (facility) => facility.facilityId
+        );
+      })
     );
+    return people
+      .filter((person) => {
+        console.log(
+          type == ADMIN
+            ? person?.PeopleFacility?.items?.some(
+                (facility) => facility.facilityId === selectedShift?.facilityID
+              )
+              ? true
+              : false
+            : person?.PeopleFacility?.items?.some(
+                (facility) => facility.facilityId === myFacility?.id
+              )
+            ? myFacility?.id && true
+            : false
+        );
+        return type == ADMIN
+          ? person?.PeopleFacility?.items?.some(
+              (facility) => facility.facilityId === selectedShift?.facilityID
+            )
+            ? true
+            : false
+          : person?.PeopleFacility?.items?.some(
+              (facility) => facility.facilityId === myFacility?.id
+            )
+          ? myFacility?.id && true
+          : false;
+      })
+      .filter(
+        (person) =>
+          person.firstName
+            .toLowerCase()
+            .includes(peopleSearchTerm.toLowerCase()) ||
+          person.lastName
+            .toLowerCase()
+            .includes(peopleSearchTerm.toLowerCase()) ||
+          (person.firstName + " " + person.lastName)
+            .toLowerCase()
+            .includes(peopleSearchTerm.toLowerCase())
+      );
   }, [people]);
 
   const itemsPerPage = 21; // adjust this as needed
@@ -722,7 +758,8 @@ const Schedules = () => {
         shifts={shifts}
         filters={filters}
         facilities={facilities}
-        filteredPeople={filteredPeople}
+        // filteredPeople={filteredPeople}
+        filteredPeople={people}
         openModal={openModal}
         setSelectedFacility={setSelectedFacility}
         setSelectedPerson={setSelectedPerson}
