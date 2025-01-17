@@ -48,18 +48,12 @@ import { people as peopleTemplate } from "../../constants/dataTemplates";
 import { createBulkUsers } from "../../services/bulkUserCreation";
 import { ErrorToast, SuccessToast } from "../../services/micro";
 import { useAuth } from "../../context";
-import { getIDCounter } from "../../graphql/queries";
+import { getIDCounter, getPeople } from "../../graphql/queries";
 import { GET_PEOPLE } from "../../apolloql/queries";
 import { PEOPLE_UPDATED, SHIFT_EDIT } from "../../constants/notificationTypes";
-import {
-  externalNotificationToInstacare,
-  externalNotificationToPeople,
-  inAppNotificationsToFacilityPeople,
-  inAppNotificationsToPeople,
-  inApplNotificationToInstacare,
-  sendNotificationsToFacilityPeople,
-} from "../../services/timecards/reporting";
+
 import { useCreateNotification } from "../../apolloql/notifications";
+import { NotificationHub } from "../../services/notifications/hub";
 // import
 
 const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
@@ -440,6 +434,17 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
   };
 
   const notifyPeopleUpdate = async (peopleDetails) => {
+    const fetchLatestPersonDetails = async (id) => {
+      try {
+        const response = await API.graphql(graphqlOperation(getPeople, { id }));
+        return response?.data?.getPeople;
+      } catch (error) {
+        console.error("Error fetching latest person details:", error);
+        ErrorToast("Failed to fetch the latest details. Please try again.");
+        throw error;
+      }
+    };
+
     function createFieldsString(changedFields, userData) {
       const excludeKeys = [
         "__typename",
@@ -514,38 +519,14 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
 
       return fieldsArray.join("");
     }
-    let formedMessage = `Subject: Account Information Update\n\nThe following account has been updated by User: ${
-      user?.attributes?.email
-    }\n\nChanged fields marked with "*"\n\n${createFieldsString(
+
+    await NotificationHub.sendAccountUpdateNotifications({
+      user,
       changedFields,
-      peopleDetails
-    )}`;
-
-    // console.log(formedMessage);
-    // console.log(changedFields);
-
-    // return;
-
-    // START: Send notification on all platforms to CareCrew
-    // INTERNAL
-
-    inApplNotificationToInstacare(
-      PEOPLE_UPDATED,
-      "Person information was edited",
-      formedMessage,
-      createNotificationQuery
-    );
-    // // INTERNAL
-    inAppNotificationsToPeople(
-      peopleDetails?.id,
-      PEOPLE_UPDATED,
-      "Person information was edited",
-      formedMessage,
-      createNotificationQuery
-    );
-    // EXTERNAL
-    externalNotificationToInstacare(formedMessage, true, false); // CareCrew
-    externalNotificationToPeople(peopleDetails?.id, formedMessage, true, true); // Employee
+      peopleDetails,
+      createFieldsString,
+      createNotificationQuery,
+    });
   };
 
   const updatePerson = async (people, imageRef, permissions) => {
@@ -577,6 +558,7 @@ const AddPeople = ({ isEdit, peopleObj, goBackHandler, refetchPeople }) => {
       id: people.id,
       permissions: permissionsString,
       profilePicture: imageUrl,
+      _version: people?._version,
       empCheckList: people?.empCheckList?.map(
         ({ __typename, ...rest }) => rest
       ),

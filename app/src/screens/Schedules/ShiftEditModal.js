@@ -243,11 +243,16 @@ const ShiftEditModal = ({
     // Generate a string from the updated fields
     const updatedFieldsString = generateUpdatedFieldsString(updatedFields);
 
+    latestShift = (
+      await API.graphql(
+        graphqlOperation(getShifts, { id: shift?.id }) // Replace with the correct query/mutation name
+      )
+    )?.data?.getShifts;
     // Ensure necessary fields are included
     updatedFields.id = latestShift.id;
     updatedFields._version = latestShift._version;
-    updatedFields.shiftStart = latestShift.shiftStart;
-    updatedFields.shiftEnd = latestShift.shiftEnd;
+    // updatedFields.shiftStart = latestShift.shiftStart;
+    // updatedFields.shiftEnd = latestShift.shiftEnd;
     updatedFields.date = latestShift.date;
 
     if (Object.keys(updatedFields).length === 0) {

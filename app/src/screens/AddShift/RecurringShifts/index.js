@@ -24,16 +24,11 @@ import moment from "moment";
 import { useAuth } from "../../../context";
 import { ADMIN } from "../../../constants/userTypes";
 import { userTimezone } from "../../../apolloql/timezone";
-import {
-  externalNotificationToInstacare,
-  inApplNotificationToInstacare,
-  inAppNotificationsToFacilityPeople,
-  inAppNotificationsToPeople,
-  sendNotificationsToFacilityPeople,
-} from "../../../services/timecards/reporting";
+
 import { useCreateNotification } from "../../../apolloql/notifications";
 import { ADD_SHIFT } from "../../../constants/notificationTypes";
 import ConfirmationModal from "../../../components/ConfirmationModal";
+import { NotificationHub } from "../../../services/notifications/hub";
 
 function RecurringShift({
   myFacility,
@@ -472,58 +467,15 @@ function RecurringShift({
     }
 
     // Notification processing
-    const tempFetchedFacility = facilities?.find(
-      (obj) => obj?.id === shift?.facilityID
-    );
-    const formedMessage_OLD = `${
-      JSON.parse(apiResponse?.result?.body).length
-    } New shift(s) created by ${
-      myFacility?.facilityName ? tempFetchedFacility?.facilityName : "CareCrew"
-    } at ${tempFetchedFacility?.facilityName} on ${new Date()} for ${
-      shift?.roleRequired
-    }`;
 
-    let formedMessage = `Subject: ${
-      JSON.parse(apiResponse?.result?.body).length
-    } New Shift Available\nThe following shft has been posted:\n\nFacility: ${
-      tempFetchedFacility?.facilityName
-    }\nRate: ${shift?.rate}\n\nTimestamp: ${
-      displayDate(new Date()?.toISOString()) +
-      " " +
-      displayTime(new Date()?.toISOString())
-    }`;
-
-    const userInfo = `\nBy User: ${user?.attributes?.email}`;
-    // // INTERNAL
-    inAppNotificationsToPeople(
-      "-1",
-      ADD_SHIFT,
-      "New shift was added on CareCrew",
-      formedMessage,
-      createNotificationQuery
-    );
-    inApplNotificationToInstacare(
-      ADD_SHIFT,
-      "New shift was added on CareCrew",
-      formedMessage + userInfo,
-      createNotificationQuery
-    );
-    inAppNotificationsToFacilityPeople(
-      shift?.facilityID,
-      ADD_SHIFT,
-      "New shift was added on CareCrew",
-      formedMessage + userInfo,
-      createNotificationQuery
-    );
-
-    // // // EXTERNAL
-    externalNotificationToInstacare(formedMessage + userInfo, true, false); // CareCrew
-    sendNotificationsToFacilityPeople(
-      shift?.facilityID,
-      formedMessage + userInfo,
-      true,
-      false // test disabled
-    ); // Facility
+    await NotificationHub.sendRecurringShiftAddNotifications({
+      apiResponse,
+      shift,
+      facilities,
+      myFacility,
+      user,
+      createNotificationQuery,
+    });
 
     setIsPublishDisabled(false);
   };

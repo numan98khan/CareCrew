@@ -67,6 +67,7 @@ import {
   SHIFT_DELETED,
 } from "../../constants/notificationTypes";
 import ConfirmationModal from "../../components/ConfirmationModal";
+import { NotificationHub } from "../../services/notifications/hub";
 // import { getShifts } from "../../graphql/queries";
 
 export const getShifts = /* GraphQL */ `
@@ -549,12 +550,6 @@ const ShiftDetailsModal = ({
         });
 
         SuccessToast("Timecard deleted successfully");
-
-        // console.log(
-        //   "🚀 ~ file: ShiftDetailsModal.js:379 ~ handleDelete ~ selectedTimecard?.lateReason:",
-        //   selectedTimecard?.lateReason
-        // );
-
         if (
           !selectedTimecard?.lateReason?.includes("Facility Cancellation") &&
           !selectedTimecard?.isCallOff
@@ -580,70 +575,36 @@ const ShiftDetailsModal = ({
       await refetchShifts();
     } else {
       try {
+        let latestShift;
+        try {
+          latestShift = (
+            await API.graphql(
+              graphqlOperation(getShifts, { id: selectedShift?.id }) // Replace with the correct query/mutation name
+            )
+          )?.data?.getShifts;
+
+          if (!latestShift) {
+            ErrorToast("Failed to fetch the latest shift details.");
+            return;
+          }
+        } catch (error) {
+          console.error("Error fetching the latest shift:", error);
+          ErrorToast("Failed to fetch the latest shift. Please try again.");
+          return;
+        }
+
         await updateShiftQuery({
           id: selectedShift?.id,
           isArchive: true,
-          _version: selectedShift?._version,
+          _version: latestShift?._version,
         });
 
-        // Fetch the latest shift details before proceeding
-        const latestShift = await refetchShifts().then((response) => {
-          return response?.data?.listShifts?.items?.find(
-            (shift) => shift.id === selectedShift?.id
-          );
+        await NotificationHub.sendShiftDeletionNotifications({
+          latestShift,
+          selectedFacility,
+          myFacility,
+          createNotificationQuery,
         });
-
-        const formedMessage_OLD = `Shift deleted by ${
-          myFacility?.facilityName ? selectedFacility?.facilityName : "CareCrew"
-        } at ${
-          selectedFacility?.facilityName
-        } on ${new Date()} for ${displayDate(
-          latestShift?.shiftStartDT
-        )}@${displayTime(latestShift?.shiftStartDT)}-${displayTime(
-          latestShift?.shiftEndDT
-        )}`;
-
-        let formedMessage = `Subject: Open Shift Deletion\n\nThe following shift has been cancelled by ${
-          myFacility?.facilityName ? "Facility" : "CareCrew"
-        }\n\nFacility: ${
-          selectedFacility?.facilityName
-        }\nShift Date: ${displayDate(latestShift?.shiftStartDT)}\nShift Time: ${
-          displayTime(latestShift?.shiftStartDT) +
-          " - " +
-          displayTime(latestShift?.shiftEndDT)
-        }\n\nTimestamp: ${
-          displayDate(new Date()?.toISOString()) +
-          " " +
-          displayTime(new Date()?.toISOString())
-        }`;
-
-        // START: Send notification on all platforms to CareCrew
-
-        // INTERNAL
-        inApplNotificationToInstacare(
-          SHIFT_DELETED,
-          "Shift Deleted",
-          formedMessage,
-          createNotificationQuery
-        );
-        inAppNotificationsToFacilityPeople(
-          latestShift?.facilityID,
-          SHIFT_DELETED,
-          "Shift Deleted",
-          formedMessage,
-          createNotificationQuery
-        );
-
-        // EXTERNAL
-        externalNotificationToInstacare(formedMessage, true, false); // CareCrew
-        sendNotificationsToFacilityPeople(
-          selectedFacility?.id,
-          formedMessage,
-          true,
-          false // test disabled
-        ); // Facility
-
-        // END.
 
         SuccessToast("Shift deleted successfully");
 
@@ -680,55 +641,14 @@ const ShiftDetailsModal = ({
           )
         )?.data?.getPeople;
 
-        let formedMessage = `Subject: Employee No Call/No Show\n\nThe employee did not appear for the following shift:\n\nEmployee: ${
-          peopleObj?.firstName
-        } ${peopleObj?.lastName}\nShift Date: ${displayDate(
-          selectedShift?.shiftStartDT
-        )}\nShift Time: ${
-          displayTime(selectedShift?.shiftStartDT) +
-          " - " +
-          displayTime(selectedShift?.shiftEndDT)
-        }\nFacility: ${selectedFacility?.facilityName}\n\nTimestamp: ${
-          displayDate(new Date()?.toISOString()) +
-          " " +
-          displayTime(new Date()?.toISOString())
-        }`; //\n\nBy User: ${user?.attributes?.email}`;
-
-        const userInfo = `\nBy User: ${user?.attributes?.email}`;
-
-        // // INTERNAL
-        inAppNotificationsToPeople(
-          selectedTimecard?.peopleID,
-          NO_CALL_NO_SHOW,
-          "Employee NO CALL NO SHOW",
-          formedMessage,
-          createNotificationQuery
-        );
-        inApplNotificationToInstacare(
-          NO_CALL_NO_SHOW,
-          "Employee NO CALL NO SHOW",
-          formedMessage + userInfo,
-          createNotificationQuery
-        );
-        inAppNotificationsToFacilityPeople(
-          selectedShift?.facilityID,
-          NO_CALL_NO_SHOW,
-          "Employee NO CALL NO SHOW",
-          formedMessage + userInfo,
-          createNotificationQuery
-        );
-
-        // // // EXTERNAL
-        externalNotificationToInstacare(formedMessage + userInfo, true, true); // CareCrew
-        sendNotificationsToFacilityPeople(
-          selectedFacility?.id,
-          formedMessage + userInfo,
-          true,
-          false // test disabled
-        ); // Facility
-        externalNotificationToPeople(peopleObj?.id, formedMessage, true, true); // Employee
-
-        // END.
+        await NotificationHub.sendNoCallNoShowNotifications({
+          peopleObj,
+          selectedShift,
+          selectedFacility,
+          selectedTimecard,
+          user,
+          createNotificationQuery,
+        });
 
         SuccessToast("Shift unassigned successfully");
       } catch (error) {
@@ -766,55 +686,13 @@ const ShiftDetailsModal = ({
         )
       )?.data?.getPeople;
 
-      let formedMessage = `Subject: Employee Delay Notice\n\nThe following employee is running late for the following shift:\n\nShift Date: ${displayDate(
-        selectedShift?.shiftStartDT
-      )}\nShift Time: ${
-        displayTime(selectedShift?.shiftStartDT) +
-        " - " +
-        displayTime(selectedShift?.shiftEndDT)
-      }\nFacility: ${selectedFacility?.facilityName}\nEmployee: ${
-        peopleObj?.firstName + " " + peopleObj?.lastName
-      }\nUpdated TOA: N/A\n\nTimestamp: ${
-        displayDate(new Date()?.toISOString()) +
-        " " +
-        displayTime(new Date()?.toISOString())
-      }\nBy User: ${user?.attributes?.email}`;
-
-      // START: Send notification on all platforms to CareCrew
-
-      // // INTERNAL
-      inAppNotificationsToPeople(
-        peopleObj?.id,
-        EMPLOYEE_LATE,
-        "Employee is running late",
-        formedMessage,
-        createNotificationQuery
-      );
-      inApplNotificationToInstacare(
-        EMPLOYEE_LATE,
-        "Employee is running late",
-        formedMessage,
-        createNotificationQuery
-      );
-      inAppNotificationsToFacilityPeople(
-        selectedShift?.facilityID,
-        EMPLOYEE_LATE,
-        "Employee is running late",
-        formedMessage,
-        createNotificationQuery
-      );
-
-      // // EXTERNAL
-      externalNotificationToInstacare(formedMessage, true, false); // CareCrew
-      sendNotificationsToFacilityPeople(
-        selectedFacility?.id,
-        formedMessage,
-        true,
-        true
-      ); // Facility
-      externalNotificationToPeople(peopleObj?.id, formedMessage, true, true); // Employee
-
-      // END.
+      await NotificationHub.sendEmployeeDelayNotifications({
+        selectedShift,
+        selectedFacility,
+        peopleObj,
+        user,
+        createNotificationQuery,
+      }); // END.
       SuccessToast('Shift "Arrived Late" successfully');
     } catch (error) {
       ErrorToast('Error "Arrived Late" shift:', error);
